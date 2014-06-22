@@ -4,9 +4,6 @@ import java.util.ArrayList;
 
 import objects.Cell;
 
-
-
-
 public class Core {
 
 	Screen frame;
