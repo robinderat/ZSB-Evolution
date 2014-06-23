@@ -1,6 +1,7 @@
 package objects;
 
 import java.awt.Image;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -11,27 +12,28 @@ import framework.Tile;
 
 public class Cell {
 
-	public Tile location;
+	public WeakReference<Tile> locationRef;
 	Properties properties;
 	public Image img;
 	ArrayList<Behaviour> behaviours;
 	
 	
-	public Cell(Tile t){
-		location = t;
+	public Cell(Tile t) {
+		locationRef = new WeakReference<Tile>(t);
 		properties = new Properties();
 		img = new ImageIcon("src/art/Cell1.png").getImage();
 		t.giveCell(this);
 		
+		behaviours = new ArrayList<Behaviour>();
 		behaviours.add(new MoveRightBehaviour());
 	}
 
-	public void moveTo(Tile t){
-		location = t;
+	public void moveTo(Tile t) {
+		locationRef = new WeakReference<Tile>(t);
 	}
 	
 	// moves the cell: check what it should do and then go toward that position
-	public void move(){
+	public void update() {
 		//get behaviour
 		
 		// possibly check if following multi-turn behaviour
@@ -45,7 +47,8 @@ public class Cell {
 		
 		
 		// go there
-		//behaviour.execute(this);
+		Behaviour behaviour = behaviours.get(0);
+		behaviour.execute(this);
 	}
 	
 
@@ -56,8 +59,8 @@ public class Cell {
 		}else{
 			properties.currentEnergy = properties.maxEnergy;
 		}
-		location.c.cellsToBeRemoved.add(cell);
-		location.c.removeCellsDelayed();
+		locationRef.get().coreRef.get().cellsToBeRemoved.add(cell);
+		locationRef.get().coreRef.get().removeCellsDelayed();
 		
 	}
 	
@@ -101,45 +104,45 @@ public class Cell {
 		ArrayList<Tile> result = new ArrayList<Tile>();
 		
 		for (int i = 0; i < properties.speed + 1; i++) {
-			int x = location.x + location.c.xOffSet + i * location.c.tileSize;	
+			int x = locationRef.get().x + locationRef.get().coreRef.get().xOffSet + i * locationRef.get().coreRef.get().tileSize;	
 			int Dy = properties.speed + 1 - i;
 			for (int j = 0; j < Dy; j++) {
-				int y = location.y + location.c.yOffSet + j * location.c.tileSize;
+				int y = locationRef.get().y + locationRef.get().coreRef.get().yOffSet + j * locationRef.get().coreRef.get().tileSize;
 				/*if (y + location.c.yOffSet < 200 + location.c.yOffSet) {
 					
 				}*/
-				Tile tile = location.c.getTile(x, y);
+				Tile tile = locationRef.get().coreRef.get().getTile(x, y);
 				result.add(tile);
 			}
 		}
 		
 		for (int i = 0; i < properties.speed + 1; i++) {
-			int x = location.x + location.c.xOffSet  + i * location.c.tileSize;
+			int x = locationRef.get().x + locationRef.get().coreRef.get().xOffSet  + i * locationRef.get().coreRef.get().tileSize;
 			int Dy = properties.speed + 1 - i;
 			for (int j = 0; j < Dy; j++) {
-				int y = location.y + location.c.yOffSet  - j * location.c.tileSize;
-				Tile tile = location.c.getTile(x, y);
+				int y = locationRef.get().y + locationRef.get().coreRef.get().yOffSet  - j * locationRef.get().coreRef.get().tileSize;
+				Tile tile = locationRef.get().coreRef.get().getTile(x, y);
 				result.add(tile);
 			}
 		}
 		
 		for (int i = 0; i < properties.speed + 1; i++) {
 			System.out.println(i);
-			int x = location.x + location.c.xOffSet  - i * location.c.tileSize;
+			int x = locationRef.get().x + locationRef.get().coreRef.get().xOffSet  - i * locationRef.get().coreRef.get().tileSize;
 			int Dy = properties.speed + 1 - i;
 			for (int j = 0; j < Dy; j++) {
-				int y = location.y + location.c.yOffSet  + j * location.c.tileSize;
-				Tile tile = location.c.getTile(x, y);
+				int y = locationRef.get().y + locationRef.get().coreRef.get().yOffSet  + j * locationRef.get().coreRef.get().tileSize;
+				Tile tile = locationRef.get().coreRef.get().getTile(x, y);
 				result.add(tile);
 			}
 		}
 		
 		for (int i = 0; i < properties.speed + 1; i++) {
-			int x = location.x  + location.c.xOffSet  - i * location.c.tileSize;
+			int x = locationRef.get().x  + locationRef.get().coreRef.get().xOffSet  - i * locationRef.get().coreRef.get().tileSize;
 			int Dy = properties.speed + 1 - i;
 			for (int j = 0; j < Dy; j++) {
-				int y = location.y + location.c.yOffSet  - j * location.c.tileSize;
-				Tile tile = location.c.getTile(x, y);
+				int y = locationRef.get().y + locationRef.get().coreRef.get().yOffSet  - j * locationRef.get().coreRef.get().tileSize;
+				Tile tile = locationRef.get().coreRef.get().getTile(x, y);
 				result.add(tile);
 			}
 		}

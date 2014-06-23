@@ -58,7 +58,7 @@ public class Core {
 				Cell c = cellArray.get(j);
 				//c.action();
 				
-				c.move();
+				c.update();
 				
 				
 			}
