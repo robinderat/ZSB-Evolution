@@ -56,12 +56,14 @@ public class Core {
 			for (int j = 0; j< cellArray.size(); j++){
 				
 				Cell c = cellArray.get(j);
-				c.action();
+				//c.action();
+				
+				c.update();
 				
 				
 			}
+
 			addCellsDelayed();
-			
 		}
 	}
 	
