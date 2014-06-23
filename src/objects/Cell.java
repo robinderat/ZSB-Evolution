@@ -18,7 +18,6 @@ public class Cell {
 	ArrayList<Behaviour> behaviours;
 	public boolean performingMultiTurnBehaviour; // in case we do multi turn complex behaviours
 	
-	
 	public Cell(Tile t) {
 		locationRef = new WeakReference<Tile>(t);
 		properties = new Properties();
@@ -79,7 +78,7 @@ public class Cell {
 	}
 	
 	public void attack(Cell target){
-		target.properties.currentEnergy -= properties.attack;
+		target.properties.currentEnergy -= properties.getStrength();
 		if(target.properties.currentEnergy < 0){
 			eat(target);
 		}
