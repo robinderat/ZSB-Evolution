@@ -11,7 +11,7 @@ public class Behaviour {
     }
 	
 	public Behaviour goRight(Cell c){
-		Behaviour b = new Behavior();
+		Behaviour b = new Behaviour();
 		//if (true) {
 		//	
 		//}
