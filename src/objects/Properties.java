@@ -128,4 +128,8 @@ public class Properties {
 		System.out.println("Vision: " +visionRange);
 		System.out.println("Strength: " +strength);
 	}
+	
+	public int getStrength() { 
+		return strength; 
+	}
 }

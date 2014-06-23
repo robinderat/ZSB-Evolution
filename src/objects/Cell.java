@@ -17,7 +17,6 @@ public class Cell {
 	public Image img;
 	ArrayList<Behaviour> behaviours;
 	
-	
 	public Cell(Tile t) {
 		locationRef = new WeakReference<Tile>(t);
 		properties = new Properties();
@@ -65,7 +64,7 @@ public class Cell {
 	}
 	
 	public void attack(Cell target){
-		target.properties.currentEnergy -= properties.attack;
+		target.properties.currentEnergy -= properties.getStrength();
 		if(target.properties.currentEnergy < 0){
 			eat(target);
 		}
