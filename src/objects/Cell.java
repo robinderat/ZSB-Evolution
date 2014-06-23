@@ -48,10 +48,29 @@ public class Cell {
 		//behaviour.execute(this);
 	}
 	
+
+	public void eat(Cell cell){
+		int energyValue = 1;
+		if (properties.currentEnergy < properties.maxEnergy - energyValue){
+			properties.currentEnergy += energyValue;
+		}else{
+			properties.currentEnergy = properties.maxEnergy;
+		}
+		location.c.cellsToBeRemoved.add(cell);
+		location.c.removeCellsDelayed();
+		
+	}
 	
+	public void attack(Cell target){
+		target.properties.currentEnergy -= properties.attack;
+		if(target.properties.currentEnergy < 0){
+			eat(target);
+		}
+	}
 	
 	public void action(){
-		ArrayList<Cell> cells = new ArrayList<Cell>();
+		/*ArrayList<Cell> cells = new ArrayList<Cell>();
+
 		ArrayList<Tile> tiles = getMoveSet();
 		System.out.println(tiles);
 		for (Tile tile : tiles) {
@@ -70,27 +89,35 @@ public class Cell {
 
 		}
 		
-		location.c.cellsToBe = cells;
+		location.c.cellsToBeAdded = cells;
+		*/
+		
+		ArrayList<Tile> moves = getMoveSet();
+		Tile tile = moves.get(3);
+		moveTo(tile);
 	}
 	
 	public ArrayList<Tile> getMoveSet(){
 		ArrayList<Tile> result = new ArrayList<Tile>();
 		
 		for (int i = 0; i < properties.speed + 1; i++) {
-			int x = location.x + i * location.c.tileSize;
+			int x = location.x + location.c.xOffSet + i * location.c.tileSize;	
 			int Dy = properties.speed + 1 - i;
 			for (int j = 0; j < Dy; j++) {
-				int y = location.y + j * location.c.tileSize;
+				int y = location.y + location.c.yOffSet + j * location.c.tileSize;
+				/*if (y + location.c.yOffSet < 200 + location.c.yOffSet) {
+					
+				}*/
 				Tile tile = location.c.getTile(x, y);
 				result.add(tile);
 			}
 		}
 		
 		for (int i = 0; i < properties.speed + 1; i++) {
-			int x = location.x + i * location.c.tileSize;
+			int x = location.x + location.c.xOffSet  + i * location.c.tileSize;
 			int Dy = properties.speed + 1 - i;
 			for (int j = 0; j < Dy; j++) {
-				int y = location.y - j * location.c.tileSize;
+				int y = location.y + location.c.yOffSet  - j * location.c.tileSize;
 				Tile tile = location.c.getTile(x, y);
 				result.add(tile);
 			}
@@ -98,20 +125,20 @@ public class Cell {
 		
 		for (int i = 0; i < properties.speed + 1; i++) {
 			System.out.println(i);
-			int x = location.x - i * location.c.tileSize;
+			int x = location.x + location.c.xOffSet  - i * location.c.tileSize;
 			int Dy = properties.speed + 1 - i;
 			for (int j = 0; j < Dy; j++) {
-				int y = location.y + j * location.c.tileSize;
+				int y = location.y + location.c.yOffSet  + j * location.c.tileSize;
 				Tile tile = location.c.getTile(x, y);
 				result.add(tile);
 			}
 		}
 		
 		for (int i = 0; i < properties.speed + 1; i++) {
-			int x = location.x - i * location.c.tileSize;
+			int x = location.x  + location.c.xOffSet  - i * location.c.tileSize;
 			int Dy = properties.speed + 1 - i;
 			for (int j = 0; j < Dy; j++) {
-				int y = location.y - j * location.c.tileSize;
+				int y = location.y + location.c.yOffSet  - j * location.c.tileSize;
 				Tile tile = location.c.getTile(x, y);
 				result.add(tile);
 			}
