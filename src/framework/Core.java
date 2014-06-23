@@ -14,6 +14,8 @@ public class Core {
 	public int xOffSet = 0;
 	public int yOffSet = 0;
 	
+	public int iterations = 1;
+	
 	Tile selected;		
 			
 	private Tile[][] tileArray = new Tile[tileNumber][tileNumber];
@@ -46,8 +48,8 @@ public class Core {
 		}
 	}
 	
-	public void iterate(int nTurns) {
-		for (int i = 0; i < nTurns; i++) {		
+	public void iterate() {
+		for (int i = 0; i < iterations; i++) {		
 			for (int j = 0; j< cellArray.size(); j++){
 				
 				Cell c = cellArray.get(j);

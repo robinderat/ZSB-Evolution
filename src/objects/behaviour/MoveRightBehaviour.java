@@ -12,8 +12,6 @@ public class MoveRightBehaviour extends Behaviour {
 
 		ArrayList<Tile> moves = c.getMoveSet();
 		Tile destination = moves.get(2);
-
-
 		c.action(destination);
 	}
 	

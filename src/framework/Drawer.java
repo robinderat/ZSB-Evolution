@@ -43,9 +43,12 @@ public class Drawer extends JPanel {
 	private void paintProperties(Graphics g){
 		g.drawImage(infoBg, 1000, 25, 300, 600, null);
 		Tile tile = core.selected;
+		g.drawString("Steps in next iteration", 1020, 50);
+		g.drawString(Integer.toString(core.iterations), 1220, 50);
+		
 		if (tile != null) {
-			g.drawString("X: " + Integer.toString(tile.x), 1020, 50);
-			g.drawString("Y: " + Integer.toString(tile.y), 1020, 75);
+			g.drawString("X: " + Integer.toString(tile.x), 1020, 150);
+			g.drawString("Y: " + Integer.toString(tile.y), 1020, 175);
 			
 			if (tile.containsCell()) {
 				Cell c = tile.getCell();
