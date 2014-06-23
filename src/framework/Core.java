@@ -66,6 +66,7 @@ public class Core {
 			
 			System.out.println(cellArray);
 
+
 		}
 	}
 	

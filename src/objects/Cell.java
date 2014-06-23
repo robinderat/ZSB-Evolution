@@ -53,13 +53,21 @@ public class Cell {
 	public void action(){
 		ArrayList<Cell> cells = new ArrayList<Cell>();
 		ArrayList<Tile> tiles = getMoveSet();
+		System.out.println(tiles);
 		for (Tile tile : tiles) {
 			if (!tile.containsCell()) {
 				Cell cell = new Cell(tile);
+
 				cells.add(cell);
 				
 			}
 			
+
+				tile.c.addCell(cell);
+				System.out.println("add cell");
+			}
+			System.out.println("end Actoin");
+
 		}
 		
 		location.c.cellsToBe = cells;
