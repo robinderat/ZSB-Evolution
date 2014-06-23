@@ -14,7 +14,7 @@ public class Properties {
 	public int maxLifeSpan;
 	public int minMatingAge;
 	public int maxMatingAge;
-	public int speed;
+	public int speed = 3;
 	public int visionRange; 
 	
 	

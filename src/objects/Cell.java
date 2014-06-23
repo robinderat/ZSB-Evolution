@@ -36,11 +36,16 @@ public class Cell {
 	}
 	
 	public void action(){
+		System.out.println("action");
 		ArrayList<Tile> tiles = getMoveSet();
+		System.out.println(tiles);
 		for (Tile tile : tiles) {
 			if (!tile.containsCell()) {
-				tile.giveCell(new Cell(tile));
+				Cell cell = new Cell(tile);
+				tile.c.addCell(cell);
+				System.out.println("add cell");
 			}
+			System.out.println("end Actoin");
 		}
 	}
 	
