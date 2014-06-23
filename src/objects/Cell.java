@@ -16,6 +16,7 @@ public class Cell {
 	Properties properties;
 	public Image img;
 	ArrayList<Behaviour> behaviours;
+	public boolean performingMultiTurnBehaviour; // in case we do multi turn complex behaviours
 	
 	
 	public Cell(Tile t) {
@@ -34,20 +35,33 @@ public class Cell {
 	
 	// moves the cell: check what it should do and then go toward that position
 	public void update() {
-		//get behaviour
-		
+
 		// possibly check if following multi-turn behaviour
-		// if (behaviour.isMultiTurn() then continue that
+		// if (performingMultiTurnBehaviour) then continue that
 		
-		// else make new behaviour
-		//pick behaviour from behaviours
+		
+		
+		// else:
+		
+		Behaviour behaviour;
+		
+		// pick behaviour from behaviours. picks first possible one from list
+		for (int i = 0; i < behaviours.size(); i++){
+			// if (behaviours.get(i).isPossible()) {
+				// behaviour = behaviours.get(i);
+				// break;
+			//}
+		}
+		
+		// TEMPORARY TEST LINE : Always make first behaviour the chosen one :
+		behaviour = behaviours.get(0);
+
 		
 		// get destination from behaviour
 		// Tile dest = behaviour.getDest();
 		
 		
 		// go there
-		Behaviour behaviour = behaviours.get(0);
 		behaviour.execute(this);
 	}
 	
