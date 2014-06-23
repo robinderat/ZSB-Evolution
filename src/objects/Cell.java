@@ -53,9 +53,9 @@ public class Cell {
 	public ArrayList<Tile> getMoveSet(){
 		ArrayList<Tile> result = new ArrayList<Tile>();
 		
-		for (int i = 0; i < properties.speed; i++) {
+		for (int i = 0; i < properties.speed + 1; i++) {
 			int x = location.x + i * location.c.tileSize;
-			int Dy = properties.speed - i;
+			int Dy = properties.speed + 1 - i;
 			for (int j = 0; j < Dy; j++) {
 				int y = location.y + j * location.c.tileSize;
 				Tile tile = location.c.getTile(x, y);
@@ -63,9 +63,9 @@ public class Cell {
 			}
 		}
 		
-		for (int i = 0; i < properties.speed; i++) {
+		for (int i = 0; i < properties.speed + 1; i++) {
 			int x = location.x + i * location.c.tileSize;
-			int Dy = properties.speed - i;
+			int Dy = properties.speed + 1 - i;
 			for (int j = 0; j < Dy; j++) {
 				int y = location.y - j * location.c.tileSize;
 				Tile tile = location.c.getTile(x, y);
@@ -73,9 +73,10 @@ public class Cell {
 			}
 		}
 		
-		for (int i = 0; i < properties.speed; i++) {
+		for (int i = 0; i < properties.speed + 1; i++) {
+			System.out.println(i);
 			int x = location.x - i * location.c.tileSize;
-			int Dy = properties.speed - i;
+			int Dy = properties.speed + 1 - i;
 			for (int j = 0; j < Dy; j++) {
 				int y = location.y + j * location.c.tileSize;
 				Tile tile = location.c.getTile(x, y);
@@ -83,9 +84,9 @@ public class Cell {
 			}
 		}
 		
-		for (int i = 0; i < properties.speed; i++) {
+		for (int i = 0; i < properties.speed + 1; i++) {
 			int x = location.x - i * location.c.tileSize;
-			int Dy = properties.speed - i;
+			int Dy = properties.speed + 1 - i;
 			for (int j = 0; j < Dy; j++) {
 				int y = location.y - j * location.c.tileSize;
 				Tile tile = location.c.getTile(x, y);
