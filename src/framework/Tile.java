@@ -11,11 +11,11 @@ import objects.Cell;
 
 public class Tile {
 
-	int x;
-	int y;
+	public int x;
+	public int y;
 	Image img;
 	Point2D.Double[] sides = new Point2D.Double[4];
-	Core c;
+	public Core c;
 	Cell cell = null;
 	
 	public Tile(int x, int y, Core core){

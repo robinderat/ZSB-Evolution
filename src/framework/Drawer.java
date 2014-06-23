@@ -49,7 +49,7 @@ public class Drawer extends JPanel {
 			
 			if (tile.containsCell()) {
 				Cell c = tile.getCell();
-				g.drawString("CellType: " + Integer.toString(c.type), 1020, 125);
+				//g.drawString("CellType: " + Integer.toString(c.type), 1020, 125);
 			}
 			
 		}

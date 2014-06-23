@@ -1,6 +1,7 @@
 package objects;
 
 import java.awt.Image;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
@@ -12,7 +13,7 @@ public class Cell {
 	Behaviour behaviour;
 	Properties properties;
 	public Image img;
-	public int type = 0;
+	
 	
 	public Cell(Tile t){
 		location = t;
@@ -33,4 +34,17 @@ public class Cell {
 	public void moveTo(Tile t){
 		location = t;
 	}
+	/*
+	public ArrayList<Tile> getTilesInRange(){
+		ArrayList<Tile> result = new ArrayList<Tile>();
+		for (Tile[] tiles : location.c.getTiles()) {
+			for (Tile tile: tiles) {
+				if (tile.x == 1) {
+					
+				}
+			}
+		}
+		
+		return result;
+	}*/
 }
