@@ -38,10 +38,36 @@ public class Core {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			move();
+			
+			
+			
+			moveBoardView();
 			frame.repaint();
 		}
 	}
+	
+	
+	public void iterate(int nTurns){
+		for (int i = 0; i < nTurns; i++){
+			
+			
+			for (int j = 0; j< cellArray.size(); j++){
+				
+				Cell c = cellArray.get(j);
+				c.action();
+				
+				
+			}
+			
+			
+			
+			
+			
+			
+		}
+	}
+	
+	
 	
 	private void fillArray(){
 		for (int i = 0; i < tileNumber; i++) {
@@ -89,7 +115,7 @@ public class Core {
 		return cellArray;
 	}
 	
-	private void move(){
+	private void moveBoardView(){
 		if(movingUp){
 			moveUp();
 		}
