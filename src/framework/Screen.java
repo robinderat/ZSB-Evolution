@@ -36,5 +36,7 @@ public class Screen extends JFrame {
 		draw.setVisible(true);
 		add(draw);
 		
+		draw.add(next);
+		
 	}
 }

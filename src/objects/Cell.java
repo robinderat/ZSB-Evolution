@@ -5,64 +5,109 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
+import objects.behaviour.Behaviour;
+import objects.behaviour.MoveRightBehaviour;
 import framework.Tile;
 
 public class Cell {
 
 	public Tile location;
-	Behaviour behaviour;
 	Properties properties;
 	public Image img;
+	ArrayList<Behaviour> behaviours;
 	
 	
 	public Cell(Tile t){
 		location = t;
-		behaviour = new Behaviour();
 		properties = new Properties();
 		img = new ImageIcon("src/art/Cell1.png").getImage();
 		t.giveCell(this);
+		
+		behaviours.add(new MoveRightBehaviour());
 	}
-	
-	public Cell(Tile t, int[] stats){
-		location = t;
-		behaviour = new Behaviour(stats);
-		properties = new Properties(stats);
-		img = new ImageIcon("src/art/Cell1.png").getImage();
-		t.giveCell(this);
-	}
-	
+
 	public void moveTo(Tile t){
 		location = t;
 	}
 	
+	// moves the cell: check what it should do and then go toward that position
+	public void move(){
+		//get behaviour
+		
+		// possibly check if following multi-turn behaviour
+		// if (behaviour.isMultiTurn() then continue that
+		
+		// else make new behaviour
+		//pick behaviour from behaviours
+		
+		// get destination from behaviour
+		// Tile dest = behaviour.getDest();
+		
+		
+		// go there
+		//behaviour.execute(this);
+	}
+	
+	
+	
 	public void action(){
+		ArrayList<Cell> cells = new ArrayList<Cell>();
 		ArrayList<Tile> tiles = getMoveSet();
 		for (Tile tile : tiles) {
 			if (!tile.containsCell()) {
-				tile.giveCell(new Cell(tile));
+				Cell cell = new Cell(tile);
+				cells.add(cell);
+				
 			}
+			
 		}
+		
+		location.c.cellsToBe = cells;
 	}
 	
 	public ArrayList<Tile> getMoveSet(){
 		ArrayList<Tile> result = new ArrayList<Tile>();
 		
-		for (int i = 0 - properties.speed; i < properties.speed; i++) {
+		for (int i = 0; i < properties.speed + 1; i++) {
 			int x = location.x + i * location.c.tileSize;
-			int Dy = properties.speed - i;
-			if(i < 0){
-				Dy = - Dy;
+			int Dy = properties.speed + 1 - i;
+			for (int j = 0; j < Dy; j++) {
+				int y = location.y + j * location.c.tileSize;
+				Tile tile = location.c.getTile(x, y);
+				result.add(tile);
 			}
-			
-			for(int j = 0-Dy; j < Dy; j++){
+		}
+		
+		for (int i = 0; i < properties.speed + 1; i++) {
+			int x = location.x + i * location.c.tileSize;
+			int Dy = properties.speed + 1 - i;
+			for (int j = 0; j < Dy; j++) {
 				int y = location.y - j * location.c.tileSize;
 				Tile tile = location.c.getTile(x, y);
 				result.add(tile);
 			}
-			
-			
 		}
 		
+		for (int i = 0; i < properties.speed + 1; i++) {
+			System.out.println(i);
+			int x = location.x - i * location.c.tileSize;
+			int Dy = properties.speed + 1 - i;
+			for (int j = 0; j < Dy; j++) {
+				int y = location.y + j * location.c.tileSize;
+				Tile tile = location.c.getTile(x, y);
+				result.add(tile);
+			}
+		}
+		
+		for (int i = 0; i < properties.speed + 1; i++) {
+			int x = location.x - i * location.c.tileSize;
+			int Dy = properties.speed + 1 - i;
+			for (int j = 0; j < Dy; j++) {
+				int y = location.y - j * location.c.tileSize;
+				Tile tile = location.c.getTile(x, y);
+				result.add(tile);
+			}
+		}
 		
 		
 		return result;
