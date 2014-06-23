@@ -13,9 +13,9 @@ import framework.Tile;
 public class Cell {
 
 	public WeakReference<Tile> locationRef;
-	Properties properties;
+	public Properties properties;
 	public Image img;
-	ArrayList<Behaviour> behaviours;
+	public ArrayList<Behaviour> behaviours;
 	public boolean performingMultiTurnBehaviour; // in case we do multi turn complex behaviours
 	
 	public Cell(Tile t) {
@@ -84,7 +84,7 @@ public class Cell {
 		}
 	}
 	
-	public void action(){
+	public void action(Tile destination){
 		/*ArrayList<Cell> cells = new ArrayList<Cell>();
 
 		ArrayList<Tile> tiles = getMoveSet();
@@ -107,10 +107,7 @@ public class Cell {
 		
 		location.c.cellsToBeAdded = cells;
 		*/
-		
-		ArrayList<Tile> moves = getMoveSet();
-		Tile tile = moves.get(3);
-		moveTo(tile);
+		moveTo(destination);
 	}
 	
 	public ArrayList<Tile> getMoveSet(){
@@ -121,9 +118,6 @@ public class Cell {
 			int Dy = properties.speed + 1 - i;
 			for (int j = 0; j < Dy; j++) {
 				int y = locationRef.get().y + locationRef.get().coreRef.get().yOffSet + j * locationRef.get().coreRef.get().tileSize;
-				/*if (y + location.c.yOffSet < 200 + location.c.yOffSet) {
-					
-				}*/
 				Tile tile = locationRef.get().coreRef.get().getTile(x, y);
 				result.add(tile);
 			}
