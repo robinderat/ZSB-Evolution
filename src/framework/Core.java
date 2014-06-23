@@ -18,6 +18,7 @@ public class Core {
 			
 	private Tile[][] tileArray = new Tile[tileNumber][tileNumber];
 	private ArrayList<Cell> cellArray = new ArrayList<Cell>();
+	public ArrayList<Cell> cellsToBe = new ArrayList<Cell>();
 	
 	public boolean movingUp = false;
 	public boolean movingDown = false;
@@ -58,7 +59,7 @@ public class Core {
 				
 				
 			}
-			
+			addCellsDelayed();
 			
 			System.out.println(cellArray);
 		}
@@ -105,6 +106,12 @@ public class Core {
 	
 	public void addCell(Cell c){
 		cellArray.add(c);
+	}
+	
+	public void addCellsDelayed(){
+		for (Cell cell : cellsToBe) {
+			cellArray.add(cell);
+		}
 	}
 	
 	public ArrayList<Cell> getCells(){

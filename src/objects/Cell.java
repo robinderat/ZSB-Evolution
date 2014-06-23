@@ -36,38 +36,62 @@ public class Cell {
 	}
 	
 	public void action(){
-		System.out.println("action");
+		ArrayList<Cell> cells = new ArrayList<Cell>();
 		ArrayList<Tile> tiles = getMoveSet();
-		System.out.println(tiles);
 		for (Tile tile : tiles) {
 			if (!tile.containsCell()) {
 				Cell cell = new Cell(tile);
-				tile.c.addCell(cell);
-				System.out.println("add cell");
+				cells.add(cell);
+				
 			}
-			System.out.println("end Actoin");
+			
 		}
+		
+		location.c.cellsToBe = cells;
 	}
 	
 	public ArrayList<Tile> getMoveSet(){
 		ArrayList<Tile> result = new ArrayList<Tile>();
 		
-		for (int i = 0 - properties.speed; i < properties.speed; i++) {
+		for (int i = 0; i < properties.speed; i++) {
 			int x = location.x + i * location.c.tileSize;
 			int Dy = properties.speed - i;
-			if(i < 0){
-				Dy = - Dy;
+			for (int j = 0; j < Dy; j++) {
+				int y = location.y + j * location.c.tileSize;
+				Tile tile = location.c.getTile(x, y);
+				result.add(tile);
 			}
-			
-			for(int j = 0-Dy; j < Dy; j++){
+		}
+		
+		for (int i = 0; i < properties.speed; i++) {
+			int x = location.x + i * location.c.tileSize;
+			int Dy = properties.speed - i;
+			for (int j = 0; j < Dy; j++) {
 				int y = location.y - j * location.c.tileSize;
 				Tile tile = location.c.getTile(x, y);
 				result.add(tile);
 			}
-			
-			
 		}
 		
+		for (int i = 0; i < properties.speed; i++) {
+			int x = location.x - i * location.c.tileSize;
+			int Dy = properties.speed - i;
+			for (int j = 0; j < Dy; j++) {
+				int y = location.y + j * location.c.tileSize;
+				Tile tile = location.c.getTile(x, y);
+				result.add(tile);
+			}
+		}
+		
+		for (int i = 0; i < properties.speed; i++) {
+			int x = location.x - i * location.c.tileSize;
+			int Dy = properties.speed - i;
+			for (int j = 0; j < Dy; j++) {
+				int y = location.y - j * location.c.tileSize;
+				Tile tile = location.c.getTile(x, y);
+				result.add(tile);
+			}
+		}
 		
 		
 		return result;
