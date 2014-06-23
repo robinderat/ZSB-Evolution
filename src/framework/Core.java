@@ -40,35 +40,25 @@ public class Core {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
-			
+				
 			moveBoardView();
 			frame.repaint();
 		}
 	}
 	
-	
-	public void iterate(int nTurns){
-		for (int i = 0; i < nTurns; i++){
-			
-			
+	public void iterate(int nTurns) {
+		for (int i = 0; i < nTurns; i++) {		
 			for (int j = 0; j< cellArray.size(); j++){
 				
 				Cell c = cellArray.get(j);
-				//c.action();
-				
 				c.update();
-				
 				
 			}
 
 			addCellsDelayed();
 		}
 	}
-	
-	
-	
+		
 	private void fillArray(){
 		for (int i = 0; i < tileNumber; i++) {
 			for (int j = 0; j < tileNumber; j++) {
@@ -153,7 +143,6 @@ public class Core {
 	private void moveDown(){
 		yOffSet += 5;
 	}
-	
 	
 	private void moveLeft(){
 		xOffSet -= 5;
