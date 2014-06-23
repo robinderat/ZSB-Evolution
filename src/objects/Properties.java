@@ -18,7 +18,7 @@ public class Properties {
 	
 	//public int fitness;
 
-	public int type;
+	//public int type;
 	
 	// inherited by DNA
 	public int maxEnergy;
@@ -131,5 +131,17 @@ public class Properties {
 	
 	public int getStrength() { 
 		return strength; 
+	}
+	
+	public int getSpeed() {
+		return speed;
+	}
+	
+	public int getVision() {
+		return visionRange;
+	}
+	
+	public int getMaxEnergy() {
+		return maxEnergy;
 	}
 }
