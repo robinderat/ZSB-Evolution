@@ -34,17 +34,37 @@ public class Cell {
 	public void moveTo(Tile t){
 		location = t;
 	}
-	/*
-	public ArrayList<Tile> getTilesInRange(){
-		ArrayList<Tile> result = new ArrayList<Tile>();
-		for (Tile[] tiles : location.c.getTiles()) {
-			for (Tile tile: tiles) {
-				if (tile.x == 1) {
-					
-				}
+	
+	public void action(){
+		ArrayList<Tile> tiles = getMoveSet();
+		for (Tile tile : tiles) {
+			if (!tile.containsCell()) {
+				tile.giveCell(new Cell(tile));
 			}
 		}
+	}
+	
+	public ArrayList<Tile> getMoveSet(){
+		ArrayList<Tile> result = new ArrayList<Tile>();
+		
+		for (int i = 0 - properties.speed; i < properties.speed; i++) {
+			int x = location.x + i * location.c.tileSize;
+			int Dy = properties.speed - i;
+			if(i < 0){
+				Dy = - Dy;
+			}
+			
+			for(int j = 0-Dy; j < Dy; j++){
+				int y = location.y - j * location.c.tileSize;
+				Tile tile = location.c.getTile(x, y);
+				result.add(tile);
+			}
+			
+			
+		}
+		
+		
 		
 		return result;
-	}*/
+	}
 }
