@@ -2,6 +2,7 @@ package objects.behaviour;
 
 import java.util.ArrayList;
 
+import framework.RandomGenerator;
 import framework.Tile;
 import objects.Cell;
 
@@ -30,16 +31,15 @@ public class MoveAnywhereBehaviour extends Behaviour {
 		// at this point this will ALWAYS be down, unless there is something there, in which case it will be right
 		// to make this better, we must make the looping through the moves array be random
 		
-		for (Tile destination : moves){
-			
-			System.out.println(destination);
-			
-			if (c.worldRef.get() != null && c.worldRef.get().getCellAtPositionCurrent(destination.x, destination.y) == null){
-				c.moveTo(destination);
-				return true;
-			}
-		}
+		RandomGenerator gen = RandomGenerator.getInstance();
 		
+		int destIndex = gen.getRandom().nextInt(moves.size());
+		
+		Tile destination = moves.get(destIndex);
+		if (c.worldRef.get() != null && c.worldRef.get().getCellAtPositionCurrent(destination.x, destination.y) == null){
+			c.moveTo(destination);
+			return true;
+		}
 		
 		// if it gets here, it hasn't returned, which means it hasn't found a move
 		// this means that it won't do anything here and automatically try another behaviour
