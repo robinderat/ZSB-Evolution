@@ -205,7 +205,6 @@ public class Cell {
 		worldRef.get().nextCells.add(this);
 	}
 	
-	
 	public ArrayList<Tile> getTilesInRadius(int rad) {
 		ArrayList<Tile> result = new ArrayList<Tile>();
 
@@ -228,7 +227,7 @@ public class Cell {
 					}
 					
 					Tile tile = worldRef.get().getTile(_x, _y);
-					if (result.contains(tile) == false) {
+					if (tile != null && result.contains(tile) == false) {
 						result.add(tile);
 					}
 				}

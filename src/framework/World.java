@@ -12,7 +12,8 @@ public class World {
 	public final int tileSize = 15;
 	public final int tileCount = 40;
 	
-
+	public boolean doIterate; // bool if iteration should be done in while loop
+	
 	public int xOffSet = 0;
 	public int yOffSet = 0;
 	
@@ -35,6 +36,7 @@ public class World {
 	public World(Screen f){
 		frame = f;
 		createTileset();
+		doIterate = false;
 	}
 	
 	public void run(){
@@ -48,6 +50,16 @@ public class World {
 				e.printStackTrace();
 			}
 				
+			if (doIterate && iterations > 0) {
+				iterate();
+				int newIt = iterations - 1;
+				// done with iterations
+				if (newIt == 0) {
+					doIterate = false;
+				}
+				setIterations(iterations - 1);
+				
+			}
 			moveBoardView();
 			frame.repaint();
 		}
@@ -92,25 +104,23 @@ public class World {
 	}
 
 	public void iterate() {
-		for (int i = 0; i < iterations; i++) {		
-			for (int j = 0; j < currentCells.size(); j++){
-				
-				Cell c = currentCells.get(j);
-				c.update();
-				
-			}
+		
+		for (int j = 0; j < currentCells.size(); j++){
 			
-			currentCells = new ArrayList<Cell>();
+			Cell c = currentCells.get(j);
+			c.update();
 			
-			for (Cell nc : nextCells) {
-				currentCells.add(nc);
-			}
-			
-			nextCells = new ArrayList<Cell>();
-			
-			//System.out.println(currentCells);
-			//DEBUGprintCells(currentCells);
 		}
+		
+		currentCells = new ArrayList<Cell>();
+		
+		for (Cell nc : nextCells) {
+			currentCells.add(nc);
+		}
+		
+		nextCells = new ArrayList<Cell>();
+		
+		DEBUGprintCells(currentCells);
 	}
 	
 	private void DEBUGprintCells(ArrayList<Cell> cells){
@@ -120,6 +130,7 @@ public class World {
 		System.out.println("n cells =" + cells.size());
 		
 	}
+	
 	
 	
 		

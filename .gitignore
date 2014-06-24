@@ -2,4 +2,6 @@
 .project
 .settings
 .metadata
-*.class
+.class
+bin/framework
+bin/objects

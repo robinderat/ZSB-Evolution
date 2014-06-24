@@ -50,7 +50,7 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
 		
 		if (e.getButton() == MouseEvent.BUTTON3) {
 			Tile t = world.getTile(x, y);
-			if (t != null) {				
+			if (t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) {				
 				int cellType = 1;
 
 				//DEBUG change cell type
@@ -58,6 +58,7 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
 
 				Cell cell = new Cell(world, t.x, t.y, cellType);
 				world.addCell(cell);
+				System.out.println("new cell: " + t.x + ":" + t.y);
 			}
 			
 		}
