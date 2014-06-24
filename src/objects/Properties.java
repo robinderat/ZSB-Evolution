@@ -2,9 +2,9 @@ package objects;
 
 import java.util.Random;
 
-public class Properties {
+import framework.RandomGenerator;
 
-	private static Random random = new Random(System.currentTimeMillis());
+public class Properties {
 			
 	// DNA settings
 	private static final int maxEnergyBitLength = 6;
@@ -117,11 +117,12 @@ public class Properties {
 	 * of the properties */
 	private void generateDNA() {
 		int totalLength = maxEnergyBitLength + speedBitLength + visionRangeBitLength + strengthBitLength;
+		RandomGenerator instance = RandomGenerator.getInstance();
 		
 		DNA = "";
 		
 		for (int i = 0; i < totalLength; i++) {
-			if (random.nextBoolean()) {
+			if (instance.getRandom().nextBoolean()) {
 				DNA = DNA + '1';
 			}
 			else {
