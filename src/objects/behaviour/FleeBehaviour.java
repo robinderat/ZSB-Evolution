@@ -72,9 +72,6 @@ public class FleeBehaviour extends WanderBehaviour {
 		for (Tile tile : vision) {
 			Cell c = tile.worldRef.get().getCellAtPositionCurrent(tile.x, tile.y);
 			
-			if(c != null){
-			}
-			
 			if(c != null && cell.type != c.type){
 				dangerousTiles.add(tile);
 			}
