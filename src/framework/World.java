@@ -19,9 +19,9 @@ public class World {
 	Tile selected;		
 			
 	private Tile[][] tileArray = new Tile[tileCount][tileCount];
-	private ArrayList<Cell> cellArray = new ArrayList<Cell>();
-	public ArrayList<Cell> cellsToBeAdded = new ArrayList<Cell>();
-	public ArrayList<Cell> cellsToBeRemoved = new ArrayList<Cell>();
+	
+	public ArrayList<Cell> currentCells = new ArrayList<Cell>();
+	public ArrayList<Cell> nextCells = new ArrayList<Cell>();
 	
 	public boolean movingUp = false;
 	public boolean movingDown = false;
@@ -49,18 +49,38 @@ public class World {
 		}
 	}
 	
+
 	public void iterate() {
 		for (int i = 0; i < iterations; i++) {		
-			for (int j = 0; j< cellArray.size(); j++){
+			for (int j = 0; j < currentCells.size(); j++){
 				
-				Cell c = cellArray.get(j);
+				Cell c = currentCells.get(j);
 				c.update();
 				
 			}
-
-			addCellsDelayed();
+			
+			currentCells = new ArrayList<Cell>();
+			
+			for (Cell nc : nextCells) {
+				currentCells.add(nc);
+			}
+			
+			nextCells = new ArrayList<Cell>();
+			
+			System.out.println(currentCells);
+			DEBUGprintCells(currentCells);
 		}
 	}
+	
+	private void DEBUGprintCells(ArrayList<Cell> cells){
+		for (Cell cell : cells){
+			System.out.println(""+ cell.x + " "+ cell.y);
+		}
+		System.out.println("n cells =" + cells.size());
+		
+	}
+	
+	
 		
 	/**
 	 * getter iterations
@@ -118,31 +138,15 @@ public class World {
 	}
 	
 	public void addCell(Cell c){
-		cellArray.add(c);
+
+		currentCells.add(c);
 	}
 	
-	public void addCellsDelayed(){
-		for (Cell cell : cellsToBeAdded) {
-			cellArray.add(cell);
-		}
-		
-		cellsToBeAdded = new ArrayList<Cell>();
+	public ArrayList<Cell> getCells() {
+		return currentCells;
 	}
 	
-	public void removeCellsDelayed(){
-		for (Cell cell : cellsToBeRemoved) {
-			cellArray.remove(cell);
-		}
-		
-		cellsToBeRemoved = new ArrayList<Cell>();
-	}
-	
-	public ArrayList<Cell> getCells(){
-		
-		return cellArray;
-	}
-	
-	private void moveBoardView(){
+	private void moveBoardView() {
 		if(movingUp){
 			moveUp();
 		}
@@ -181,4 +185,18 @@ public class World {
 		return tileArray[0][0];
 	}
 	
+	
+	public Cell getCellAtPositionNext(int px, int py) {
+		for (Cell c : nextCells) {
+			if (c.x == px && c.y == py) return c;
+		}
+		return null;
+	}
+	
+	public Cell getCellAtPositionCurrent(int px, int py) {
+		for (Cell c : currentCells) {
+			if (c.x == px && c.y == py) return c;
+		}
+		return null;
+	}
 }

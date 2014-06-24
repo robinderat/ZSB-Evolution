@@ -112,13 +112,14 @@ public class Properties {
 		}
 	}
 	
+	/*
 	private void printProperties(){
 		System.out.println("DNA: " +DNA);
 		System.out.println("Max Energy: " +maxEnergy);
 		System.out.println("Speed: " +speed);
 		System.out.println("Vision: " +visionRange);
 		System.out.println("Strength: " +strength);
-	}
+	}*/
 	
 	public int getStrength() { 
 		return strength; 

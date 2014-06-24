@@ -6,18 +6,16 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
-import objects.behaviour.Behaviour;
-import objects.behaviour.MoveRightBehaviour;
+import objects.behaviour.*;
 import framework.Tile;
 import framework.World;
 
 public class Cell {
 
-	public WeakReference<Tile> locationRef;
 	public Properties properties;
 	public Image img;
 	public ArrayList<Behaviour> behaviours;
-	public boolean performingMultiTurnBehaviour; // in case we do multi turn complex behaviours
+	//public boolean performingMultiTurnBehaviour; // in case we do multi turn complex behaviours
 	
 	public int x;
 	public int y;
@@ -34,7 +32,7 @@ public class Cell {
 		worldRef = new WeakReference<World>(w);
 		
 		behaviours = new ArrayList<Behaviour>();
-		behaviours.add(new MoveRightBehaviour());
+		behaviours.add(new JosefDebugBehaviour());
 	}
 
 	// moves the cell: check what it should do and then go toward that position
@@ -43,12 +41,7 @@ public class Cell {
 		// possibly check if following multi-turn behaviour
 		// if (performingMultiTurnBehaviour) then continue that
 		
-		
-		
-		// else:
-		
 		Behaviour behaviour;
-		
 		// pick behaviour from behaviours. picks first possible one from list
 		for (int i = 0; i < behaviours.size(); i++) {
 			// if (behaviours.get(i).isPossible()) {
@@ -60,15 +53,25 @@ public class Cell {
 		// TEMPORARY TEST LINE : Always make first behaviour the chosen one :
 		behaviour = behaviours.get(0);
 
-		
-		// get destination from behaviour
-		// Tile dest = behaviour.getDest();
-		
-		
 		// go there
 		behaviour.execute(this);
 	}
 	
+	public void DEBUGmoveToAllInMoveSet(ArrayList<Tile> moveSet){
+		for (Tile tile : moveSet) {
+			if (worldRef.get().getCellAtPositionNext(tile.x, tile.y) == null &&
+				worldRef.get().getCellAtPositionCurrent(tile.x, tile.y) == null) { 
+				Cell cell = new Cell(worldRef.get(), tile.x, tile.y);
+				
+				
+//				locationRef.get().coreRef.get().removeCellsDelayed();
+				worldRef.get().nextCells.add(cell);
+//				locationRef.get().coreRef.get().addCellsDelayed();
+			}
+		}
+//		locationRef.get().coreRef.get().removeCellsDelayed();
+//		locationRef.get().coreRef.get().addCellsDelayed();
+	}
 
 	public void eat(Cell cell) {
 		int energyValue = 20;
@@ -76,10 +79,7 @@ public class Cell {
 			properties.currentEnergy += energyValue;
 		} else {
 			properties.currentEnergy = properties.getMaxEnergy();
-		}
-		worldRef.get().cellsToBeRemoved.add(cell);
-		worldRef.get().removeCellsDelayed();
-		
+		}		
 	}
 	
 	public void attack(Cell target) {
@@ -92,6 +92,7 @@ public class Cell {
 	public void moveTo(Tile destination) {
 		x = destination.x;
 		y = destination.y;
+		worldRef.get().nextCells.add(this);
 		/*
 		Tile endTile = worldRef.get().getWorldEndPoint();
 		Tile startTile = worldRef.get().getWorldStartPoint();
@@ -113,7 +114,7 @@ public class Cell {
 
 	public ArrayList<Tile> getTilesInRadius(int rad) {
 		ArrayList<Tile> result = new ArrayList<Tile>();
-		
+
 		for (int k = 0; k < 4; k++) {
 			for (int i = 0; i < rad + 1; i++) {
 				int _x;
@@ -124,7 +125,6 @@ public class Cell {
 				} 
 				int Dy = rad + 1 - i;
 				
-				
 				for (int j = 0; j < Dy; j++) {
 					int _y;
 					if (k % 2 == 0) {
@@ -134,10 +134,15 @@ public class Cell {
 					}
 					
 					Tile tile = worldRef.get().getTile(_x, _y);
-					result.add(tile);
+					if (result.contains(tile) == false) {
+						result.add(tile);
+					}
 				}
 			}
 		}
+		
+		System.out.println(result);
+		System.out.println(result.size());
 		
 		return result;
 	}

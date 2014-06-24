@@ -1,13 +1,10 @@
 package framework;
 import java.awt.Image;
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
-
-import objects.Cell;
 
 
 public class Tile {

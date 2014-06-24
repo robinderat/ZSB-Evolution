@@ -4,10 +4,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.util.ArrayList;
 
 import objects.Cell;
-
 
 public class MouseInput implements MouseListener, MouseMotionListener, MouseWheelListener{
 
@@ -40,17 +38,17 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
 		int x = e.getX() - 10;
 		int y = e.getY() - 30;
 		
-		if (e.getButton() == e.BUTTON1) {
+		if (e.getButton() == MouseEvent.BUTTON1) {
 			Tile t = world.getTile(x, y);
 			world.select(t);
 		}
 		
-		if (e.getButton() == e.BUTTON2) {
+		if (e.getButton() == MouseEvent.BUTTON2) {
 			world.iterate();
 			
 		}
 		
-		if (e.getButton() == e.BUTTON3) {
+		if (e.getButton() == MouseEvent.BUTTON3) {
 			Tile t = world.getTile(x, y);
 			if (t != null) {
 				Cell cell = new Cell(world, t.x, t.y);
