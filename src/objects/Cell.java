@@ -145,7 +145,7 @@ public class Cell {
 			}
 		}
 		
-		//moveTo(bestTile);
+		moveTo(bestTile);
 		
 	}
 	
@@ -159,50 +159,16 @@ public class Cell {
 		System.out.println("A baby has been made");
 	}
 	
-	/*
-	public void flee(ArrayList<Tile> danger){
-		ArrayList<Tile> options = new ArrayList<Tile>();
-		ArrayList<Tile> tiles = getMoveSet();
-		Tile bestTile = null;
-		
-		for (Tile t : danger) {
-			Tile proposedTile = null;
-			double distance = 0;
-			for (Tile tile : tiles) {
-					
-				int Dx = tile.x - t.x; 
-				int Dy = tile.y - t.y;
-				double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
-					
-				if (newDistance > distance) {
-					distance = newDistance;
-					proposedTile = tile;
-				}
-			}
-			options.add(proposedTile);
-			
-			double bestDistance = 0;
-			for (Tile tile : options) {
-				int Dx = tile.x - t.x; 
-				int Dy = tile.y - t.y;
-				double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
-				
-				if (newDistance > bestDistance) {
-					distance = newDistance;
-					bestTile = tile;
-				}
-			}
-		
-		
-	//	moveTo(bestTile);
-	}*/
-
-	
 	// cell moves to new destination
 	public void moveTo(Tile destination) {
 		x = destination.x;
 		y = destination.y;
-		worldRef.get().nextCells.add(this);
+		if (getMoveSet().contains(destination)) {
+			worldRef.get().nextCells.add(this);
+		} else {
+			moveTowards(destination);
+		}
+		
 	}
 	
 	

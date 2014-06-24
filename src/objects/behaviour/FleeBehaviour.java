@@ -14,11 +14,47 @@ public class FleeBehaviour extends MoveAnywhereBehaviour {
 		ArrayList<Tile> perception = c.getPerceptionSet();
 
 		// first search for other cells in area
-		ArrayList<Tile> dangerousTiles = searchForDanger(perception);
+		ArrayList<Tile> dangerousTiles = searchForDanger(perception, c);
 		// if found, move in other direction
 		if (!dangerousTiles.isEmpty()) {
-			// flee behaviour (ROBIN)
-			//
+			
+				ArrayList<Tile> options = new ArrayList<Tile>();
+				ArrayList<Tile> tiles = c.getMoveSet();
+				Tile bestTile = null;
+				
+				for (Tile t : dangerousTiles) {
+					Tile proposedTile = null;
+					double distance = 0;
+					for (Tile tile : tiles) {
+							
+						int Dx = tile.x - t.x; 
+						int Dy = tile.y - t.y;
+						double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
+							
+						if (newDistance > distance) {
+							distance = newDistance;
+							proposedTile = tile;
+						}
+					}
+					options.add(proposedTile);
+					
+					double bestDistance = 0;
+					for (Tile tile : options) {
+						int Dx = tile.x - t.x; 
+						int Dy = tile.y - t.y;
+						double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
+						
+						if (newDistance > bestDistance) {
+							distance = newDistance;
+							bestTile = tile;
+						}
+					}
+				
+				
+			c.moveTo(bestTile);
+			}
+
+			
 			return true;
 		} else { // if not found then no move possible in this behaviour
 			return false;
@@ -33,10 +69,15 @@ public class FleeBehaviour extends MoveAnywhereBehaviour {
 	}
 	
 	// looks through perception tiles searching for tiles that have a cell on them
-	public ArrayList<Tile> searchForDanger(ArrayList<Tile> tiles){
+	private ArrayList<Tile> searchForDanger(ArrayList<Tile> vision, Cell cell){
 		ArrayList<Tile> dangerousTiles = new ArrayList<Tile>();
+		for (Tile tile : vision) {
+			Cell c = tile.worldRef.get().getCellAtPositionCurrent(tile.x, tile.y);
+			if(c != null && cell.type != c.type){
+				dangerousTiles.add(tile);
+			}
+		}
 		
-		// ROBIN
 		
 		// returns a list containing all tiles that have a cell on them
 		return dangerousTiles;
