@@ -76,8 +76,7 @@ public class World {
 		for (Cell cell : cells){
 			System.out.println(""+ cell.x + " "+ cell.y);
 		}
-		System.out.println("n cells =" + cells.size());
-		
+		System.out.println("n cells =" + cells.size());	
 	}
 	
 	

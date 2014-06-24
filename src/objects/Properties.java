@@ -159,4 +159,8 @@ public class Properties {
 	public int getMaxEnergy() {
 		return maxEnergy;
 	}
+	
+	public String getDNA() {
+		return DNA;
+	}
 }
