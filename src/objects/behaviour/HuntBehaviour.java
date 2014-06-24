@@ -1,6 +1,6 @@
 package objects.behaviour;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import framework.Tile;
 import objects.Cell;
@@ -12,7 +12,7 @@ public class HuntBehaviour extends WanderBehaviour {
 	public boolean execute(Cell c) {
 		if (!(c.properties.currentEnergy > 1)) return false;
 
-		Vector<Tile> perception = c.getPerceptionSet();
+		ArrayList<Tile> perception = c.getPerceptionSet();
 
 		// first search for other cells in area
 		Tile target = scour(perception);
@@ -45,15 +45,15 @@ public class HuntBehaviour extends WanderBehaviour {
 	}
 	
 	// scours surrounding searching for tiles that holds a cell
-	public Tile scour(Vector<Tile> tiles){
-		Vector<Tile> targets = new Vector<Tile>();
+	public Tile scour(ArrayList<Tile> tiles){
+		ArrayList<Tile> targets = new ArrayList<Tile>();
 		
 		// if found, see if it can eat/beat any of those cells
 		return chooseTarget(targets);
 	}
 	
 	// selects a target from a list of targets that it can eat/beat
-	public Tile chooseTarget(Vector<Tile> targets){
+	public Tile chooseTarget(ArrayList<Tile> targets){
 		Tile target = null;
 		return target;
 	}
