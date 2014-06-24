@@ -24,14 +24,20 @@ public class Cell {
 	public int type;
 	
 	public WeakReference<World> worldRef;
+
+	public Cell(World w, int lx, int ly, int t) {
+		this(w, lx, ly, t, "");
+	}
 	
 	/**
 	 * cell constructor
 	 */
-	public Cell(World w, int locX, int locY, int t, Properties p) {
-		properties = p;
-		if (properties == null) {
+	public Cell(World w, int locX, int locY, int t, String DNA) {
+		
+		if (DNA.length() == 0) {
 			properties = new Properties(); // random DNA
+		} else {
+			properties = new Properties(DNA);
 		}
 		
 		x = locX;
@@ -99,7 +105,77 @@ public class Cell {
 			eat(target);
 		}
 	}
-
+	
+	public void moveTowards(Tile target) {
+		
+		ArrayList<Tile> tiles = getMoveSet();
+		
+		double distance = 500;
+		int Dx;
+		int Dy;
+		Tile bestTile = null;
+		for (Tile tile : tiles) {
+			Dx = tile.x - target.x; 
+			Dy = tile.y - target.y;
+			double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
+			
+			if (newDistance < distance) {
+				distance = newDistance;
+				bestTile = tile;
+			}
+		}
+		
+		//moveTo(bestTile);
+		
+	}
+	
+	public void mate(Cell cell){
+		String ownDNA = properties.getDNA();
+		String otherDNA = cell.properties.getDNA();
+		String newDNA = worldRef.get().cBreeder.merge(ownDNA, otherDNA)[0];
+		
+		Cell c = new Cell(worldRef.get(), 15, 15, cell.type, newDNA);
+		worldRef.get().nextCells.add(c);
+		System.out.println("A baby has been made");
+	}
+	
+	/*
+	public void Flee(ArrayList<Tile> danger){
+		ArrayList<Tile> options = new ArrayList<Tile>();
+		ArrayList<Tile> tiles = getMoveSet();
+		Tile bestTile = null;
+		
+		for (Tile t : danger) {
+			Tile proposedTile = null;
+			double distance = 0;
+			for (Tile tile : tiles) {
+					
+				int Dx = tile.x - t.x; 
+				int Dy = tile.y - t.y;
+				double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
+					
+				if (newDistance > distance) {
+					distance = newDistance;
+					proposedTile = tile;
+				}
+			}
+			options.add(proposedTile);
+			
+			double bestDistance = 0;
+			for (Tile tile : options) {
+				int Dx = tile.x - t.x; 
+				int Dy = tile.y - t.y;
+				double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
+				
+				if (newDistance > bestDistance) {
+					distance = newDistance;
+					bestTile = tile;
+				}
+			}
+		
+		
+	//	moveTo(bestTile);
+	}*/
 
 	public ArrayList<Tile> getTilesInRadius(int rad) {
 		ArrayList<Tile> result = new ArrayList<Tile>();

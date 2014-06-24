@@ -55,9 +55,8 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
 
 				//DEBUG change cell type
 				cellType = (int)(Math.random() * 2)+1;
-				
-				
-				Cell cell = new Cell(world, t.x, t.y, cellType, null);
+
+				Cell cell = new Cell(world, t.x, t.y, cellType);
 				world.addCell(cell);
 			}
 			
