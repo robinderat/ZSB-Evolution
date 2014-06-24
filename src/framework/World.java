@@ -1,6 +1,6 @@
 package framework;
 
-import java.util.ArrayList;
+import java.util.Vector;
 import java.util.Random;
 
 import objects.Cell;
@@ -11,6 +11,7 @@ public class World {
 	Screen frame;
 	public final int tileSize = 15;
 	public final int tileCount = 40;
+	public final int memorySize = tileCount * tileCount;
 	
 	public boolean doIterate; // bool if iteration should be done in while loop
 	
@@ -23,8 +24,9 @@ public class World {
 			
 	private Tile[][] tileArray = new Tile[tileCount][tileCount];
 	
-	public ArrayList<Cell> currentCells = new ArrayList<Cell>();
-	public ArrayList<Cell> nextCells = new ArrayList<Cell>();
+	// create vector of cells with enough memory
+	public Vector<Cell> currentCells = new Vector<Cell>(memorySize);
+	public Vector<Cell> nextCells = new Vector<Cell>(memorySize);
 	
 	public CrossoverBreeder cBreeder =  new CrossoverBreeder();
 	
@@ -110,12 +112,12 @@ public class World {
 			Cell c = currentCells.get(j);
 			c.update();	
 		}
-		currentCells = new ArrayList<Cell>();
+		currentCells = new Vector<Cell>(memorySize);
 		
 		for (Cell nc : nextCells) {
 			currentCells.add(nc);
 		}
-		nextCells = new ArrayList<Cell>();
+		nextCells = new Vector<Cell>(memorySize);
 	}
 	
 	/*
@@ -195,7 +197,7 @@ public class World {
 		currentCells.add(c);
 	}
 	
-	public ArrayList<Cell> getCells() {
+	public Vector<Cell> getCells() {
 		return currentCells;
 	}
 	
@@ -254,6 +256,6 @@ public class World {
 
 	// clears the world
 	public void clear() {
-		currentCells = new ArrayList<Cell>();
+		currentCells = new Vector<Cell>(memorySize);
 	}
 }
