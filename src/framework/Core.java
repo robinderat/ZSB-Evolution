@@ -21,6 +21,9 @@ public class Core {
 	public ArrayList<Cell> cellsToBeAdded = new ArrayList<Cell>();
 	public ArrayList<Cell> cellsToBeRemoved = new ArrayList<Cell>();
 	
+	public ArrayList<Cell> currentCells = new ArrayList<Cell>();
+	public ArrayList<Cell> nextCells = new ArrayList<Cell>();
+	
 	public boolean movingUp = false;
 	public boolean movingDown = false;
 	public boolean movingLeft = false;
@@ -53,20 +56,32 @@ public class Core {
 		for (int i = 0; i < nTurns; i++){
 			
 			
-			for (int j = 0; j< cellArray.size(); j++){
+			for (int j = 0; j< currentCells.size(); j++){
 				
-				Cell c = cellArray.get(j);
+				Cell c = currentCells.get(j);
 				//c.action();
 				
 				c.update();
 				
 				
 			}
-
-			addCellsDelayed();
+			
+			//addCellsDelayed();
+			currentCells =  nextCells;
+			nextCells = new ArrayList<Cell>();
+			
+			//System.out.println(currentCells);
+			DEBUGprintCells(currentCells);
 		}
 	}
 	
+	private void DEBUGprintCells(ArrayList<Cell> cells){
+		for (Cell cell : cells){
+			System.out.println(""+ cell.locationRef.get().x + " "+ cell.locationRef.get().y);
+		}
+		System.out.println("n cells =" + cells.size());
+		
+	}
 	
 	
 	private void fillArray(){
@@ -107,7 +122,8 @@ public class Core {
 	}
 	
 	public void addCell(Cell c){
-		cellArray.add(c);
+		//cellArray.add(c);
+		currentCells.add(c);
 	}
 	
 	public void addCellsDelayed(){
@@ -128,7 +144,8 @@ public class Core {
 	
 	public ArrayList<Cell> getCells(){
 		
-		return cellArray;
+		//return cellArray;
+		return currentCells;
 	}
 	
 	private void moveBoardView(){

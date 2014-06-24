@@ -64,7 +64,25 @@ public class Cell {
 		behaviour.execute(this);
 	}
 	
+	public void DEBUGmoveToAllInMoveSet(ArrayList<Tile> moveSet){
+		for (Tile tile : moveSet){
+			if(!tile.containsCell()) {
+				Cell cell = new Cell(tile);
+				
+				
+//				locationRef.get().coreRef.get().removeCellsDelayed();
+				locationRef.get().coreRef.get().nextCells.add(cell);
+//				locationRef.get().coreRef.get().addCellsDelayed();
+			}
+		}
+//		locationRef.get().coreRef.get().removeCellsDelayed();
+//		locationRef.get().coreRef.get().addCellsDelayed();
 
+	}
+	
+	
+	
+	
 	public void eat(Cell cell){
 		int energyValue = 1;
 		if (properties.currentEnergy < properties.maxEnergy - energyValue){
@@ -85,7 +103,7 @@ public class Cell {
 	}
 	
 	public void action(Tile destination){
-		/*ArrayList<Cell> cells = new ArrayList<Cell>();
+		ArrayList<Cell> cells = new ArrayList<Cell>();
 
 		ArrayList<Tile> tiles = getMoveSet();
 		System.out.println(tiles);
@@ -95,23 +113,31 @@ public class Cell {
 
 				cells.add(cell);
 				
-			}
+			
 			
 
-				tile.c.addCell(cell);
+	//			tile.coreRef.get().addCell(cell);
 				System.out.println("add cell");
 			}
+			}
 			System.out.println("end Actoin");
-
-		}
 		
-		location.c.cellsToBeAdded = cells;
-		*/
-		moveTo(destination);
+		locationRef.get().coreRef.get().cellsToBeAdded = cells;
+		locationRef.get().coreRef.get().addCellsDelayed();
+		//moveTo(destination);
 	}
 	
 	public ArrayList<Tile> getMoveSet(){
 		ArrayList<Tile> result = new ArrayList<Tile>();
+		
+		//
+		
+		for (int i = 0; i < properties.speed +1; i++){
+		
+		
+		
+		}
+		
 		
 		for (int i = 0; i < properties.speed + 1; i++) {
 			int x = locationRef.get().x + locationRef.get().coreRef.get().xOffSet + i * locationRef.get().coreRef.get().tileSize;	
@@ -134,7 +160,7 @@ public class Cell {
 		}
 		
 		for (int i = 0; i < properties.speed + 1; i++) {
-			System.out.println(i);
+			//System.out.println(i);
 			int x = locationRef.get().x + locationRef.get().coreRef.get().xOffSet  - i * locationRef.get().coreRef.get().tileSize;
 			int Dy = properties.speed + 1 - i;
 			for (int j = 0; j < Dy; j++) {
