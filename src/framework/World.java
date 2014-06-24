@@ -3,6 +3,7 @@ package framework;
 import java.util.ArrayList;
 
 import objects.Cell;
+import objects.breeders.CrossoverBreeder;
 
 public class World {
 
@@ -22,6 +23,8 @@ public class World {
 	
 	public ArrayList<Cell> currentCells = new ArrayList<Cell>();
 	public ArrayList<Cell> nextCells = new ArrayList<Cell>();
+	
+	public CrossoverBreeder cBreeder =  new CrossoverBreeder();
 	
 	public boolean movingUp = false;
 	public boolean movingDown = false;
@@ -76,7 +79,8 @@ public class World {
 		for (Cell cell : cells){
 			System.out.println(""+ cell.x + " "+ cell.y);
 		}
-		System.out.println("n cells =" + cells.size());	
+		System.out.println("n cells =" + cells.size());
+		
 	}
 	
 	

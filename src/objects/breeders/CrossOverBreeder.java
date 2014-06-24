@@ -2,7 +2,7 @@ package objects.breeders;
 
 import java.util.Random;
 
-public class CrossOverBreeder extends Breeder {
+public class CrossoverBreeder extends Breeder {
 	
 	private float crossOverRate;
 	private Random random;
@@ -18,12 +18,12 @@ public class CrossOverBreeder extends Breeder {
 		return newDNAs;
 	}
 	
-	public CrossOverBreeder() {
+	public CrossoverBreeder() {
 		crossOverRate = 0.7f;
 		random = new Random(10);
 	}
 	
-	public CrossOverBreeder(float crossRate) {
+	public CrossoverBreeder(float crossRate) {
 		crossOverRate = crossRate;
 		random = new Random(10);
 	}
