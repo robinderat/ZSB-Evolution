@@ -23,7 +23,7 @@ public class Cell {
 	public int y;
 	public int type;
 	
-	WeakReference<World> worldRef;
+	public WeakReference<World> worldRef;
 	
 	/**
 	 * cell constructor
@@ -47,8 +47,8 @@ public class Cell {
 		worldRef = new WeakReference<World>(w);
 		
 		behaviours = new ArrayList<Behaviour>();
-		behaviours.add(new DEBUGCloneSurroundingsBehaviour());
-		behaviours.add(new DEBUGHoldPositionBehaviour());
+		behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
+		behaviours.add(new HoldPositionBehaviour());
 		behaviours.add(new HuntBehaviour());
 		behaviours.add(new MoveBehaviour());
 
@@ -70,27 +70,12 @@ public class Cell {
 		}
 		
 		// TEMPORARY TEST LINE : Always make first behaviour the chosen one :
-		behaviour = behaviours.get(2); // 2 is hunt behaviour
+		behaviour = behaviours.get(3); // 2 is hunt behaviour
 
 		// go there
 		behaviour.execute(this);
 	}
-	
-	public void DEBUGmoveToAllInMoveSet(ArrayList<Tile> moveSet, Cell oldCell){
-		for (Tile tile : moveSet) {
-			if (worldRef.get().getCellAtPositionNext(tile.x, tile.y) == null &&
-				worldRef.get().getCellAtPositionCurrent(tile.x, tile.y) == null) { 
-				Cell cell = new Cell(worldRef.get(), tile.x, tile.y, oldCell.type, null);
-				
-				
-//				locationRef.get().coreRef.get().removeCellsDelayed();
-				worldRef.get().nextCells.add(cell);
-//				locationRef.get().coreRef.get().addCellsDelayed();
-			}
-		}
-//		locationRef.get().coreRef.get().removeCellsDelayed();
-//		locationRef.get().coreRef.get().addCellsDelayed();
-	}
+
 
 	public void eat(Cell cell) {
 		int energyValue = 20;
@@ -107,13 +92,7 @@ public class Cell {
 			eat(target);
 		}
 	}
-	
-	public void moveTo(Tile destination) {
-		x = destination.x;
-		y = destination.y;
-		worldRef.get().nextCells.add(this);
 
-	}
 
 	public ArrayList<Tile> getTilesInRadius(int rad) {
 		ArrayList<Tile> result = new ArrayList<Tile>();
@@ -158,8 +137,4 @@ public class Cell {
 		return getTilesInRadius(properties.getVision());
 	}
 
-	// cell stays in same spot
-	public void holdPosition() {
-		worldRef.get().nextCells.add(this);
-	}
 }

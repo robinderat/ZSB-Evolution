@@ -50,8 +50,13 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
 		
 		if (e.getButton() == MouseEvent.BUTTON3) {
 			Tile t = world.getTile(x, y);
-			if (t != null) {
+			if (t != null) {				
 				int cellType = 1;
+
+				//DEBUG change cell type
+				cellType = (int)(Math.random() * 2)+1;
+				
+				
 				Cell cell = new Cell(world, t.x, t.y, cellType, null);
 				world.addCell(cell);
 			}
