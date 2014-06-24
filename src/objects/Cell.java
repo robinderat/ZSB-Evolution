@@ -64,7 +64,7 @@ public class Cell {
 		behaviours = new ArrayList<Behaviour>();
 
 		// special behavior for type 2 for DEBUG testing purposes
-		if (type == 2) behaviours.add(new HoldPositionBehaviour());
+		if (type == 2) behaviours.add(new StayBehaviour());
 		else {
 		// dump all behaviours for normal type (not finished: since some types get only some behaviours)
 		//
@@ -74,11 +74,11 @@ public class Cell {
 		// the below order is the optimal order. NOTE: right now all cells (save type 2) have this order!!
 			//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
 			behaviours.add(new HuntBehaviour());
-			behaviours.add(new FleeBehaviour());
+			//behaviours.add(new FleeBehaviour());
 			behaviours.add(new ApproachCenterBehaviour());
 			behaviours.add(new ApproachBorderBehaviour());
-			behaviours.add(new MoveAnywhereBehaviour());
-			behaviours.add(new HoldPositionBehaviour());
+			behaviours.add(new WanderBehaviour());
+			behaviours.add(new StayBehaviour());
 
 
 		}
@@ -151,59 +151,25 @@ public class Cell {
 		System.out.println("A baby has been made");
 	}
 	
-	/*
-	public void flee(ArrayList<Tile> danger){
-		ArrayList<Tile> options = new ArrayList<Tile>();
-		ArrayList<Tile> tiles = getMoveSet();
-		Tile bestTile = null;
-		
-		for (Tile t : danger) {
-			Tile proposedTile = null;
-			double distance = 0;
-			for (Tile tile : tiles) {
-					
-				int Dx = tile.x - t.x; 
-				int Dy = tile.y - t.y;
-				double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
-					
-				if (newDistance > distance) {
-					distance = newDistance;
-					proposedTile = tile;
-				}
-			}
-			options.add(proposedTile);
-			
-			double bestDistance = 0;
-			for (Tile tile : options) {
-				int Dx = tile.x - t.x; 
-				int Dy = tile.y - t.y;
-				double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
-				
-				if (newDistance > bestDistance) {
-					distance = newDistance;
-					bestTile = tile;
-				}
-			}
-		
-		
-	//	moveTo(bestTile);
-	}*/
-
-	
 	// cell moves to new destination
 	public void moveTo(Tile destination) {
 		
-		// decrease energy
-		int dist = worldRef.get().pointDistanceInWorldUnit(x, y, destination.x, destination.y);
-		properties.currentEnergy -= dist;
-	
-		// update position
-		x = destination.x;
-		y = destination.y;
+		if (getMoveSet().contains(destination)) {
+			// decrease energy
+			int dist = worldRef.get().pointDistanceInWorldUnit(x, y, destination.x, destination.y);
+			properties.currentEnergy -= dist;
 		
-		// we dont kill him here. even if energy reaches 0, we let him live one more iteration
-		worldRef.get().nextCells.add(this);
-		
+			// update position
+			x = destination.x;
+			y = destination.y;
+			
+			// we dont kill him here. even if energy reaches 0, we let him live one more iteration
+			worldRef.get().nextCells.add(this);
+
+		} else {
+			// will call moveTo again. 
+			moveTowards(destination);	
+		}		
 	}
 	
 	public ArrayList<Tile> getTilesInRadius(int rad) {

@@ -6,7 +6,7 @@ import framework.Tile;
 import objects.Cell;
 
 // in this behaviour the cell scours its surroundings for 
-public class HuntBehaviour extends MoveAnywhereBehaviour {
+public class HuntBehaviour extends WanderBehaviour {
 
 	@Override
 	public boolean execute(Cell c) {
