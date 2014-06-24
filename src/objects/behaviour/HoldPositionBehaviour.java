@@ -16,11 +16,6 @@ public class HoldPositionBehaviour extends MoveAnywhereBehaviour {
 					 // because this is the SOLE behaviour where you can even do it if you have too low energy
 					 // just need to make sure it dies in that case
 	}
-
-	@Override
-	public boolean isPossible(Cell c) {
-		return c.properties.currentEnergy > 1;
-	}
 	
 	// cell stays in same spot ((( NOTE ! this still needs the kill cell if <2 energy )))
 	public void holdPosition(Cell c) {
