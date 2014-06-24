@@ -32,7 +32,11 @@ public class Cell {
 		worldRef = new WeakReference<World>(w);
 		
 		behaviours = new ArrayList<Behaviour>();
-		behaviours.add(new JosephDebugBehaviour());
+		behaviours.add(new DEBUGCloneSurroundingsBehaviour());
+		behaviours.add(new DEBUGHoldPositionBehaviour());
+		behaviours.add(new HuntBehaviour());
+		behaviours.add(new MoveBehaviour());
+
 	}
 
 	// moves the cell: check what it should do and then go toward that position
@@ -51,12 +55,13 @@ public class Cell {
 		}
 		
 		// TEMPORARY TEST LINE : Always make first behaviour the chosen one :
-		behaviour = behaviours.get(0);
+		behaviour = behaviours.get(2); // 2 is hunt behaviour
 
 		// go there
 		behaviour.execute(this);
 	}
 	
+	// clones into all surrounding tile
 	public void DEBUGmoveToAllInMoveSet(ArrayList<Tile> moveSet){
 		for (Tile tile : moveSet) {
 			if (worldRef.get().getCellAtPositionNext(tile.x, tile.y) == null &&
@@ -139,5 +144,10 @@ public class Cell {
 	
 	public ArrayList<Tile> getPerceptionSet() {
 		return getTilesInRadius(properties.getVision());
+	}
+
+	// cell stays in same spot
+	public void holdPosition() {
+		worldRef.get().nextCells.add(this);
 	}
 }

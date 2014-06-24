@@ -199,4 +199,9 @@ public class World {
 		}
 		return null;
 	}
+
+	// clears the world
+	public void clear() {
+		currentCells = new ArrayList<Cell>();
+	}
 }

@@ -41,7 +41,8 @@ World world;
 		
 		int typed = (int)e.getKeyChar();
 		
-		System.out.println((int)e.getKeyChar());
+		// uncomment this line to find out the integer that corresponds to a key
+		//ystem.out.println((int)e.getKeyChar());
 		
 		if (typed == 119){
 			world.movingUp = false;
@@ -65,6 +66,11 @@ World world;
 		// space
 		if (typed == 32) {
 			world.iterate();
+		}
+		
+		// c (clear)
+		if (typed == 99 ) {
+			world.clear();			
 		}
 		
 		// +
