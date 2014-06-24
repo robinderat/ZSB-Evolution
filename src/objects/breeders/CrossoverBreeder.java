@@ -1,11 +1,8 @@
 package objects.breeders;
 
-import java.util.Random;
-
 public class CrossoverBreeder extends Breeder {
 	
 	private float crossOverRate;
-	private Random random;
 	
 	@Override
 	public String[] merge(String DNA1, String DNA2) {
@@ -19,17 +16,21 @@ public class CrossoverBreeder extends Breeder {
 	}
 	
 	public CrossoverBreeder() {
+		super();
 		crossOverRate = 0.7f;
-		random = new Random(10);
 	}
 	
 	public CrossoverBreeder(float crossRate) {
+		super();
 		crossOverRate = crossRate;
-		random = new Random(10);
 	}
 	
-	private void crossOver(String[] newDNAs, String DNA1, String DNA2)
-	{
+	public CrossoverBreeder(float mutRate, float crossRate) {
+		super(mutRate);
+		crossOverRate = crossRate;
+	}
+	
+	private void crossOver(String[] newDNAs, String DNA1, String DNA2) {
 		int DNALength = DNA1.length();
 		
 		int crossBit = random.nextInt(DNALength);

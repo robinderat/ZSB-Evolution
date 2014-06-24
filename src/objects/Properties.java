@@ -4,6 +4,8 @@ import java.util.Random;
 
 public class Properties {
 
+	private static Random random = new Random(System.currentTimeMillis());
+			
 	// DNA settings
 	private static final int maxEnergyBitLength = 6;
 	private static final int speedBitLength = 5;
@@ -115,7 +117,6 @@ public class Properties {
 	 * of the properties */
 	private void generateDNA() {
 		int totalLength = maxEnergyBitLength + speedBitLength + visionRangeBitLength + strengthBitLength;
-		Random random = new Random(System.currentTimeMillis());
 		
 		DNA = "";
 		
@@ -160,6 +161,7 @@ public class Properties {
 		return maxEnergy;
 	}
 	
+	/* retrieves the DNA */
 	public String getDNA() {
 		return DNA;
 	}
