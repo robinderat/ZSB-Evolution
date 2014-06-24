@@ -2,7 +2,7 @@ package objects;
 
 import java.awt.Image;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
 
@@ -20,7 +20,7 @@ public class Cell {
 	public Image img;
 	
 	// list of behaviours available to cell
-	public ArrayList<Behaviour> behaviours;
+	public Vector<Behaviour> behaviours;
 	
 	// location
 	public int x;			
@@ -61,7 +61,7 @@ public class Cell {
 		
 		worldRef = new WeakReference<World>(w);
 		
-		behaviours = new ArrayList<Behaviour>();
+		behaviours = new Vector<Behaviour>();
 
 		// special behavior for type 2 for DEBUG testing purposes
 		if (type == 2) behaviours.add(new StayBehaviour());
@@ -128,7 +128,7 @@ public class Cell {
 	}
 	
 	public void moveTowards(Tile target) {
-		ArrayList<Tile> tiles = getMoveSet();
+		Vector<Tile> tiles = getMoveSet();
 		
 		double distance = 500;
 		int Dx;
@@ -179,8 +179,8 @@ public class Cell {
 		}		
 	}
 	
-	public ArrayList<Tile> getTilesInRadius(int rad) {
-		ArrayList<Tile> result = new ArrayList<Tile>();
+	public Vector<Tile> getTilesInRadius(int rad) {
+		Vector<Tile> result = new Vector<Tile>();
 
 		for (int k = 0; k < 4; k++) {
 			for (int i = 0; i < rad + 1; i++) {
@@ -214,14 +214,14 @@ public class Cell {
 		return result;
 	}
 	
-	public ArrayList<Tile> getMoveSet() {
+	public Vector<Tile> getMoveSet() {
 		
 		int moveRad = properties.currentEnergy < properties.getSpeed() ? properties.currentEnergy : properties.getSpeed();
 		
 		return getTilesInRadius(moveRad);
 	}
 	
-	public ArrayList<Tile> getPerceptionSet() {
+	public Vector<Tile> getPerceptionSet() {
 		return getTilesInRadius(properties.getVision());
 	}
 
