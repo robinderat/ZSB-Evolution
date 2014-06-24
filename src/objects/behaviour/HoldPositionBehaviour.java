@@ -7,20 +7,22 @@ import objects.Cell;
 
 
 // in this behaviour the cell stays in the same tile that it currently is
-public class HoldPositionBehaviour extends Behaviour {
+public class HoldPositionBehaviour extends MoveAnywhereBehaviour {
 
 	@Override
-	public void execute(Cell c) {
+	public boolean execute(Cell c) {
 		holdPosition(c);
+		return true; // always possible (unless you die) ?? ==> then still this must return true
+					 // because this is the SOLE behaviour where you can even do it if you have too low energy
+					 // just need to make sure it dies in that case
 	}
-	// NOTE: if we use this behaviour then it probably needs to kill the cell if it has <2 energy
 
 	@Override
 	public boolean isPossible(Cell c) {
 		return c.properties.currentEnergy > 1;
 	}
-
-	// cell stays in same spot
+	
+	// cell stays in same spot ((( NOTE ! this still needs the kill cell if <2 energy )))
 	public void holdPosition(Cell c) {
 		c.worldRef.get().nextCells.add(c);
 	}

@@ -108,8 +108,8 @@ public class World {
 			
 			nextCells = new ArrayList<Cell>();
 			
-			System.out.println(currentCells);
-			DEBUGprintCells(currentCells);
+			//System.out.println(currentCells);
+			//DEBUGprintCells(currentCells);
 		}
 	}
 	

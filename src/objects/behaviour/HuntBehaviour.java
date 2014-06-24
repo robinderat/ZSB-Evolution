@@ -9,19 +9,31 @@ import objects.Cell;
 public class HuntBehaviour extends MoveAnywhereBehaviour {
 
 	@Override
-	public void execute(Cell c) {
+	public boolean execute(Cell c) {
+		
+		//first check if this is possible ???
 
 		ArrayList<Tile> perception = c.getPerceptionSet();
 
 		// first search for other cells in area
-		scour(perception);
+		Tile target = scour(perception);
 		// if found, check if you can eat/beat them
-		// if so, check if they are far or close
-		// if far, approach
-		// if close, eat
+		if (target != null) {
+			// if so, check if they are far or close
+			// if far, approach
+			// if close, eat
+			
+			// and return true!
+			return true;
+		}
+		// if not found, return (do nothing) ==> will automatically try another behaviour
+		else return false;
+		
+		
+		/* OLD
 		// if not found, then just move (move behaviour)
 		moveAnywhere(c);
-		
+		*/
 		/*
 		ArrayList<Tile> moves = c.getMoveSet();
 		

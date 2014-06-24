@@ -24,7 +24,7 @@ public class Cell {
 	public int type;
 	
 	public WeakReference<World> worldRef;
-
+	
 	public Cell(World w, int lx, int ly, int t) {
 		this(w, lx, ly, t, "");
 	}
@@ -52,16 +52,27 @@ public class Cell {
 		
 		worldRef = new WeakReference<World>(w);
 		
+		
 		behaviours = new ArrayList<Behaviour>();
 
 		// special behavior for type 2 for DEBUG testing purposes
 		if (type == 2) behaviours.add(new HoldPositionBehaviour());
 		else {
 		// dump all behaviours for normal type (not finished: since some types get only some behaviours)
-			behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
-			behaviours.add(new HoldPositionBehaviour());
+		//
+		// !! note: we want to give certain (initial) types certain (initial) behaviours
+		// !! new note: OR (better?) randomize certain behaviours to all cells
+		//
+		// the below order is the optimal order. NOTE: right now all cells (save type 2) have this order!!
+			//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
 			behaviours.add(new HuntBehaviour());
+			behaviours.add(new FleeBehaviour());
+			behaviours.add(new ApproachCenterBehaviour());
+			behaviours.add(new ApproachBorderBehaviour());
 			behaviours.add(new MoveAnywhereBehaviour());
+			behaviours.add(new HoldPositionBehaviour());
+
+
 		}
 	}
 
@@ -80,13 +91,22 @@ public class Cell {
 			//}
 		}
 		
-		// DEBUG testing hunt purposes
-		if (type == 2) behaviour = behaviours.get(0);
-		// TEMPORARY TEST LINE : Always make first behaviour the chosen one :
-		else behaviour = behaviours.get(2); // 2 is hunt behaviour
-
+		
+		// ALTERNATIVE METHOD !
+		// global bool to check if a behaviour will be possible
+		// while (!bool) try all your behaviours (which can be in a cell(type)'s own randomized indexed order)
+		// within the behaviours the bool will be set to true when it's possible
+		// and they will return before that point if is it not possible
+		// ==> clever use of returns
+		int i = 0;
+		while (!behaviours.get(i).execute(this)){
+			i++;
+		}
+		
+		/* (OLD METHOD: )
 		// go there
 		behaviour.execute(this);
+		*/
 	}
 
 
@@ -215,8 +235,8 @@ public class Cell {
 			}
 		}
 		
-		System.out.println(result);
-		System.out.println(result.size());
+		//System.out.println(result);
+		//System.out.println(result.size());
 		
 		return result;
 	}
