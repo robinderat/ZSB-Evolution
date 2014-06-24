@@ -56,7 +56,7 @@ public class Cell {
 		behaviours = new ArrayList<Behaviour>();
 
 		// special behavior for type 2 for DEBUG testing purposes
-		if (type == 2) behaviours.add(new HoldPositionBehaviour());
+		if (type == 2) behaviours.add(new StayBehaviour());
 		else {
 		// dump all behaviours for normal type (not finished: since some types get only some behaviours)
 		//
@@ -69,8 +69,8 @@ public class Cell {
 			behaviours.add(new FleeBehaviour());
 			behaviours.add(new ApproachCenterBehaviour());
 			behaviours.add(new ApproachBorderBehaviour());
-			behaviours.add(new MoveAnywhereBehaviour());
-			behaviours.add(new HoldPositionBehaviour());
+			behaviours.add(new WanderBehaviour());
+			behaviours.add(new StayBehaviour());
 
 
 		}

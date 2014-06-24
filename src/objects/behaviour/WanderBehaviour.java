@@ -7,7 +7,7 @@ import framework.Tile;
 import objects.Cell;
 
 // in this behaviour the cell just goes to any location around it
-public class MoveAnywhereBehaviour extends Behaviour {
+public class WanderBehaviour extends Behaviour {
 
 	@Override
 	public boolean execute(Cell c) {

@@ -6,12 +6,12 @@ import framework.Tile;
 import objects.Cell;
 
 // in this behaviour the cell scours its surroundings for 
-public class FleeBehaviour extends MoveAnywhereBehaviour {
+public class FleeBehaviour extends WanderBehaviour {
 
 	@Override
 	public boolean execute(Cell c) {
+		
 		if (!(c.properties.currentEnergy > 1)) return false;
-
 
 		ArrayList<Tile> perception = c.getPerceptionSet();
 
@@ -69,6 +69,10 @@ public class FleeBehaviour extends MoveAnywhereBehaviour {
 		ArrayList<Tile> dangerousTiles = new ArrayList<Tile>();
 		for (Tile tile : vision) {
 			Cell c = tile.worldRef.get().getCellAtPositionCurrent(tile.x, tile.y);
+			
+			if(c != null){
+			}
+			
 			if(c != null && cell.type != c.type){
 				dangerousTiles.add(tile);
 			}
