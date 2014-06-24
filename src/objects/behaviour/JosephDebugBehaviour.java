@@ -11,7 +11,7 @@ public class JosephDebugBehaviour extends Behaviour {
 	public void execute(Cell c) {
 		// TODO Auto-generated method stub
 		ArrayList<Tile> moves = c.getMoveSet();
-		c.DEBUGmoveToAllInMoveSet(moves);
+		c.DEBUGmoveToAllInMoveSet(moves, c);
 	}
 
 	@Override

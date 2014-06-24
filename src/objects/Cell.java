@@ -12,6 +12,8 @@ import framework.World;
 
 public class Cell {
 
+	public static final int MaxTypes = 6;
+	
 	public Properties properties;
 	public Image img;
 	public ArrayList<Behaviour> behaviours;
@@ -19,15 +21,28 @@ public class Cell {
 	
 	public int x;
 	public int y;
+	public int type;
 	
 	WeakReference<World> worldRef;
 	
-	public Cell(World w, int locX, int locY) {
-		properties = new Properties();
-		img = new ImageIcon("src/art/Cell1.png").getImage();
+	/**
+	 * cell constructor
+	 */
+	public Cell(World w, int locX, int locY, int t, Properties p) {
+		properties = p;
+		if (properties == null) {
+			properties = new Properties(); // random DNA
+		}
 		
 		x = locX;
 		y = locY;
+		
+		type = t;
+		if (type > MaxTypes || type < 1) {
+			type = 1;
+		}
+		
+		img = new ImageIcon("src/art/Cell" + Integer.toString(type) + ".png").getImage();
 		
 		worldRef = new WeakReference<World>(w);
 		
@@ -57,11 +72,11 @@ public class Cell {
 		behaviour.execute(this);
 	}
 	
-	public void DEBUGmoveToAllInMoveSet(ArrayList<Tile> moveSet){
+	public void DEBUGmoveToAllInMoveSet(ArrayList<Tile> moveSet, Cell oldCell){
 		for (Tile tile : moveSet) {
 			if (worldRef.get().getCellAtPositionNext(tile.x, tile.y) == null &&
 				worldRef.get().getCellAtPositionCurrent(tile.x, tile.y) == null) { 
-				Cell cell = new Cell(worldRef.get(), tile.x, tile.y);
+				Cell cell = new Cell(worldRef.get(), tile.x, tile.y, oldCell.type, null);
 				
 				
 //				locationRef.get().coreRef.get().removeCellsDelayed();
@@ -88,8 +103,6 @@ public class Cell {
 			eat(target);
 		}
 	}
-	
-	
 	
 	public void moveTo(Tile destination) {
 		x = destination.x;

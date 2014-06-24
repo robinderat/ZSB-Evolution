@@ -62,6 +62,11 @@ World world;
 			world.movingRight = false;			
 		}
 		
+		// n
+		if (typed == 101) {
+			world.populate();
+		}
+		
 		// space
 		if (typed == 32) {
 			world.iterate();

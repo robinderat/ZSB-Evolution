@@ -49,6 +49,18 @@ public class World {
 		}
 	}
 	
+	/**
+	 * populates world with cells. doesn't clear before
+	 */
+	public void populate() {
+		// to-do: replace variables by values from settings
+		int numberDifferentTypes = 2 + (int)(Math.random() * ((4 - 2) + 1));	 // 2,3 or 4 
+		float percentageWorld = 0.6f; 	// fill 60% of world
+		
+		while (true) {
+			
+		}
+	}
 
 	public void iterate() {
 		for (int i = 0; i < iterations; i++) {		
