@@ -49,6 +49,18 @@ public class Drawer extends JPanel {
 		if (tile != null) {
 			g.drawString("X: " + Integer.toString(tile.x), 1020, 150);
 			g.drawString("Y: " + Integer.toString(tile.y), 1020, 175);
+			
+			Cell selectedCell = world.getCellAtPositionCurrent(tile.x, tile.y);
+			
+			if (selectedCell != null)
+			{
+				g.drawString("DNA Properties", 1020, 250);
+				g.drawString("DNA: " + selectedCell.properties.getDNA(), 1020, 275);
+				g.drawString("Max Energy: " + selectedCell.properties.getMaxEnergy(), 1020, 300);
+				g.drawString("Speed: " + selectedCell.properties.getSpeed(), 1020, 325);
+				g.drawString("Vision: " + selectedCell.properties.getVision(), 1020, 350);
+				g.drawString("Strength: " + selectedCell.properties.getStrength(), 1020, 375);
+			}
 		}
 	}
 
