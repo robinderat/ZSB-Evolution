@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import framework.Tile;
 import objects.Cell;
 
-public class MoveBehaviour extends Behaviour {
+public class MoveAnywhereBehaviour extends Behaviour {
 
 	@Override
 	public void execute(Cell c) {
@@ -34,7 +34,7 @@ public class MoveBehaviour extends Behaviour {
 		// to make this better, we must make the looping through the moves array be random
 		for (Tile destination : moves){
 			if (c.worldRef.get().getCellAtPositionCurrent(destination.x,destination.y) == null){
-				moveTo(destination,c);
+				c.moveTo(destination);
 				return;
 			}
 		}
@@ -42,12 +42,5 @@ public class MoveBehaviour extends Behaviour {
 		// if it gets here, it hasn't returned, which means we must trigger isPossible and return false 
 		// (in which case it should use hold position behaviour, but we could also put it in here)
 		// ^ important discussion point!, considering hunt will use move stuff ^
-	}
-	
-	public void moveTo(Tile destination, Cell c) {
-		c.x = destination.x;
-		c.y = destination.y;
-		c.worldRef.get().nextCells.add(c);
-
 	}
 }

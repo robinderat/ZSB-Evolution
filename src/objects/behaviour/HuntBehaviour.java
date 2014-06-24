@@ -6,15 +6,15 @@ import framework.Tile;
 import objects.Cell;
 
 // in this behaviour the cell scours its surroundings for 
-public class HuntBehaviour extends MoveBehaviour {
+public class HuntBehaviour extends MoveAnywhereBehaviour {
 
 	@Override
 	public void execute(Cell c) {
 
-		ArrayList<Tile> moves = c.getMoveSet();
+		ArrayList<Tile> perception = c.getPerceptionSet();
 
 		// first search for other cells in area
-		scour(moves);
+		scour(perception);
 		// if found, check if you can eat/beat them
 		// if so, check if they are far or close
 		// if far, approach

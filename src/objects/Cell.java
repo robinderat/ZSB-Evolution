@@ -61,7 +61,7 @@ public class Cell {
 			behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
 			behaviours.add(new HoldPositionBehaviour());
 			behaviours.add(new HuntBehaviour());
-			behaviours.add(new MoveBehaviour());
+			behaviours.add(new MoveAnywhereBehaviour());
 		}
 	}
 
@@ -140,7 +140,7 @@ public class Cell {
 	}
 	
 	/*
-	public void Flee(ArrayList<Tile> danger){
+	public void flee(ArrayList<Tile> danger){
 		ArrayList<Tile> options = new ArrayList<Tile>();
 		ArrayList<Tile> tiles = getMoveSet();
 		Tile bestTile = null;
@@ -177,6 +177,15 @@ public class Cell {
 	//	moveTo(bestTile);
 	}*/
 
+	
+	// cell moves to new destination
+	public void moveTo(Tile destination) {
+		x = destination.x;
+		y = destination.y;
+		worldRef.get().nextCells.add(this);
+	}
+	
+	
 	public ArrayList<Tile> getTilesInRadius(int rad) {
 		ArrayList<Tile> result = new ArrayList<Tile>();
 
