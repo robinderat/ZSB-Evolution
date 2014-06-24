@@ -238,7 +238,6 @@ public class World {
 		return tileArray[0][0];
 	}
 	
-	
 	public Cell getCellAtPositionNext(int px, int py) {
 		for (Cell c : nextCells) {
 			if (c.x == px && c.y == py) return c;
