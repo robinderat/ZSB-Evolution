@@ -72,7 +72,8 @@ World world;
 		
 		// space
 		if (typed == 32) {
-			world.iterate();
+			if (world.doIterate == false) 
+				world.doIterate = true;
 		}
 		
 		// c (clear)
