@@ -115,7 +115,7 @@ public class Properties {
 	 * of the properties */
 	private void generateDNA() {
 		int totalLength = maxEnergyBitLength + speedBitLength + visionRangeBitLength + strengthBitLength;
-		Random random = new Random(10);
+		Random random = new Random(System.currentTimeMillis());
 		
 		DNA = "";
 		
