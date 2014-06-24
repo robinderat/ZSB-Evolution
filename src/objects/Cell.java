@@ -13,18 +13,27 @@ import framework.World;
 public class Cell {
 
 	public static final int MaxTypes = 6;
-	
+
+	// properties of cell. 
 	public Properties properties;
+	
 	public Image img;
+	
+	// list of behaviours available to cell
 	public ArrayList<Behaviour> behaviours;
-	//public boolean performingMultiTurnBehaviour; // in case we do multi turn complex behaviours
 	
-	public int x;
+	// location
+	public int x;			
 	public int y;
-	public int type;
 	
+	public int type; // type of cell
+	
+	// reference back to the world
 	public WeakReference<World> worldRef;
 	
+	/**
+	 * constructor which generates random DNA
+	 */
 	public Cell(World w, int lx, int ly, int t) {
 		this(w, lx, ly, t, "");
 	}
@@ -52,7 +61,6 @@ public class Cell {
 		
 		worldRef = new WeakReference<World>(w);
 		
-		
 		behaviours = new ArrayList<Behaviour>();
 
 		// special behavior for type 2 for DEBUG testing purposes
@@ -76,9 +84,15 @@ public class Cell {
 		}
 	}
 
-	// moves the cell: check what it should do and then go toward that position
+	/*
+	 * updates cell in iteration
+	 */
 	public void update() {
 
+		if (properties.currentEnergy <= 0) {
+			return;
+		}
+		
 		int i = 0;
 		while (i < behaviours.size() && behaviours.get(i).execute(this) == false){
 			i++;
@@ -86,6 +100,9 @@ public class Cell {
  
 	}
 
+	/*
+	 * cell eats other cell
+	 */
 	public void eat(Cell cell) {
 		int energyValue = 20;
 		if (properties.currentEnergy < properties.getMaxEnergy() - energyValue) {
@@ -176,9 +193,17 @@ public class Cell {
 	
 	// cell moves to new destination
 	public void moveTo(Tile destination) {
+		
+		int dist = worldRef.get().pointDistanceInWorldUnit(x, y, destination.x, destination.y);
+		
 		x = destination.x;
 		y = destination.y;
+		
+		properties.currentEnergy -= dist;
+		
+		// we dont kill him here. even if energy reaches 0, we let him live one more iteration
 		worldRef.get().nextCells.add(this);
+		
 	}
 	
 	public ArrayList<Tile> getTilesInRadius(int rad) {
@@ -217,7 +242,10 @@ public class Cell {
 	}
 	
 	public ArrayList<Tile> getMoveSet() {
-		return getTilesInRadius(properties.getSpeed());
+		
+		int moveRad = properties.currentEnergy < properties.getSpeed() ? properties.currentEnergy : properties.getSpeed();
+		
+		return getTilesInRadius(moveRad);
 	}
 	
 	public ArrayList<Tile> getPerceptionSet() {

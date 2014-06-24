@@ -19,6 +19,12 @@ public class HoldPositionBehaviour extends MoveAnywhereBehaviour {
 	
 	// cell stays in same spot ((( NOTE ! this still needs the kill cell if <2 energy )))
 	public void holdPosition(Cell c) {
-		c.worldRef.get().nextCells.add(c);
+		// also doing nothing costs energy. Ask Koen!
+		c.properties.currentEnergy--;
+		
+		// if still alive :-)
+		if (c.properties.currentEnergy > 0) {
+			c.worldRef.get().nextCells.add(c);
+		}
 	}
 }
