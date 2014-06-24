@@ -1,6 +1,6 @@
 package objects.behaviour;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import framework.RandomGenerator;
 import framework.Tile;
@@ -20,7 +20,7 @@ public class WanderBehaviour extends Behaviour {
 	
 	// moves cell anywhere (if there is no cell)
 	public boolean wander(Cell c){
-		Vector<Tile> moves = c.getMoveSet();
+		ArrayList<Tile> moves = c.getMoveSet();
 		
 		RandomGenerator gen = RandomGenerator.getInstance();
 		

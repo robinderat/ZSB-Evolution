@@ -1,6 +1,6 @@
 package objects.behaviour;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import framework.Tile;
 import objects.Cell;
@@ -12,12 +12,12 @@ public class DEBUGCloneToSurroundingsBehaviour extends Behaviour {
 	public boolean execute(Cell c) {
 		if (!(c.properties.currentEnergy > 1)) return false;
 		
-		Vector<Tile> moves = c.getMoveSet();
+		ArrayList<Tile> moves = c.getMoveSet();
 		return (DEBUGmoveToAllInMoveSet(moves, c));
 	}
 	
 	// moves to surrounding tiles
-	public boolean DEBUGmoveToAllInMoveSet(Vector<Tile> moveSet, Cell oldCell){
+	public boolean DEBUGmoveToAllInMoveSet(ArrayList<Tile> moveSet, Cell oldCell){
 		boolean succes = false;
 		for (Tile tile : moveSet) {
 			if (oldCell.worldRef.get().getCellAtPositionNext(tile.x, tile.y) == null &&

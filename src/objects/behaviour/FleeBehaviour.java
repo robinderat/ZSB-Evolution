@@ -1,6 +1,6 @@
 package objects.behaviour;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import framework.Tile;
 import objects.Cell;
@@ -13,14 +13,14 @@ public class FleeBehaviour extends WanderBehaviour {
 		
 		if (!(c.properties.currentEnergy > 1)) return false;
 			System.out.println("Flee" + c);
-			Vector<Tile> perception = c.getPerceptionSet();
+			ArrayList<Tile> perception = c.getPerceptionSet();
 	
 			// first search for other cells in area
-			Vector<Tile> dangerousTiles = searchForDanger(perception, c);
+			ArrayList<Tile> dangerousTiles = searchForDanger(perception, c);
 			// if found, move in other direction
 			if (dangerousTiles.size() != 0) {	
-				Vector<Tile> options = new Vector<Tile>();
-				Vector<Tile> tiles = c.getMoveSet();
+				ArrayList<Tile> options = new ArrayList<Tile>();
+				ArrayList<Tile> tiles = c.getMoveSet();
 				Tile bestTile = null;
 				
 				for (Tile t : dangerousTiles) {
@@ -66,9 +66,9 @@ public class FleeBehaviour extends WanderBehaviour {
 	}
 	
 	// looks through perception tiles searching for tiles that have a cell on them
-	private Vector<Tile> searchForDanger(Vector<Tile> vision, Cell cell) {
-		// create vector, reserve memory for size
-		Vector<Tile> dangerousTiles = new Vector<Tile>(vision.size());
+	private ArrayList<Tile> searchForDanger(ArrayList<Tile> vision, Cell cell) {
+		// create ArrayList, reserve memory for size
+		ArrayList<Tile> dangerousTiles = new ArrayList<Tile>(vision.size());
 		for (Tile tile : vision) {
 			Cell c = tile.worldRef.get().getCellAtPositionCurrent(tile.x, tile.y);
 			
