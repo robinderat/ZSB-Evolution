@@ -47,11 +47,16 @@ public class Cell {
 		worldRef = new WeakReference<World>(w);
 		
 		behaviours = new ArrayList<Behaviour>();
-		behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
-		behaviours.add(new HoldPositionBehaviour());
-		behaviours.add(new HuntBehaviour());
-		behaviours.add(new MoveBehaviour());
 
+		// special behavior for type 2 for DEBUG testing purposes
+		if (type == 2) behaviours.add(new HoldPositionBehaviour());
+		else {
+		// dump all behaviours for normal type (not finished: since some types get only some behaviours)
+			behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
+			behaviours.add(new HoldPositionBehaviour());
+			behaviours.add(new HuntBehaviour());
+			behaviours.add(new MoveBehaviour());
+		}
 	}
 
 	// moves the cell: check what it should do and then go toward that position
@@ -69,8 +74,10 @@ public class Cell {
 			//}
 		}
 		
+		// DEBUG testing hunt purposes
+		if (type == 2) behaviour = behaviours.get(0);
 		// TEMPORARY TEST LINE : Always make first behaviour the chosen one :
-		behaviour = behaviours.get(3); // 2 is hunt behaviour
+		else behaviour = behaviours.get(2); // 2 is hunt behaviour
 
 		// go there
 		behaviour.execute(this);
