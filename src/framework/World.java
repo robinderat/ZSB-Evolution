@@ -4,21 +4,21 @@ import java.util.ArrayList;
 
 import objects.Cell;
 
-public class Core {
+public class World {
 
 	Screen frame;
 	public final int tileSize = 15;
-	public final int tileNumber = 40;
+	public final int tileCount = 40;
 	
 
 	public int xOffSet = 0;
 	public int yOffSet = 0;
 	
-	public int iterations = 1;
+	private int iterations = 1;
 	
 	Tile selected;		
 			
-	private Tile[][] tileArray = new Tile[tileNumber][tileNumber];
+	private Tile[][] tileArray = new Tile[tileCount][tileCount];
 	private ArrayList<Cell> cellArray = new ArrayList<Cell>();
 	public ArrayList<Cell> cellsToBeAdded = new ArrayList<Cell>();
 	public ArrayList<Cell> cellsToBeRemoved = new ArrayList<Cell>();
@@ -28,10 +28,11 @@ public class Core {
 	public boolean movingLeft = false;
 	public boolean movingRight = false;
 	
-	public Core(Screen f){
+	public World(Screen f){
 		frame = f;
-		fillArray();
+		createTileset();
 	}
+	
 	public void run(){
 		
 		while (true) {
@@ -61,9 +62,27 @@ public class Core {
 		}
 	}
 		
-	private void fillArray(){
-		for (int i = 0; i < tileNumber; i++) {
-			for (int j = 0; j < tileNumber; j++) {
+	/**
+	 * getter iterations
+	 */
+	public int getIterations() {
+		return iterations;
+	}
+	
+	/**
+	 * set iterations
+	 */
+	public void setIterations(int n) {
+		if (n < 1) n = 1;
+		iterations = n;
+	}
+	
+	/**
+	 * creates all tiles
+	 */
+	private void createTileset(){
+		for (int i = 0; i < tileCount; i++) {
+			for (int j = 0; j < tileCount; j++) {
 				Tile t = new Tile(tileSize + tileSize * j,tileSize + tileSize * i , this);
 				tileArray[i][j] = t;
 			}
@@ -153,4 +172,13 @@ public class Core {
 	private void moveRight(){
 		xOffSet += 5;
 	}
+	
+	public Tile getWorldEndPoint() {
+		return tileArray[tileCount - 1][tileCount - 1]; 
+	}
+	
+	public Tile getWorldStartPoint() {
+		return tileArray[0][0];
+	}
+	
 }

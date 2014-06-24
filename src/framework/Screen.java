@@ -9,9 +9,9 @@ import javax.swing.JFrame;
 public class Screen extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	Core core = new Core(this);
-	Clicker click = new Clicker(core);
-	Typer type = new Typer(core);
+	World core = new World(this);
+	MouseInput click = new MouseInput(core);
+	KeyboardInput type = new KeyboardInput(core);
 	Drawer draw = new Drawer(core);
 	
 	public Screen(String string){

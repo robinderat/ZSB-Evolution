@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import objects.Cell;
 
 
-public class Clicker implements MouseListener, MouseMotionListener, MouseWheelListener{
+public class MouseInput implements MouseListener, MouseMotionListener, MouseWheelListener{
 
-	Core c;
+	World world;
 	
-	public Clicker(Core core) {
-		c = core;
+	public MouseInput(World w) {
+		world = w;
 	}
 
 	@Override
@@ -41,20 +41,20 @@ public class Clicker implements MouseListener, MouseMotionListener, MouseWheelLi
 		int y = e.getY() - 30;
 		
 		if (e.getButton() == e.BUTTON1) {
-			Tile t = c.getTile(x, y);
-			c.select(t);
+			Tile t = world.getTile(x, y);
+			world.select(t);
 		}
 		
 		if (e.getButton() == e.BUTTON2) {
-			c.iterate();
+			world.iterate();
 			
 		}
 		
 		if (e.getButton() == e.BUTTON3) {
-			Tile t = c.getTile(x, y);
+			Tile t = world.getTile(x, y);
 			if (t != null) {
-				Cell cell = new Cell(t);
-				c.addCell(cell);
+				Cell cell = new Cell(world, t.x, t.y);
+				world.addCell(cell);
 			}
 			
 		}
@@ -83,14 +83,11 @@ public class Clicker implements MouseListener, MouseMotionListener, MouseWheelLi
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL && e.getWheelRotation() == -1) {
-			c.iterations += e.getScrollAmount() / 3;
+			world.setIterations(world.getIterations() +  e.getScrollAmount() / 3);
 		}
 		
 		if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL && e.getWheelRotation() == 1) {
-			c.iterations -= e.getScrollAmount() / 3;
-			if (c.iterations < 1) {
-				c.iterations = 1;
-			}
+			world.setIterations(world.getIterations() - e.getScrollAmount() / 3);
 		}
 	}
 
