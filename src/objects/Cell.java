@@ -24,7 +24,7 @@ public class Cell {
 	public int type;
 	
 	public WeakReference<World> worldRef;
-
+	
 	public Cell(World w, int lx, int ly, int t) {
 		this(w, lx, ly, t, "");
 	}
@@ -52,43 +52,39 @@ public class Cell {
 		
 		worldRef = new WeakReference<World>(w);
 		
+		
 		behaviours = new ArrayList<Behaviour>();
 
 		// special behavior for type 2 for DEBUG testing purposes
 		if (type == 2) behaviours.add(new HoldPositionBehaviour());
 		else {
 		// dump all behaviours for normal type (not finished: since some types get only some behaviours)
-			behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
-			behaviours.add(new HoldPositionBehaviour());
+		//
+		// !! note: we want to give certain (initial) types certain (initial) behaviours
+		// !! new note: OR (better?) randomize certain behaviours to all cells
+		//
+		// the below order is the optimal order. NOTE: right now all cells (save type 2) have this order!!
+			//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
 			behaviours.add(new HuntBehaviour());
-			behaviours.add(new MoveBehaviour());
+			behaviours.add(new FleeBehaviour());
+			behaviours.add(new ApproachCenterBehaviour());
+			behaviours.add(new ApproachBorderBehaviour());
+			behaviours.add(new MoveAnywhereBehaviour());
+			behaviours.add(new HoldPositionBehaviour());
+
+
 		}
 	}
 
 	// moves the cell: check what it should do and then go toward that position
 	public void update() {
 
-		// possibly check if following multi-turn behaviour
-		// if (performingMultiTurnBehaviour) then continue that
-		
-		Behaviour behaviour;
-		// pick behaviour from behaviours. picks first possible one from list
-		for (int i = 0; i < behaviours.size(); i++) {
-			// if (behaviours.get(i).isPossible()) {
-				// behaviour = behaviours.get(i);
-				// break;
-			//}
+		int i = 0;
+		while (i < behaviours.size() && behaviours.get(i).execute(this) == false){
+			i++;
 		}
-		
-		// DEBUG testing hunt purposes
-		if (type == 2) behaviour = behaviours.get(0);
-		// TEMPORARY TEST LINE : Always make first behaviour the chosen one :
-		else behaviour = behaviours.get(2); // 2 is hunt behaviour
-
-		// go there
-		behaviour.execute(this);
+ 
 	}
-
 
 	public void eat(Cell cell) {
 		int energyValue = 20;
@@ -140,7 +136,7 @@ public class Cell {
 	}
 	
 	/*
-	public void Flee(ArrayList<Tile> danger){
+	public void flee(ArrayList<Tile> danger){
 		ArrayList<Tile> options = new ArrayList<Tile>();
 		ArrayList<Tile> tiles = getMoveSet();
 		Tile bestTile = null;
@@ -177,6 +173,14 @@ public class Cell {
 	//	moveTo(bestTile);
 	}*/
 
+	
+	// cell moves to new destination
+	public void moveTo(Tile destination) {
+		x = destination.x;
+		y = destination.y;
+		worldRef.get().nextCells.add(this);
+	}
+	
 	public ArrayList<Tile> getTilesInRadius(int rad) {
 		ArrayList<Tile> result = new ArrayList<Tile>();
 
@@ -199,15 +203,15 @@ public class Cell {
 					}
 					
 					Tile tile = worldRef.get().getTile(_x, _y);
-					if (result.contains(tile) == false) {
+					if (tile != null && result.contains(tile) == false) {
 						result.add(tile);
 					}
 				}
 			}
 		}
 		
-		System.out.println(result);
-		System.out.println(result.size());
+		//System.out.println(result);
+		//System.out.println(result.size());
 		
 		return result;
 	}
