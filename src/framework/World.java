@@ -102,24 +102,20 @@ public class World {
 		}
 	}
 
+	/*
+	 * do one world step
+	 */
 	public void iterate() {
-		
 		for (int j = 0; j < currentCells.size(); j++){
-			
 			Cell c = currentCells.get(j);
-			c.update();
-			
+			c.update();	
 		}
-		
 		currentCells = new ArrayList<Cell>();
 		
 		for (Cell nc : nextCells) {
 			currentCells.add(nc);
 		}
-		
 		nextCells = new ArrayList<Cell>();
-		
-		//DEBUGprintCells(currentCells);
 	}
 	
 	/*
@@ -129,9 +125,6 @@ public class World {
 		}
 		System.out.println("n cells =" + cells.size());
 	}*/
-	
-	
-	
 		
 	/**
 	 * getter iterations
@@ -162,6 +155,15 @@ public class World {
 	
 	public Tile[][] getTiles(){
 		return tileArray;
+	}
+	
+	/*
+	 * returns euclidean distance between two points in world units
+	 */
+	public int pointDistanceInWorldUnit(int x1, int y1, int x2, int y2) {
+		int DX = Math.abs((x1 + xOffSet) - x2);
+		int DY = Math.abs((y1 + yOffSet) - y2);
+		return (int)Math.ceil(Math.sqrt(DX * DX  + DY * DY) / tileSize);
 	}
 	
 	public Tile getTile(int x, int y){

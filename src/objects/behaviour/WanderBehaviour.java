@@ -7,7 +7,7 @@ import framework.Tile;
 import objects.Cell;
 
 // in this behaviour the cell just goes to any location around it
-public class MoveAnywhereBehaviour extends Behaviour {
+public class WanderBehaviour extends Behaviour {
 
 	@Override
 	public boolean execute(Cell c) {
@@ -21,16 +21,6 @@ public class MoveAnywhereBehaviour extends Behaviour {
 	public boolean moveAnywhere(Cell c){
 		ArrayList<Tile> moves = c.getMoveSet();
 		
-		// === DEBUG CODE
-		// always move right (DEBUG)
-		//Tile destination = moves.get(2); // 2 is right of current pos
-		//moveTo(destination,c);
-		// === END DEBUG CODE
-		
-		// moves to ANY position if there is nothing there
-		// at this point this will ALWAYS be down, unless there is something there, in which case it will be right
-		// to make this better, we must make the looping through the moves array be random
-		
 		RandomGenerator gen = RandomGenerator.getInstance();
 		
 		int destIndex = gen.getRandom().nextInt(moves.size());
@@ -38,6 +28,7 @@ public class MoveAnywhereBehaviour extends Behaviour {
 		Tile destination = moves.get(destIndex);
 		if (c.worldRef.get() != null && c.worldRef.get().getCellAtPositionCurrent(destination.x, destination.y) == null){
 			c.moveTo(destination);
+
 			return true;
 		}
 		
