@@ -125,6 +125,7 @@ public class Cell {
 		locationRef.get().coreRef.get().cellsToBeAdded = cells;
 		locationRef.get().coreRef.get().addCellsDelayed();
 		//moveTo(destination);
+
 	}
 	
 	public ArrayList<Tile> getMoveSet(){
@@ -138,7 +139,7 @@ public class Cell {
 		
 		}
 		
-		
+		/*
 		for (int i = 0; i < properties.speed + 1; i++) {
 			int x = locationRef.get().x + locationRef.get().coreRef.get().xOffSet + i * locationRef.get().coreRef.get().tileSize;	
 			int Dy = properties.speed + 1 - i;
@@ -177,6 +178,30 @@ public class Cell {
 				int y = locationRef.get().y + locationRef.get().coreRef.get().yOffSet  - j * locationRef.get().coreRef.get().tileSize;
 				Tile tile = locationRef.get().coreRef.get().getTile(x, y);
 				result.add(tile);
+			}
+		}*/
+		for(int k = 0; k < 4; k++){
+			for (int i = 0; i < properties.speed + 1; i++) {
+				int x;
+				if (k < 2) {
+					x = locationRef.get().x + locationRef.get().coreRef.get().xOffSet + i * locationRef.get().coreRef.get().tileSize;	
+				}else{
+					x = locationRef.get().x + locationRef.get().coreRef.get().xOffSet - i * locationRef.get().coreRef.get().tileSize;	
+				} 
+				int Dy = properties.speed + 1 - i;
+				
+				
+				for (int j = 0; j < Dy; j++) {
+					int y;
+					if(k % 2 == 0){
+						y = locationRef.get().y + locationRef.get().coreRef.get().yOffSet + j * locationRef.get().coreRef.get().tileSize;
+					}else{
+						 y = locationRef.get().y + locationRef.get().coreRef.get().yOffSet - j * locationRef.get().coreRef.get().tileSize;
+					}
+					
+					Tile tile = locationRef.get().coreRef.get().getTile(x, y);
+					result.add(tile);
+				}
 			}
 		}
 		

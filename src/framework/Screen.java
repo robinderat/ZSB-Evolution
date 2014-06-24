@@ -13,7 +13,6 @@ public class Screen extends JFrame {
 	Clicker click = new Clicker(core);
 	Typer type = new Typer(core);
 	Drawer draw = new Drawer(core);
-	JButton next = new JButton("Next Turn");
 	
 	public Screen(String string){
 		super(string);
@@ -21,22 +20,13 @@ public class Screen extends JFrame {
 		setSize(1350, 800);
 		setVisible(true);
 		
-		
-		next.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				core.iterate(1);
-			}
-		});
-		
 		addMouseListener(click);
 		addMouseMotionListener(click);
+		addMouseWheelListener(click);
 		addKeyListener(type);
 		draw.setVisible(true);
 		add(draw);
 		
-		draw.add(next);
 		
 	}
 }

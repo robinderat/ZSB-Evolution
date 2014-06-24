@@ -14,6 +14,8 @@ public class Core {
 	public int xOffSet = 0;
 	public int yOffSet = 0;
 	
+	public int iterations = 1;
+	
 	Tile selected;		
 			
 	private Tile[][] tileArray = new Tile[tileNumber][tileNumber];
@@ -43,26 +45,19 @@ public class Core {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
-			
+				
 			moveBoardView();
 			frame.repaint();
 		}
 	}
 	
-	
-	public void iterate(int nTurns){
-		for (int i = 0; i < nTurns; i++){
-			
-			
+
+	public void iterate() {
+		for (int i = 0; i < iterations; i++) {		
 			for (int j = 0; j< currentCells.size(); j++){
 				
 				Cell c = currentCells.get(j);
-				//c.action();
-				
 				c.update();
-				
 				
 			}
 			
@@ -84,6 +79,7 @@ public class Core {
 	}
 	
 	
+		
 	private void fillArray(){
 		for (int i = 0; i < tileNumber; i++) {
 			for (int j = 0; j < tileNumber; j++) {
@@ -170,7 +166,6 @@ public class Core {
 	private void moveDown(){
 		yOffSet += 5;
 	}
-	
 	
 	private void moveLeft(){
 		xOffSet -= 5;
