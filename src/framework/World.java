@@ -60,7 +60,7 @@ public class World {
 		// to-do: replace variables by values from settings
 		Random random = new Random(System.currentTimeMillis());
 		
-		
+
 		int minType = 1;
 		int diffTypes = 2 + (int)(random.nextDouble() * ((4 - 2) + 1));	 // 2,3 or 4 
 		float percentageWorldFilled = 0.2f; 	// fill 60% of world
@@ -82,7 +82,7 @@ public class World {
 						// generate tile on cell
 						// choose randomly a type
 						int cellType = minType + (int)(random.nextDouble() * (((minType + diffTypes) - minType - 1) + 1));
-						currentCells.add(new Cell(this, tile.x, tile.y, cellType, null));
+						currentCells.add(new Cell(this, tile.x, tile.y, cellType));
 					}
 					//System.out.println((currentCells.size() / (float)(tileCount * tileCount)));
 					goOn = (currentCells.size() / (float)(tileCount * tileCount)) < percentageWorldFilled;

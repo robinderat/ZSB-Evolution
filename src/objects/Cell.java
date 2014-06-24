@@ -25,13 +25,19 @@ public class Cell {
 	
 	public WeakReference<World> worldRef;
 	
+	public Cell(World w, int lx, int ly, int t) {
+		this(w, lx, ly, t, "");
+	}
+	
 	/**
 	 * cell constructor
 	 */
-	public Cell(World w, int locX, int locY, int t, Properties p) {
-		properties = p;
-		if (properties == null) {
+	public Cell(World w, int locX, int locY, int t, String DNA) {
+		
+		if (DNA.length() == 0) {
 			properties = new Properties(); // random DNA
+		} else {
+			properties = new Properties(DNA);
 		}
 		
 		x = locX;
@@ -52,19 +58,6 @@ public class Cell {
 		behaviours.add(new HuntBehaviour());
 		behaviours.add(new MoveBehaviour());
 
-	}
-	
-	public Cell(World w, int locX, int locY, String DNA) {
-		properties = new Properties(DNA);
-		img = new ImageIcon("src/art/Cell1.png").getImage();
-		
-		x = locX;
-		y = locY;
-		
-		worldRef = new WeakReference<World>(w);
-		
-		behaviours = new ArrayList<Behaviour>();
-		behaviours.add(new JosephDebugBehaviour());
 	}
 
 	// moves the cell: check what it should do and then go toward that position
@@ -156,7 +149,7 @@ public class Cell {
 		String otherDNA = cell.properties.getDNA();
 		String newDNA = worldRef.get().cBreeder.merge(ownDNA, otherDNA)[0];
 		
-		Cell c = new Cell(worldRef.get(), 15, 15, newDNA);
+		Cell c = new Cell(worldRef.get(), 15, 15, cell.type, newDNA);
 		worldRef.get().nextCells.add(c);
 		System.out.println("A baby has been made");
 	}

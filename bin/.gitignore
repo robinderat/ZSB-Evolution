@@ -1,2 +1,3 @@
-/objects
 /framework
+/objects
+*.class
