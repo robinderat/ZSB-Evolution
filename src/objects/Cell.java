@@ -138,8 +138,7 @@ public class Cell {
 			}
 		}
 		
-		//moveTo(bestTile);
-		
+		moveTo(bestTile);
 	}
 	
 	public void mate(Cell cell){
@@ -194,12 +193,13 @@ public class Cell {
 	// cell moves to new destination
 	public void moveTo(Tile destination) {
 		
+		// decrease energy
 		int dist = worldRef.get().pointDistanceInWorldUnit(x, y, destination.x, destination.y);
-		
+		properties.currentEnergy -= dist;
+	
+		// update position
 		x = destination.x;
 		y = destination.y;
-		
-		properties.currentEnergy -= dist;
 		
 		// we dont kill him here. even if energy reaches 0, we let him live one more iteration
 		worldRef.get().nextCells.add(this);

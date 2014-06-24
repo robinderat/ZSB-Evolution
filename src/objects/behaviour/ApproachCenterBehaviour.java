@@ -1,8 +1,5 @@
 package objects.behaviour;
 
-import java.util.ArrayList;
-
-import framework.Tile;
 import objects.Cell;
 
 // in this behaviour the cell wants to go one of the world's center

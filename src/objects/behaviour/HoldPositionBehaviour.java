@@ -1,10 +1,6 @@
 package objects.behaviour;
 
-import java.util.ArrayList;
-
-import framework.Tile;
 import objects.Cell;
-
 
 // in this behaviour the cell stays in the same tile that it currently is
 public class HoldPositionBehaviour extends MoveAnywhereBehaviour {
