@@ -12,13 +12,13 @@ public class FleeBehaviour extends WanderBehaviour {
 	public boolean execute(Cell c) {
 		
 		if (!(c.properties.currentEnergy > 1)) return false;
-
+		System.out.println("Flee" + c);
 		ArrayList<Tile> perception = c.getPerceptionSet();
 
 		// first search for other cells in area
 		ArrayList<Tile> dangerousTiles = searchForDanger(perception, c);
 		// if found, move in other direction
-		if (!dangerousTiles.isEmpty()) {
+		if (dangerousTiles.size() != 0) {
 			
 				ArrayList<Tile> options = new ArrayList<Tile>();
 				ArrayList<Tile> tiles = c.getMoveSet();
@@ -38,25 +38,29 @@ public class FleeBehaviour extends WanderBehaviour {
 							proposedTile = tile;
 						}
 					}
-					options.add(proposedTile);
+					if(proposedTile != null){
+						options.add(proposedTile);
+					}
 					
+				}
 					double bestDistance = 0;
+					double totalDistance = 0;
 					for (Tile tile : options) {
-						int Dx = tile.x - t.x; 
-						int Dy = tile.y - t.y;
-						double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
-						
-						if (newDistance > bestDistance) {
-							distance = newDistance;
+						for(Tile t : dangerousTiles){
+							System.out.println("tile" + tile);
+							System.out.println("dangerous" + t);
+							int Dx = tile.x - t.x; 
+							int Dy = tile.y - t.y;
+							double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
+							totalDistance = totalDistance + newDistance;
+						}
+						if (totalDistance > bestDistance) {
+							bestDistance = totalDistance;
 							bestTile = tile;
 						}
-					}
-				
-				
+				}
+					
 			c.moveTo(bestTile);
-			}
-
-			
 			return true;
 		} else { // if not found then no move possible in this behaviour
 			return false;
