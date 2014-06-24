@@ -79,36 +79,12 @@ public class Cell {
 	// moves the cell: check what it should do and then go toward that position
 	public void update() {
 
-		// possibly check if following multi-turn behaviour
-		// if (performingMultiTurnBehaviour) then continue that
-		
-		Behaviour behaviour;
-		// pick behaviour from behaviours. picks first possible one from list
-		for (int i = 0; i < behaviours.size(); i++) {
-			// if (behaviours.get(i).isPossible()) {
-				// behaviour = behaviours.get(i);
-				// break;
-			//}
-		}
-		
-		
-		// ALTERNATIVE METHOD !
-		// global bool to check if a behaviour will be possible
-		// while (!bool) try all your behaviours (which can be in a cell(type)'s own randomized indexed order)
-		// within the behaviours the bool will be set to true when it's possible
-		// and they will return before that point if is it not possible
-		// ==> clever use of returns
 		int i = 0;
-		while (!behaviours.get(i).execute(this)){
+		while (i < behaviours.size() && behaviours.get(i).execute(this) == false){
 			i++;
 		}
-		
-		/* (OLD METHOD: )
-		// go there
-		behaviour.execute(this);
-		*/
+ 
 	}
-
 
 	public void eat(Cell cell) {
 		int energyValue = 20;

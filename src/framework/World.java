@@ -70,9 +70,8 @@ public class World {
 	 */
 	public void populate() {
 		// to-do: replace variables by values from settings
-		Random random = new Random(System.currentTimeMillis());
+		Random random = RandomGenerator.getInstance().getRandom();
 		
-
 		int minType = 1;
 		int diffTypes = 2 + (int)(random.nextDouble() * ((4 - 2) + 1));	 // 2,3 or 4 
 		float percentageWorldFilled = 0.2f; 	// fill 60% of world
@@ -120,16 +119,16 @@ public class World {
 		
 		nextCells = new ArrayList<Cell>();
 		
-		DEBUGprintCells(currentCells);
+		//DEBUGprintCells(currentCells);
 	}
 	
+	/*
 	private void DEBUGprintCells(ArrayList<Cell> cells){
 		for (Cell cell : cells){
 			System.out.println(""+ cell.x + " "+ cell.y);
 		}
 		System.out.println("n cells =" + cells.size());
-		
-	}
+	}*/
 	
 	
 	
