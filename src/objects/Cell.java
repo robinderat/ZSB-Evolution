@@ -23,7 +23,7 @@ public class Cell {
 	public int y;
 	public int type;
 	
-	WeakReference<World> worldRef;
+	public WeakReference<World> worldRef;
 	
 	/**
 	 * cell constructor
@@ -52,6 +52,19 @@ public class Cell {
 		behaviours.add(new HuntBehaviour());
 		behaviours.add(new MoveBehaviour());
 
+	}
+	
+	public Cell(World w, int locX, int locY, String DNA) {
+		properties = new Properties(DNA);
+		img = new ImageIcon("src/art/Cell1.png").getImage();
+		
+		x = locX;
+		y = locY;
+		
+		worldRef = new WeakReference<World>(w);
+		
+		behaviours = new ArrayList<Behaviour>();
+		behaviours.add(new JosephDebugBehaviour());
 	}
 
 	// moves the cell: check what it should do and then go toward that position
@@ -113,6 +126,76 @@ public class Cell {
 		y = destination.y;
 		worldRef.get().nextCells.add(this);
 
+	}
+	
+	public void moveTowards(Tile target) {
+		
+		ArrayList<Tile> tiles = getMoveSet();
+		
+		double distance = 500;
+		int Dx;
+		int Dy;
+		Tile bestTile = null;
+		for (Tile tile : tiles) {
+			Dx = tile.x - target.x; 
+			Dy = tile.y - target.y;
+			double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
+			
+			if (newDistance < distance) {
+				distance = newDistance;
+				bestTile = tile;
+			}
+		}
+		
+		moveTo(bestTile);
+		
+	}
+	
+	public void mate(Cell cell){
+		String ownDNA = properties.getDNA();
+		String otherDNA = cell.properties.getDNA();
+		String newDNA = worldRef.get().cBreeder.merge(ownDNA, otherDNA)[0];
+		
+		Cell c = new Cell(worldRef.get(), 15, 15, newDNA);
+		worldRef.get().nextCells.add(c);
+		System.out.println("A baby has been made");
+	}
+	
+	public void Flee(ArrayList<Tile> danger){
+		ArrayList<Tile> options = new ArrayList<Tile>();
+		ArrayList<Tile> tiles = getMoveSet();
+		Tile bestTile = null;
+		
+		for (Tile t : danger) {
+			Tile proposedTile = null;
+			double distance = 0;
+			for (Tile tile : tiles) {
+					
+				int Dx = tile.x - t.x; 
+				int Dy = tile.y - t.y;
+				double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
+					
+				if (newDistance > distance) {
+					distance = newDistance;
+					proposedTile = tile;
+				}
+			}
+			options.add(proposedTile);
+			
+		double bestDistance = 0;
+		for (Tile tile : options) {
+			int Dx = tile.x - t.x; 
+			int Dy = tile.y - t.y;
+			double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
+			
+			if (newDistance > bestDistance) {
+				distance = newDistance;
+				bestTile = tile;
+			}
+		}
+	}
+		
+		moveTo(bestTile);
 	}
 
 	public ArrayList<Tile> getTilesInRadius(int rad) {

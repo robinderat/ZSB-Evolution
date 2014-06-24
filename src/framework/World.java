@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import objects.Cell;
+import objects.breeders.CrossoverBreeder;
 
 public class World {
 
@@ -23,6 +24,8 @@ public class World {
 	
 	public ArrayList<Cell> currentCells = new ArrayList<Cell>();
 	public ArrayList<Cell> nextCells = new ArrayList<Cell>();
+	
+	public CrossoverBreeder cBreeder =  new CrossoverBreeder();
 	
 	public boolean movingUp = false;
 	public boolean movingDown = false;
