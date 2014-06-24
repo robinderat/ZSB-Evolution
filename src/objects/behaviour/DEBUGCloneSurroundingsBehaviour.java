@@ -5,19 +5,18 @@ import java.util.ArrayList;
 import framework.Tile;
 import objects.Cell;
 
-public class JosephDebugBehaviour extends Behaviour {
+// in this behaviour the cell clones itself onto all tiles around it
+public class DEBUGCloneSurroundingsBehaviour extends Behaviour {
 
 	@Override
 	public void execute(Cell c) {
-		// TODO Auto-generated method stub
 		ArrayList<Tile> moves = c.getMoveSet();
 		c.DEBUGmoveToAllInMoveSet(moves, c);
 	}
 
 	@Override
 	public boolean isPossible(Cell c) {
-		// TODO Auto-generated method stub
-		return true;
+		return c.properties.currentEnergy > 1;
 	}
 
 }

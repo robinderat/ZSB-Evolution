@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import framework.Tile;
 import objects.Cell;
 
-public class MoveBehaviour extends Behaviour {
+// in this behaviour the cell scours its surroundings for 
+public class HuntBehaviour extends Behaviour {
 
 	@Override
 	public void execute(Cell c) {
