@@ -41,7 +41,7 @@ World world;
 		
 		int typed = (int)e.getKeyChar();
 		
-		System.out.println(typed);
+		//System.out.println(typed);
 		
 		// uncomment this line to find out the integer that corresponds to a key
 		//ystem.out.println((int)e.getKeyChar());
@@ -72,7 +72,8 @@ World world;
 		
 		// space
 		if (typed == 32) {
-			world.iterate();
+			if (world.doIterate == false) 
+				world.doIterate = true;
 		}
 		
 		// c (clear)
