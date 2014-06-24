@@ -13,13 +13,13 @@ import objects.Cell;
 public class Drawer extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	Core core;
+	World world;
 	Image bg = new ImageIcon("src/art/Bg.png").getImage();
 	Image select = new ImageIcon("src/art/Selected.png").getImage();
 	Image infoBg = new ImageIcon("src/art/Data.png").getImage();
 	
-	public Drawer(Core c) {
-		core = c;
+	public Drawer(World c) {
+		world = c;
 	}
 
 	public void paintComponent(Graphics g){
@@ -33,41 +33,35 @@ public class Drawer extends JPanel {
 	}
 	
 	private void paintTiles(Graphics g){
-		for (Tile[] tiles : core.getTiles()) {
+		for (Tile[] tiles : world.getTiles()) {
 			for (Tile t : tiles) {
-				g.drawImage(t.getImage(), t.x + core.xOffSet - core.tileSize / 2 , t.y + core.yOffSet - core.tileSize /2, core.tileSize , core.tileSize , null);
+				g.drawImage(t.getImage(), t.x + world.xOffSet - world.tileSize / 2 , t.y + world.yOffSet - world.tileSize /2, world.tileSize , world.tileSize , null);
 			}
 		}
 	}
 	
 	private void paintProperties(Graphics g){
 		g.drawImage(infoBg, 1000, 25, 300, 600, null);
-		Tile tile = core.selected;
+		Tile tile = world.selected;
 		g.drawString("Steps in next iteration", 1020, 50);
-		g.drawString(Integer.toString(core.iterations), 1220, 50);
+		g.drawString(Integer.toString(world.getIterations()), 1220, 50);
 		
 		if (tile != null) {
 			g.drawString("X: " + Integer.toString(tile.x), 1020, 150);
 			g.drawString("Y: " + Integer.toString(tile.y), 1020, 175);
-			
-			if (tile.containsCell()) {
-				Cell c = tile.getCell();
-				//g.drawString("CellType: " + Integer.toString(c.type), 1020, 125);
-			}
-			
 		}
 	}
 
 	private void paintSelected(Graphics g){
-		Tile t = core.selected;
+		Tile t = world.selected;
 		if (t != null) {
-			g.drawImage(select, t.x + core.xOffSet - core.tileSize / 2 , t.y + core.yOffSet - core.tileSize /2, core.tileSize , core.tileSize , null);
+			g.drawImage(select, t.x + world.xOffSet - world.tileSize / 2 , t.y + world.yOffSet - world.tileSize /2, world.tileSize , world.tileSize , null);
 		}
 	}
 		
 	private void paintCells(Graphics g){
-		for(Cell cell : core.getCells()){
-			g.drawImage(cell.img, cell.locationRef.get().x + core.xOffSet - core.tileSize / 2 , cell.locationRef.get().y + core.yOffSet - core.tileSize /2, core.tileSize, core.tileSize, null);
+		for(Cell cell : world.getCells()){
+			g.drawImage(cell.img, cell.x + world.xOffSet - world.tileSize / 2 , cell.y + world.yOffSet - world.tileSize /2, world.tileSize, world.tileSize, null);
 		}
 		
 	}
