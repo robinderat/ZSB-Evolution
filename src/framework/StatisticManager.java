@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.TreeSet;
 
 import objects.Cell;
 
@@ -17,15 +18,30 @@ public class StatisticManager {
 		public int type;		// which type
 		public int aliveCount;	// how much alive
 		public int deadCount;	// how much dead
+		public double dnaVariation;
+		ArrayList<Cell> cells;
 		
 		public CellTypeStatistic(int t) {
 			type = t;
 			aliveCount = 0;
 			deadCount = 0;
+			dnaVariation = 0;
+			cells = new ArrayList<Cell>();
 		}
 		
 		public String toString() {
-			return "Type: " + type + " aliveCount " + aliveCount + " deadCount " + deadCount;
+			return "Type: " + type + " aliveCount " + aliveCount + " deadCount " + deadCount + " dnaVariation: " + dnaVariation;
+		}
+		
+		public void calcDnaVariation() {
+			
+			TreeSet<String> DNAs = new TreeSet<String>();
+			
+			for (Cell c : cells) {
+				DNAs.add(c.properties.getDNA());
+			}
+			
+			dnaVariation = (double)DNAs.size() / cells.size();
 		}
 	}
 	
@@ -56,6 +72,16 @@ public class StatisticManager {
 			} else {
 				statToWorkWith.deadCount++;
 			}
+			
+			// for partitioning
+			statToWorkWith.cells.add(c);
+		}
+		
+		// do stuff that can be done only after partitioning
+		for (CellTypeStatistic s : stats) {
+			s.calcDnaVariation();
+			// clear memory used for partitioning
+			s.cells = new ArrayList<Cell>();
 		}
 		
 		cellStatistics.add(stats);
@@ -90,10 +116,9 @@ public class StatisticManager {
 					
 				});
 				
-				writer.println(step);
+				writer.print(step + ":");
 				for (CellTypeStatistic stat : cs) {
-					writer.print(stat.type + "," + stat.aliveCount + "," + stat.deadCount);
-					writer.println("");
+					writer.print(stat.type + "," + stat.aliveCount + "," + stat.deadCount + ":");
 				}
 				step++;
 			}
