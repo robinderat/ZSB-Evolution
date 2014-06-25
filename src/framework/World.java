@@ -120,8 +120,6 @@ public class World {
 	 */
 	public void iterate() {
 		
-
-		
 		for (int j = 0; j < currentCells.size(); j++){
 			Cell c = currentCells.get(j);
 			c.update();	

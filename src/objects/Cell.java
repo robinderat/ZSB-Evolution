@@ -73,13 +73,9 @@ public class Cell {
 		worldRef = new WeakReference<World>(w);
 		
 		behaviours = new ArrayList<Behaviour>();
-
-		
 		behaviours.add(new HuntBehaviour());
-		//behaviours.add(new MateBehaviour());
+		behaviours.add(new MateBehaviour());
 		behaviours.add(new FleeBehaviour());
-		//behaviours.add(new ApproachCenterBehaviour());
-		//behaviours.add(new ApproachBorderBehaviour());
 		behaviours.add(new WanderBehaviour());
 		behaviours.add(new StayBehaviour());
 	}
@@ -161,15 +157,28 @@ public class Cell {
 		
 		ArrayList<Tile> tiles = getFreeNeighbours();
 		if(tiles.size() != 0){
-			properties.setCurrentEnergy(cell.properties.getCurrentEnergy() - cell.properties.getMaxEnergy() / 7 * 10);
-			properties.setCurrentEnergy(properties.getCurrentEnergy() - properties.getMaxEnergy() / 7 * 10);
+			
+			double energyCost = 0.7;
+			
+			int energyLostCell1 = (int)Math.ceil(cell.properties.getMaxEnergy() * energyCost);
+			if (energyLostCell1 <= 0) {
+				energyLostCell1 = 1;
+			}
+			
+			int energyLostCell2 = (int)Math.ceil(properties.getMaxEnergy() * energyCost);
+			if (energyLostCell2 <= 0) {
+				energyLostCell2 = 1;
+			}
+			
+			cell.properties.setCurrentEnergy(cell.properties.getCurrentEnergy() - energyLostCell1);
+			properties.setCurrentEnergy(properties.getCurrentEnergy() - energyLostCell2);
 			
 			Cell c = new Cell(worldRef.get(), tiles.get(0).x, tiles.get(0).y, cell.type, newDNA);
 			worldRef.get().nextCells.add(c);
-			//System.out.println("A baby has been made");
+			System.out.println("A baby has been made");
 			return true;
 		}
-		//System.out.println("No space for another baby");
+		System.out.println("No space for another baby");
 		return false;
 	}
 	
@@ -177,7 +186,7 @@ public class Cell {
 
 	// cell moves to new destination
 	public void moveTo(Tile destination) {
-		
+		System.out.println("destx " + destination.x + " desty " + destination.y);
 		if (getMoveSet().contains(destination)) {
 			// decrease energy
 			int dist = worldRef.get().pointDistanceInWorldUnit(x, y, destination.x, destination.y);
@@ -189,6 +198,7 @@ public class Cell {
 			// update position
 			x = destination.x;
 			y = destination.y;
+			
 			
 			// we dont kill him here. even if energy reaches 0, we let him live one more iteration
 			worldRef.get().nextCells.add(this);
@@ -221,7 +231,7 @@ public class Cell {
 		return neighbours;
 	}
 	
-	public Tile getClosestFreeNeighbour(int x, int y){
+	public Tile getClosestFreeNeighbour(int askx, int asky){
 		
 		
 		ArrayList<Tile> neighbours = new ArrayList<Tile>();
@@ -243,8 +253,8 @@ public class Cell {
 		 Tile closest = null;
 		 double bestDistance = 500;
 		 for (Tile tile : neighbours) {
-			 int Dx = tile.x - x;
-			 int Dy = tile.y - y;
+			 int Dx = tile.x - askx;
+			 int Dy = tile.y - asky;
 			 double distance = Math.sqrt(Dx *Dx  + Dy * Dy);
 			 
 			 if (distance < bestDistance) {
@@ -254,10 +264,6 @@ public class Cell {
 		 }
 		
 		return closest;
-	}
-	
-	public boolean canMate(){
-		return true;
 	}
 	
 	public ArrayList<Tile> getTilesInRadius(int rad) {
