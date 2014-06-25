@@ -17,7 +17,6 @@ public class Settings {
 	
 	public boolean allowCannibalism;
 	
-	
 	public Settings() {
 		fillRate = 0.4f;
 		mutationRate = 0.1f;
