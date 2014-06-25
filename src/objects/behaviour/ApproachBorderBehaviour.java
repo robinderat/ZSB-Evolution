@@ -1,8 +1,8 @@
 package objects.behaviour;
 
-import java.util.Arrays;
+//import java.util.Arrays;
 
-import framework.Tile;
+//import framework.Tile;
 import objects.Cell;
 
 // in this behaviour the cell wants to go one of the world's borders

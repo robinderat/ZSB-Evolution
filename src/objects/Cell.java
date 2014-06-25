@@ -74,9 +74,14 @@ public class Cell {
 		
 		// order may still need to be randomized based on type or DNA, although that will mean rapid extinction
 		behaviours = new ArrayList<Behaviour>();
+
 		//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
 		//behaviours.add(new HuntBehaviour());
 		//behaviours.add(new MateBehaviour());
+
+		//behaviours.add(new HuntBehaviourRobin());
+
+
 		behaviours.add(new FleeBehaviour());
 		behaviours.add(new HuntBehaviour());
 		behaviours.add(new WanderBehaviour());
@@ -108,9 +113,14 @@ public class Cell {
 		}
  
 	}
+	
+	public boolean isHungry(){
+		int hungryFrom = properties.getMaxEnergy() / 10 * 8;
+		return properties.getCurrentEnergy() < hungryFrom;
+	}
 
 	// cell eats another cell and fills current energy up to max if possible
-	public void eat(Cell target) {
+	public void attack(Cell target) {
 		
 		int attackValue = properties.getStrength();
 		if (attackValue <= 0) {
@@ -281,6 +291,7 @@ public class Cell {
 	}
 	
 	public ArrayList<Tile> getTilesInRadius(int rad, boolean isViewing) {
+
 		ArrayList<Tile> result = new ArrayList<Tile>();
 
 		for (int k = 0; k < 4; k++) {
@@ -312,6 +323,7 @@ public class Cell {
 					}
 				}
 			}
+				
 		}
 		
 		//System.out.println(result);

@@ -30,9 +30,11 @@ public class HuntBehaviour extends Behaviour {
 			if (!targetIsClose){ // if far, approach
 				c.isHunting = false;
 				
+				
+				
 				c.moveTo(target);
 			} else { // if close, eat
-				c.eat(target.worldRef.get().getCellAtPositionCurrent(target.x, target.y));
+				c.attack(target.worldRef.get().getCellAtPositionCurrent(target.x, target.y));
 				c.moveTo(target);
 			}
 			
