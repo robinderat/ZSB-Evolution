@@ -80,7 +80,6 @@ public class FleeBehaviour extends WanderBehaviour {
 			}
 		}
 		
-		
 		// returns a list containing all tiles that have a cell on them
 		return dangerousTiles;
 	}

@@ -12,7 +12,7 @@ public class WanderBehaviour extends Behaviour {
 	@Override
 	public boolean execute(Cell c) {
 		if (!(c.properties.currentEnergy > 1)) return false;
-		System.out.println("Wandering" + c);
+		//System.out.println("Wandering" + c);
 		
 		if (wander(c)) return true;
 		else return false;
