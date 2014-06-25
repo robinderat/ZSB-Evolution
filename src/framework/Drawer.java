@@ -3,7 +3,11 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JButton;
@@ -45,7 +49,21 @@ public class Drawer extends JPanel {
 	
 	JLabel eatingEnergyGainLabel = new JLabel("Eating Energy Gain", JLabel.CENTER);
 	JLabel currentEatingEnergyGain = new JLabel("", JLabel.CENTER);
-	JSlider eatingEnergyGainSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 20);
+	JSlider eatingEnergyGainSlider = new JSlider(JSlider.HORIZONTAL, 0, 200, 20);
+	
+	JLabel veryHungryThresholdLabel = new JLabel("Very Hungry Threshold", JLabel.CENTER);
+	JLabel currentVeryHungryThreshold = new JLabel("", JLabel.CENTER);
+	JSlider veryHungryThresholdSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 20);
+	
+	JLabel startEnergyRateLabel = new JLabel("Starting Energy Rate", JLabel.CENTER);
+	JLabel currentStartEnergyRate = new JLabel("", JLabel.CENTER);
+	JSlider startEnergyRateSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 20);
+	
+	JLabel moveStrengthModifierLabel = new JLabel("Move Strength Modifier", JLabel.CENTER);
+	JLabel currentMoveStrengthModifier = new JLabel("", JLabel.CENTER);
+	JSlider moveStrengthModifierSlider = new JSlider(JSlider.HORIZONTAL, 0, 200, 20);
+	
+	JCheckBox allowCanibalismButton = new JCheckBox("Canibalism");
 
 	
 	public Drawer(World c) {
@@ -83,13 +101,13 @@ public class Drawer extends JPanel {
 		crossOverRateSlider.setFocusable(false);
 		
 		
-		mutationLabel.setBounds(830, 120, 160, 90);
+		mutationLabel.setBounds(825, 120, 160, 90);
 		
 		currentMutationRate.setBounds(825, 140, 160, 90);
 		currentMutationRate.setText(String.valueOf((int)(settings.mutationRate*1000)));
 		
 		mutationRateSlider.setValue((int)(settings.mutationRate*1000));
-		mutationRateSlider.setBounds(830, 200, 160, 30);
+		mutationRateSlider.setBounds(825, 200, 160, 30);
 		mutationRateSlider.addChangeListener(bl);
 		mutationRateSlider.setFocusable(false);
 		
@@ -120,7 +138,46 @@ public class Drawer extends JPanel {
 		eatingEnergyGainSlider.setBounds(825, 300, 160, 30);
 		eatingEnergyGainSlider.addChangeListener(bl);
 		eatingEnergyGainSlider.setFocusable(false);
-	
+		
+		
+		veryHungryThresholdLabel.setBounds(620, 320, 160, 90);
+		
+		currentVeryHungryThreshold.setBounds(620, 340, 160, 90);
+		currentVeryHungryThreshold.setText(String.valueOf((int)(settings.veryHungryThreshold*100)));
+		
+		veryHungryThresholdSlider.setValue((int)(settings.veryHungryThreshold*100));
+		veryHungryThresholdSlider.setBounds(620, 400, 160, 30);
+		veryHungryThresholdSlider.addChangeListener(bl);
+		veryHungryThresholdSlider.setFocusable(false);
+		
+		
+		startEnergyRateLabel.setBounds(825, 320, 160, 90);
+		
+		currentStartEnergyRate.setBounds(825, 340, 160, 90);
+		currentStartEnergyRate.setText(String.valueOf((int)(settings.startEnergyRate*100)));
+		
+		startEnergyRateSlider.setValue((int)(settings.startEnergyRate*100));
+		startEnergyRateSlider.setBounds(825, 400, 160, 30);
+		startEnergyRateSlider.addChangeListener(bl);
+		startEnergyRateSlider.setFocusable(false);
+		
+		
+		moveStrengthModifierLabel.setBounds(620, 420, 160, 90);
+		
+		currentMoveStrengthModifier.setBounds(620, 440, 160, 90);
+		currentMoveStrengthModifier.setText(String.valueOf((int)(settings.moveStrengthModifier*100)));
+		
+		moveStrengthModifierSlider.setValue((int)(settings.moveStrengthModifier*100));
+		moveStrengthModifierSlider.setBounds(620, 500, 160, 30);
+		moveStrengthModifierSlider.addChangeListener(bl);
+		moveStrengthModifierSlider.setFocusable(false);
+		
+		
+		allowCanibalismButton.setBounds(825, 500, 100, 35);
+	    allowCanibalismButton.setSelected(true);
+	    allowCanibalismButton.setFocusable(false);
+	    allowCanibalismButton.addItemListener(bl);
+	    allowCanibalismButton.setSelected(settings.allowCannibalism);
 		
 		
 		super.add(clearButton);
@@ -145,6 +202,19 @@ public class Drawer extends JPanel {
 		super.add(currentEatingEnergyGain);
 		super.add(eatingEnergyGainSlider);
 		
+		super.add(veryHungryThresholdLabel);
+		super.add(currentVeryHungryThreshold);
+		super.add(veryHungryThresholdSlider);
+		
+		super.add(startEnergyRateLabel);
+		super.add(currentStartEnergyRate);
+		super.add(startEnergyRateSlider);
+		
+		super.add(moveStrengthModifierLabel);
+		super.add(currentMoveStrengthModifier);
+		super.add(moveStrengthModifierSlider);
+		
+		super.add(allowCanibalismButton);
 		
 		world = c;
 	}
@@ -232,7 +302,7 @@ public class Drawer extends JPanel {
 	
 	private ButtonListener bl = new ButtonListener();
 	
-	class ButtonListener implements ActionListener, ChangeListener {
+	class ButtonListener implements ActionListener, ChangeListener, ItemListener {
 				
 	    public void actionPerformed(ActionEvent e) {
 	    	
@@ -286,6 +356,38 @@ public class Drawer extends JPanel {
         		if (!source.getValueIsAdjusting()) settings.eatingEnergyGain = value/100.0f;
         		currentEatingEnergyGain.setText(String.valueOf(value));
         	}    
+        	else if (source == veryHungryThresholdSlider)
+        	{
+        		if (!source.getValueIsAdjusting()) settings.veryHungryThreshold = value/100.0f;
+        		currentVeryHungryThreshold.setText(String.valueOf(value));
+        	}
+        	else if (source == startEnergyRateSlider)
+        	{
+        		if (!source.getValueIsAdjusting()) settings.startEnergyRate = value/100.0f;
+        		currentStartEnergyRate.setText(String.valueOf(value));
+        	}
+        	else if (source == moveStrengthModifierSlider)
+        	{
+        		if (!source.getValueIsAdjusting()) settings.moveStrengthModifier = value/100.0f;
+        		currentMoveStrengthModifier.setText(String.valueOf(value));
+        	}
+	    }
+	    
+	    public void itemStateChanged(ItemEvent e) {
+	    	Settings settings = Settings.getInstance();
+	    	Object source = e.getItemSelectable();
+
+	        if (source == allowCanibalismButton) {
+	        	if (e.getStateChange() == ItemEvent.DESELECTED) {
+	        		settings.allowCannibalism = false;
+	        	}
+	        	else {
+	        		settings.allowCannibalism = true;
+	        	}
+	        }
+	        
+
+	        
 	    }
 	}
 }
