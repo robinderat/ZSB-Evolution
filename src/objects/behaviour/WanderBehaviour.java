@@ -11,7 +11,9 @@ public class WanderBehaviour extends Behaviour {
 
 	@Override
 	public boolean execute(Cell c) {
-		if (!(c.properties.currentEnergy > 1)) return false;
+		if (!(c.isAlive())) {
+			return false;
+		}
 
 		if (moveAnywhere(c)) return true;
 		else return false;

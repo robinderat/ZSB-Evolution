@@ -11,9 +11,10 @@ public class FleeBehaviour extends Behaviour {
 	@Override
 	public boolean execute(Cell c) {
 
-		if (!(c.properties.currentEnergy > 1)) {
+		if (!(c.isAlive())) {
 			return false;
 		}
+		
 		ArrayList<Tile> perception = c.getPerceptionSet();
 
 		// first search for other cells in area

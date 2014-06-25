@@ -13,6 +13,10 @@ public class MateBehaviour extends Behaviour {
 	@Override
 	public boolean execute(Cell c) {
 		
+		if (!(c.isAlive())) {
+			return false;
+		}
+		
 		ArrayList<Tile> vision = c.getPerceptionSet();
 		ArrayList<Cell> partners = getPotentialPartners(vision, c);
 		

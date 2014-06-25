@@ -13,7 +13,9 @@ public class HuntBehaviour extends Behaviour {
 	
 	@Override
 	public boolean execute(Cell c) {
-		if (!(c.properties.currentEnergy > 1)) return false;
+		if (!(c.isAlive())) {
+			return false;
+		}
 
 		c.isHunting = true;
 		targetIsClose = false;
@@ -57,7 +59,7 @@ public class HuntBehaviour extends Behaviour {
 			
 			if (target != null && target != me){
 				// if very hungry, cells resort to cannibalism
-				if (me.properties.currentEnergy < me.properties.getMaxEnergy()/4 && target.type == me.type){
+				if (me.properties.getCurrentEnergy() < me.properties.getMaxEnergy()/4 && target.type == me.type){
 					targets.add(target);
 					continue;
 				}
@@ -116,8 +118,8 @@ public class HuntBehaviour extends Behaviour {
 		while (targets.size() > 1) {
 			Cell one = targets.get(0);
 			Cell two = targets.get(1);
-			if (one.properties.currentEnergy >= two.properties.currentEnergy) targets.remove(one);
-			else if (one.properties.currentEnergy < two.properties.currentEnergy) targets.remove(two);
+			if (one.properties.getCurrentEnergy() >= two.properties.getCurrentEnergy()) targets.remove(one);
+			else if (one.properties.getCurrentEnergy() < two.properties.getCurrentEnergy()) targets.remove(two);
 			// additional if to take the cell closest to hunter if both targets have equal currentEnergy
 			//else {
 			//	if (distance(two)>distance(one))
