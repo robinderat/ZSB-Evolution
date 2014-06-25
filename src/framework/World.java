@@ -73,17 +73,21 @@ public class World {
 	 * populates world with cells. doesn't clear before
 	 */
 	public void populate() {
+		Settings settings = Settings.getInstance();
+		
 		// to-do: replace variables by values from settings
 		Random random = RandomGenerator.getInstance().getRandom();
 		
 		int minType = 1;
 		int maxTypes = 6;
 		int diffTypes = 2 + (int)(random.nextDouble() * ((maxTypes - 2) + 1));	 // 2,3 or 4 
-		float percentageWorldFilled = 0.2f; 	// fill 60% of world
+		float percentageWorldFilled = settings.fillRate; 	// fill 60% of world
 		
 		System.out.println("different types: " + diffTypes);
 		
 		float probabilityCellGen = Math.abs(1.0f - percentageWorldFilled); // 30% prob that a cell gets placed on a tile
+		
+		int cellCount = 0;
 		
 		boolean goOn = true;
 		// we iterate until min threshold is reached
@@ -99,12 +103,15 @@ public class World {
 						// choose randomly a type
 						int cellType = minType + (int)(random.nextDouble() * (((minType + diffTypes) - minType - 1) + 1));
 						currentCells.add(new Cell(this, tile.x, tile.y, cellType));
+						cellCount ++;
 					}
 					//System.out.println((currentCells.size() / (float)(tileCount * tileCount)));
 					goOn = (currentCells.size() / (float)(TILE_COUNT * TILE_COUNT)) < percentageWorldFilled;
 				}
 			}
 		}
+		System.out.println(cellCount);
+		System.out.println(40*40);
 		sortCellsBySpeed(currentCells);
 	}
 
