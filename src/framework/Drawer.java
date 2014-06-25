@@ -336,19 +336,14 @@ public class Drawer extends JPanel {
         	}
         	else if (source == mutationRateSlider)
         	{
-        		if (!source.getValueIsAdjusting()) { 
-        			settings.mutationRate = value/1000.0f;
-        			world.cBreeder.setMutationRate(value/1000.0f);
-        		}
+        		if (!source.getValueIsAdjusting()) settings.mutationRate = value/1000.0f;
         		currentMutationRate.setText(String.valueOf(value));
         		
         	}
         	else if (source == crossOverRateSlider)
         	{
-        		if (!source.getValueIsAdjusting()) {
-        			settings.crossoverRate = value/100.0f;
-        			world.cBreeder.setCrossoverRate(value/100.0f);
-        		}
+        		if (!source.getValueIsAdjusting()) settings.crossoverRate = value/100.0f;
+        		
         		currentCrossoverRate.setText(String.valueOf(value));
         		
         	}

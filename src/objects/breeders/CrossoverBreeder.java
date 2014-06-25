@@ -1,17 +1,18 @@
 package objects.breeders;
 
 import framework.RandomGenerator;
+import framework.Settings;
 
 public class CrossoverBreeder extends Breeder {
 	
-	private float crossOverRate;
-	
 	@Override
 	public String[] merge(String DNA1, String DNA2) {
+		Settings settings = Settings.getInstance();
+		
 		String[] newDNAs = new String[2];
 		RandomGenerator instance = RandomGenerator.getInstance();
 		
-		if (instance.getRandom().nextFloat() < crossOverRate) {
+		if (instance.getRandom().nextFloat() < settings.crossoverRate) {
 			crossOver(newDNAs, DNA1, DNA2);
 		} else {
 			newDNAs[0] = DNA1;
@@ -21,24 +22,8 @@ public class CrossoverBreeder extends Breeder {
 		return newDNAs;
 	}
 	
-	public void setCrossoverRate(float rate)
-	{
-		crossOverRate = rate;
-	}
-	
 	public CrossoverBreeder() {
 		super();
-		crossOverRate = 0.7f;
-	}
-	
-	public CrossoverBreeder(float crossRate) {
-		super();
-		crossOverRate = crossRate;
-	}
-	
-	public CrossoverBreeder(float mutRate, float crossRate) {
-		super(mutRate);
-		crossOverRate = crossRate;
 	}
 	
 	private void crossOver(String[] newDNAs, String DNA1, String DNA2) {

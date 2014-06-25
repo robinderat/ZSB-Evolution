@@ -1,24 +1,12 @@
 package objects.breeders;
 
 import framework.RandomGenerator;
+import framework.Settings;
 
 public abstract class Breeder {
 	
-	protected float mutationRate;
-	
-	public void setMutationRate(float rate)
-	{
-		mutationRate = rate;
-	}
-	
-	public Breeder(float rate)
-	{
-		mutationRate = rate;
-	}
-	
 	public Breeder()
 	{
-		mutationRate = 0.001f;
 	}
 	
 	String[] breed(String DNA1, String DNA2) {
@@ -34,11 +22,13 @@ public abstract class Breeder {
 	}
 	
 	private String mutateString(String DNA) {
+		Settings settings = Settings.getInstance();
 		RandomGenerator instance = RandomGenerator.getInstance();
+		
 		String newDNA = "";
 		
 		for (int i = 0; i < DNA.length(); i++) {
-			if (instance.getRandom().nextFloat() < mutationRate) {
+			if (instance.getRandom().nextFloat() < settings.mutationRate) {
 				if (DNA.charAt(i) == '0')
 				{
 					newDNA = newDNA + '1';
