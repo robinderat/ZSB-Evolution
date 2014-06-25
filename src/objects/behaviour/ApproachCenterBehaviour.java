@@ -8,7 +8,7 @@ public class ApproachCenterBehaviour extends Behaviour {
 
 	@Override
 	public boolean execute(Cell c) {
-		if (!(c.properties.currentEnergy > 1)) return false;
+		if (!(c.properties.getCurrentEnergy() > 1)) return false;
 		
 		return false;
 	}

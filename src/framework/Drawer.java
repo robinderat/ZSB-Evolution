@@ -61,7 +61,7 @@ public class Drawer extends JPanel {
 				g.drawString("Vision: " + selectedCell.properties.getVision(), 1020, 350);
 				g.drawString("Strength: " + selectedCell.properties.getStrength(), 1020, 375);
 				g.drawString("-----------", 1020, 400);
-				g.drawString("Current Energy: " + selectedCell.properties.currentEnergy, 1020, 425); 
+				g.drawString("Current Energy: " + selectedCell.properties.getCurrentEnergy(), 1020, 425); 
 			}
 		}
 	}

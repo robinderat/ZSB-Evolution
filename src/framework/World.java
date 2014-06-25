@@ -113,7 +113,7 @@ public class World {
 	 */
 	public void iterate() {
 		
-		System.out.println("n cells alive: " + currentCells.size());
+
 		
 		for (int j = 0; j < currentCells.size(); j++){
 			Cell c = currentCells.get(j);
@@ -122,13 +122,17 @@ public class World {
 		currentCells = new ArrayList<Cell>(MEMORY_SIZE);
 		
 		for (Cell nc : nextCells) {
-			currentCells.add(nc);
+			if (nc.isAlive()) {
+				currentCells.add(nc);
+			}
 		}
 		
 		// sort cells according to speed.
 		// that will guarantee that fast cells move first
 		sortCellsBySpeed(currentCells);
 		//for (Cell c : currentCells) { System.out.println(c.properties.getSpeed()); }
+		
+		System.out.println("n cells alive: " + currentCells.size());
 		
 		nextCells = new ArrayList<Cell>(MEMORY_SIZE);
 	}
@@ -204,53 +208,18 @@ public class World {
 		if (x > endx){
 			xTiles = TILE_COUNT - 1;
 		}
-		
-/*<<<<<<< HEAD
-			if (x > endx){
-			
-				xTiles = TILE_COUNT - 1;
-			}
-			
-			if (x < startx){
-				
-				xTiles = 0;
-			}
-			
-			if (y > endy){
-				
-				yTiles = TILE_COUNT - 1;
-			}
-			
-			if (y < starty){
-				
-				yTiles = 0;
-			}
-			
-			if (xTiles == -1) {
-				xTiles = (x - startx - xOffSet)/TILE_SIZE;
-			}
-			
-			if (yTiles == -1) {
-				yTiles = (y - starty - yOffSet)/TILE_SIZE;
-			}
-=======*/
 		if (x < startx){
 			xTiles = 0;
 		}
-/*>>>>>>> upstream/master*/
-		
 		if (y > endy){
 			yTiles = TILE_COUNT - 1;
 		}
-		
 		if (y < starty){
 			yTiles = 0;
 		}
-		
 		if (xTiles == -1) {
 			xTiles = (x - startx - xOffSet)/TILE_SIZE;
 		}
-		
 		if (yTiles == -1) {
 			yTiles = (y - starty - yOffSet)/TILE_SIZE;
 		}

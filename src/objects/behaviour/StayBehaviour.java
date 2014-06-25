@@ -17,12 +17,16 @@ public class StayBehaviour extends Behaviour {
 	public void holdPosition(Cell c) {
 		// also doing nothing costs energy. Ask Koen!
 		// === NOTE this needs to scale to how big the cell is. big animals need require more energy to hold pos
-		c.properties.currentEnergy -= Math.ceil(0.05f * c.properties.getStrength());
+		int potDec = (int)Math.ceil(0.05f * c.properties.getStrength());
+		if (potDec <= 0) {
+			potDec = 1;
+		}
+		c.properties.setCurrentEnergy(c.properties.getCurrentEnergy() - potDec);
 		
 		// if still alive add to next state of world
 		// DEBUG - temporarily removing auto expiration, uncomment the if line and the bracket to turn back on
-		if (c.properties.currentEnergy > 0) {
-			c.worldRef.get().nextCells.add(c);
-		}
+		
+		c.worldRef.get().nextCells.add(c);
+		
 	}
 }

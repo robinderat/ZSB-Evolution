@@ -10,7 +10,7 @@ public class DEBUGCloneToSurroundingsBehaviour extends Behaviour {
 
 	@Override
 	public boolean execute(Cell c) {
-		if (!(c.properties.currentEnergy > 1)) return false;
+		if (!(c.properties.getCurrentEnergy() > 1)) return false;
 		
 		ArrayList<Tile> moves = c.getMoveSet();
 		return (DEBUGmoveToAllInMoveSet(moves, c));

@@ -84,11 +84,9 @@ public class Cell {
 		//
 		// the below order is the optimal order. NOTE: right now all cells (save type 2) have this order!!
 			//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
-			behaviours.add(new HuntBehaviour());
-			behaviours.add(new MateBehaviour());
+			//behaviours.add(new HuntBehaviour());
+			//behaviours.add(new MateBehaviour());
 			behaviours.add(new FleeBehaviour());
-			behaviours.add(new ApproachCenterBehaviour());
-			behaviours.add(new ApproachBorderBehaviour());
 			behaviours.add(new WanderBehaviour());
 			behaviours.add(new StayBehaviour());
 
@@ -96,13 +94,21 @@ public class Cell {
 		}
 	}
 
+	public boolean isAlive() {
+		if (properties.getCurrentEnergy() < 0) {
+			properties.setCurrentEnergy(0);
+		}
+		return properties.getIsAlive();
+	}
+	
 	/*
 	 * updates cell in iteration
 	 */
 	public void update() {
 
-		// DEBUG : Turning off expiration- uncomment the following line to turn back on		
-		//if (properties.currentEnergy <= 0) return;
+		if (!isAlive()) {
+			return;
+		}
 		
 		// loops through each behaviour in a cell's own order, and breaks as soon as it finds one that it can do
 		for(Behaviour behaviour : behaviours){
@@ -116,18 +122,20 @@ public class Cell {
 	// cell eats another cell and fills current energy up to max if possible
 	public void eat(Cell target) {
 		int energyValue = (int) Math.ceil(target.properties.getStrength() * 0.5f); // this is hardcoded, should really be taken from target cell or something
-		if (properties.currentEnergy < properties.getMaxEnergy() - energyValue) {
-			properties.currentEnergy += energyValue;
-		} else {
-			properties.currentEnergy = properties.getMaxEnergy();
+		if (energyValue <= 0) {
+			energyValue = 1;
 		}
-		worldRef.get().currentCells.remove(target);
+		if (properties.getCurrentEnergy() < properties.getMaxEnergy() - energyValue) {
+			properties.setCurrentEnergy(properties.getCurrentEnergy() + energyValue);
+		} else {
+			properties.setCurrentEnergy(properties.getMaxEnergy());
+		}
 	}
 	
-	// 
 	public void attack(Cell target) {
-		target.properties.currentEnergy -= properties.getStrength();
-		if(target.properties.currentEnergy < 0) {
+		target.properties.setCurrentEnergy(target.properties.getCurrentEnergy() - properties.getStrength());
+		properties.setCurrentEnergy(properties.getCurrentEnergy() - target.properties.getStrength());
+		if(isAlive() && target.isAlive() == false) {
 			eat(target);
 		}
 	}
@@ -163,8 +171,8 @@ public class Cell {
 		
 		ArrayList<Tile> tiles = getFreeNeighbours();
 		if(tiles.size() != 0){
-			cell.properties.currentEnergy -= cell.properties.getMaxEnergy() / 7 *10;
-			properties.currentEnergy -= properties.getMaxEnergy() / 7 *10;
+			properties.setCurrentEnergy(cell.properties.getCurrentEnergy() - cell.properties.getMaxEnergy() / 7 * 10);
+			properties.setCurrentEnergy(properties.getCurrentEnergy() - properties.getMaxEnergy() / 7 * 10);
 			
 			Cell c = new Cell(worldRef.get(), tiles.get(0).x, tiles.get(0).y, cell.type, newDNA);
 			worldRef.get().nextCells.add(c);
@@ -183,7 +191,10 @@ public class Cell {
 		if (getMoveSet().contains(destination)) {
 			// decrease energy
 			int dist = worldRef.get().pointDistanceInWorldUnit(x, y, destination.x, destination.y);
-			properties.currentEnergy -= dist;
+			if (dist <= 0) {
+				dist = 1;
+			}
+			properties.setCurrentEnergy(properties.getCurrentEnergy() - dist);
 		
 			// update position
 			x = destination.x;
@@ -296,7 +307,7 @@ public class Cell {
 	
 	public ArrayList<Tile> getMoveSet() {
 		
-		int moveRad = properties.currentEnergy < properties.getSpeed() ? properties.currentEnergy : properties.getSpeed();
+		int moveRad = properties.getCurrentEnergy() < properties.getSpeed() ? properties.getCurrentEnergy() : properties.getSpeed();
 		
 		return getTilesInRadius(moveRad);
 	}
