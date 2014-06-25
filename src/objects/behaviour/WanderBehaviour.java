@@ -22,8 +22,12 @@ public class WanderBehaviour extends Behaviour {
 	// moves cell anywhere (if there is no cell)
 	public boolean canMoveAnywhere(Cell c){
 		ArrayList<Tile> moves = c.getMoveSet();
+/*<<<<<<< HEAD
 		
 		if (moves.isEmpty()) return false;
+=======*/
+		if(moves.size() == 0) return false;
+//>>>>>>> robin/master
 		RandomGenerator gen = RandomGenerator.getInstance();
 		
 		int destIndex = gen.getRandom().nextInt(moves.size());

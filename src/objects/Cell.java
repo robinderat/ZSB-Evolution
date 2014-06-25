@@ -76,7 +76,7 @@ public class Cell {
 		behaviours = new ArrayList<Behaviour>();
 		//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
 		//behaviours.add(new HuntBehaviour());
-		behaviours.add(new MateBehaviour());
+		//behaviours.add(new MateBehaviour());
 		behaviours.add(new FleeBehaviour());
 		behaviours.add(new WanderBehaviour());
 		behaviours.add(new StayBehaviour());
@@ -278,20 +278,20 @@ public class Cell {
 			for (int i = 0; i < rad + 1; i++) {
 				int _x;
 				if (k < 2) {
-					_x = x + worldRef.get().xOffSet + i * worldRef.get().TILE_SIZE;	
+					_x = x + /*worldRef.get().xOffSet*/+ i * worldRef.get().TILE_SIZE;	
 				} else {
-					_x = x + worldRef.get().xOffSet - i * worldRef.get().TILE_SIZE;	
+					_x = x +/* worldRef.get().xOffSet */- i * worldRef.get().TILE_SIZE;	
 				} 
 				int Dy = rad + 1 - i;
 				
 				for (int j = 0; j < Dy; j++) {
 					int _y;
 					if (k % 2 == 0) {
-						_y = y + worldRef.get().yOffSet + j * worldRef.get().TILE_SIZE;
+						_y = y + /*worldRef.get().yOffSet*/ + j * worldRef.get().TILE_SIZE;
 					} else {
-						_y = y + worldRef.get().yOffSet - j * worldRef.get().TILE_SIZE;
+						_y = y + /*worldRef.get().yOffSet*/ - j * worldRef.get().TILE_SIZE;
 					}
-					
+					//System.out.println("X: " + _x + " Y: " + _y);
 					Tile tile = worldRef.get().getTile(_x, _y);
 					
 					if (isHunting && tile != null) result.add(tile);
@@ -301,7 +301,6 @@ public class Cell {
 							else if (tile.worldRef.get().getCellAtPositionCurrent(tile.x, tile.y) == null) result.add(tile);
 						}
 					}
-
 				}
 			}
 		}
@@ -316,6 +315,7 @@ public class Cell {
 		int moveRad = properties.getCurrentEnergy() < properties.getSpeed() ? properties.getCurrentEnergy() : properties.getSpeed();
 		
 		return getTilesInRadius(moveRad, false);
+
 	}
 	
 	public ArrayList<Tile> getPerceptionSet() {

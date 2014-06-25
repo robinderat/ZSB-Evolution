@@ -29,7 +29,6 @@ public class MateBehaviour extends Behaviour {
 		double shortestDistance = 1000;
 		for(Cell part : partners){
 			Tile tile = part.getClosestFreeNeighbour(c.x, c.y);
-			 
 			if (tile == null){
 				continue;
 			}
