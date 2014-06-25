@@ -73,6 +73,7 @@ public class Cell {
 		worldRef = new WeakReference<World>(w);
 		
 		behaviours = new ArrayList<Behaviour>();
+		//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
 		behaviours.add(new HuntBehaviour());
 		behaviours.add(new MateBehaviour());
 		behaviours.add(new FleeBehaviour());
@@ -158,7 +159,7 @@ public class Cell {
 		ArrayList<Tile> tiles = getFreeNeighbours();
 		if(tiles.size() != 0){
 			
-			double energyCost = 0.7;
+			double energyCost = 0.45;
 			
 			int energyLostCell1 = (int)Math.ceil(cell.properties.getMaxEnergy() * energyCost);
 			if (energyLostCell1 <= 0) {

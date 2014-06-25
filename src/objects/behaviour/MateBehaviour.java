@@ -6,10 +6,9 @@ import framework.Tile;
 
 import objects.Cell;
 
+//in this behaviour the cell looks for a mate and makes babies if both have enough energy and are in range
 public class MateBehaviour extends Behaviour {
 	
-	
-// in this behaviour the cell looks for a mate and makes babies if both have enough energy and are in range
 	@Override
 	public boolean execute(Cell c) {
 		
@@ -63,7 +62,7 @@ public class MateBehaviour extends Behaviour {
 	}
 	
 	private boolean canMate(Cell c1) {
-		double percentageMating = 0.7;	// get from Settings
+		double percentageMating = 0.45;	// get from Settings
 		return (double)c1.properties.getCurrentEnergy() > percentageMating * c1.properties.getMaxEnergy();
 	}
 
