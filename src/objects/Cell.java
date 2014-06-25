@@ -119,7 +119,9 @@ public class Cell {
 		if (target.isAlive() == false) {
 			System.out.println("cell eats target");
 			
-			int energyValue = (int) Math.ceil(target.properties.getStrength() * 0.5f); // this is hardcoded, should really be taken from target cell or something
+			float eatModifier = Settings.getInstance().eatingEnergyGain;
+			
+			int energyValue = (int) Math.ceil(target.properties.getStrength() * eatModifier); // this is hardcoded, should really be taken from target cell or something
 			if (energyValue <= 0) {
 				energyValue = 1;
 			}

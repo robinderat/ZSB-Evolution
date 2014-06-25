@@ -102,7 +102,6 @@ public class World {
 						// choose randomly a type
 						int cellType = minType + (int)(random.nextDouble() * (((minType + diffTypes) - minType - 1) + 1));						
 						currentCells.add(new Cell(this, tile.x, tile.y, cellType));
-						cellCount ++;
 					}
 					//System.out.println((currentCells.size() / (float)(tileCount * tileCount)));
 					goOn = (currentCells.size() / (float)(TILE_COUNT * TILE_COUNT)) < percentageWorldFilled;
