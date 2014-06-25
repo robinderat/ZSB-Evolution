@@ -1,6 +1,8 @@
 package framework;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
 
 import objects.Cell;
@@ -75,7 +77,8 @@ public class World {
 		Random random = RandomGenerator.getInstance().getRandom();
 		
 		int minType = 1;
-		int diffTypes = 2 + (int)(random.nextDouble() * ((4 - 2) + 1));	 // 2,3 or 4 
+		int maxTypes = 6;
+		int diffTypes = 2 + (int)(random.nextDouble() * ((maxTypes - 2) + 1));	 // 2,3 or 4 
 		float percentageWorldFilled = 0.2f; 	// fill 60% of world
 		
 		System.out.println("different types: " + diffTypes);
@@ -102,6 +105,7 @@ public class World {
 				}
 			}
 		}
+		sortCellsBySpeed(currentCells);
 	}
 
 	/*
@@ -117,7 +121,22 @@ public class World {
 		for (Cell nc : nextCells) {
 			currentCells.add(nc);
 		}
+		
+		// sort cells according to speed.
+		// that will guarantee that fast cells move first
+		sortCellsBySpeed(currentCells);
+		//for (Cell c : currentCells) { System.out.println(c.properties.getSpeed()); }
+		
 		nextCells = new ArrayList<Cell>(memorySize);
+	}
+	
+	public void sortCellsBySpeed(ArrayList<Cell> cellArray) {
+		Collections.sort(cellArray, new Comparator<Cell>() {
+			@Override
+			public int compare(Cell c1, Cell c2) {
+				return Integer.signum(c2.properties.getSpeed() - c1.properties.getSpeed());
+			}
+		});
 	}
 	
 	/*
@@ -126,7 +145,8 @@ public class World {
 			System.out.println(""+ cell.x + " "+ cell.y);
 		}
 		System.out.println("n cells =" + cells.size());
-	}*/
+	}
+	*/
 		
 	/**
 	 * getter iterations

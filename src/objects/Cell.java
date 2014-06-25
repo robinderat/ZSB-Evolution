@@ -39,6 +39,13 @@ public class Cell {
 	}
 	
 	/**
+	 * copy constructor
+	 */
+	public Cell(Cell other) {
+		this(other.worldRef.get(), other.x, other.y, other.type, other.properties.getDNA());
+	}
+	
+	/**
 	 * cell constructor
 	 */
 	public Cell(World w, int locX, int locY, int t, String DNA) {
