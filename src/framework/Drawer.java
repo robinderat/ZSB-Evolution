@@ -28,11 +28,13 @@ public class Drawer extends JPanel {
 	
 	
 	JLabel currentFillRate = new JLabel("", JLabel.CENTER);
+	JLabel currentMutationRate = new JLabel("2", JLabel.CENTER);
 	
 	JButton populateButton = new JButton("populate");
 	JButton clearButton = new JButton("clear");
 	
 	JSlider fillRateSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 10);
+	JSlider mutationRateSlider = new JSlider(JSlider.HORIZONTAL, 0, 1000, 10);
 	
 	public Drawer(World c) {
 		
@@ -46,9 +48,18 @@ public class Drawer extends JPanel {
 		populateButton.addActionListener(bl);
 		
 		
+
+		
+		currentMutationRate.setBounds(800, 120, 120, 90);
+		currentMutationRate.setText(String.valueOf((int)(settings.mutationRate*1000)));
+		
+		mutationRateSlider.setBounds(800, 180, 120, 30);
+		mutationRateSlider.addChangeListener(bl);
+		mutationRateSlider.setFocusable(false);
+		
+		
 		currentFillRate.setBounds(800, 0, 120, 90);
 		currentFillRate.setText(String.valueOf((int)(settings.fillRate*100)));
-		
 		
 		fillRateSlider.setBounds(800, 60, 120, 30);
 		fillRateSlider.addChangeListener(bl);
@@ -74,6 +85,8 @@ public class Drawer extends JPanel {
 		super.add(clearButton);
 		super.add(fillRateSlider);
 		super.add(currentFillRate);
+		super.add(currentMutationRate);
+		super.add(mutationRateSlider);
 		
 		
 		
@@ -183,8 +196,21 @@ public class Drawer extends JPanel {
 	        JSlider source = (JSlider)e.getSource();
 	        if (!source.getValueIsAdjusting()) {
 	        	int value = (int)source.getValue();
-	        	settings.fillRate = value/100.0f;
-	            currentFillRate.setText(String.valueOf(value));
+	        	if (source == fillRateSlider)
+	        	{
+		        	settings.fillRate = value/100.0f;
+		            currentFillRate.setText(String.valueOf(value));
+	        	}
+	        	else if (source == mutationRateSlider)
+	        	{
+	        		settings.mutationRate = value/1000.0f;
+	        		currentMutationRate.setText(String.valueOf(value));
+	        	}
+	        	else if (source == mutationRateSlider)
+	        	{
+	        		settings.mutationRate = value/1000.0f;
+	        		currentMutationRate.setText(String.valueOf(value));
+	        	}
 	        }    
 	    }
 	}
