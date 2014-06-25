@@ -201,31 +201,41 @@ public class World {
 	
 	public Tile getTile(int x, int y) {
 		
-		int startx = tileArray[0][0].x;
-		int starty = tileArray[0][0].y;
-		int endx = tileArray[0][TILE_COUNT -1].x;
-		int endy = tileArray[TILE_COUNT -1][0].y;
+		int startx = tileArray[0][0].x + xOffSet;
+		int starty = tileArray[0][0].y + yOffSet;
+		int endx = tileArray[0][TILE_COUNT -1].x + xOffSet;
+		int endy = tileArray[TILE_COUNT -1][0].y + yOffSet;
+		System.out.println("Startx: " + startx);
+		System.out.println("Starty: " + starty);
+		System.out.println("endx: " + endx);
+		System.out.println("endy: " + endy);
 		
 		int xTiles = -1;
 		int yTiles = -1;
 		
 		if (x > endx){
+			System.out.println("te grote x");
 			xTiles = TILE_COUNT - 1;
 		}
 		if (x < startx){
+			System.out.println("te kleine x");
 			xTiles = 0;
 		}
 		if (y > endy){
+			System.out.println("te grote y");
 			yTiles = TILE_COUNT - 1;
 		}
 		if (y < starty){
+			System.out.println("te kleine y");
 			yTiles = 0;
 		}
 		if (xTiles == -1) {
-			xTiles = (x - startx - xOffSet)/TILE_SIZE;
+			System.out.println((x - startx + xOffSet)/TILE_SIZE);
+			xTiles = (x - startx + xOffSet)/TILE_SIZE;
 		}
 		if (yTiles == -1) {
-			yTiles = (y - starty - yOffSet)/TILE_SIZE;
+			System.out.println((y - starty + yOffSet)/TILE_SIZE);
+			yTiles = (y - starty + yOffSet)/TILE_SIZE;
 		}
 		
 		return tileArray[yTiles][xTiles];
@@ -286,6 +296,7 @@ public class World {
 	public Cell getCellAtPositionNext(int px, int py) {
 		for (Cell c : nextCells) {
 			if (c.x == px && c.y == py) return c;
+			
 		}
 		return null;
 	}
