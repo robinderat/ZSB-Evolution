@@ -14,7 +14,6 @@ public class CrossoverBreeder extends Breeder {
 		if (instance.getRandom().nextFloat() < crossOverRate) {
 			crossOver(newDNAs, DNA1, DNA2);
 		}
-		
 		return newDNAs;
 	}
 	

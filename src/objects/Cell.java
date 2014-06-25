@@ -49,7 +49,7 @@ public class Cell {
 	 * cell constructor
 	 */
 	public Cell(World w, int locX, int locY, int t, String DNA) {
-		
+		System.out.println(DNA);
 		if (DNA.length() == 0) {
 			properties = new Properties(); // random DNA
 		} else {
@@ -81,6 +81,7 @@ public class Cell {
 		// the below order is the optimal order. NOTE: right now all cells (save type 2) have this order!!
 			//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
 			behaviours.add(new HuntBehaviour());
+			behaviours.add(new MateBehaviour());
 			behaviours.add(new FleeBehaviour());
 			behaviours.add(new ApproachCenterBehaviour());
 			behaviours.add(new ApproachBorderBehaviour());
@@ -157,16 +158,29 @@ public class Cell {
 		}
 	}
 	
-	public void mate(Cell cell){
+	public boolean mate(Cell cell){
+		
 		String ownDNA = properties.getDNA();
 		String otherDNA = cell.properties.getDNA();
+		System.out.println("cell: " + cell);
+		System.out.println("ownDna: " + ownDNA);
+		System.out.println("otherDNA: " + otherDNA);
 		String newDNA = worldRef.get().cBreeder.merge(ownDNA, otherDNA)[0];
 		
-		Cell c = new Cell(worldRef.get(), 15, 15, cell.type, newDNA);
-		worldRef.get().nextCells.add(c);
-		System.out.println("A baby has been made");
+		
+		ArrayList<Tile> tiles = getFreeNeighbours();
+		if(tiles.size() != 0){
+			Cell c = new Cell(worldRef.get(), tiles.get(0).x, tiles.get(0).y, cell.type, newDNA);
+			worldRef.get().nextCells.add(c);
+			System.out.println("A baby has been made");
+			return true;
+		}
+		System.out.println("No space for another baby");
+		return false;
 	}
 	
+	
+
 	// cell moves to new destination
 	public void moveTo(Tile destination) {
 		
@@ -186,6 +200,67 @@ public class Cell {
 			// will call moveTo again. 
 			moveTowards(destination);	
 		}		
+	}
+	
+	private ArrayList<Tile> getFreeNeighbours() {
+		
+		ArrayList<Tile> neighbours = new ArrayList<Tile>();
+		World world = worldRef.get();
+		Tile t = null;
+		
+		 t = world.getTile(x - 1 * world.tileSize , y); 
+		if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		
+		 t = world.getTile(x + 1 * world.tileSize , y); 
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		 
+		 t = world.getTile(x, y - 1 * world.tileSize);
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		 
+		 t = world.getTile(x, y + 1 * world.tileSize);
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		
+		
+		return neighbours;
+	}
+	
+	public Tile getClosestFreeNeighbour(int x, int y){
+		
+		
+		ArrayList<Tile> neighbours = new ArrayList<Tile>();
+		World world = worldRef.get();
+		Tile t = null;
+		
+		 t = world.getTile(x - 1 * world.tileSize , y); 
+		if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null ) neighbours.add(t);
+		
+		 t = world.getTile(x + 1 * world.tileSize , y); 
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		 
+		 t = world.getTile(x, y - 1 * world.tileSize);
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		 
+		 t = world.getTile(x, y + 1 * world.tileSize);
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		 
+		 Tile closest = null;
+		 double bestDistance = 500;
+		 for (Tile tile : neighbours) {
+			 int Dx = tile.x - x;
+			 int Dy = tile.y - y;
+			 double distance = Math.sqrt(Dx *Dx  + Dy * Dy);
+			 
+			 if (distance < bestDistance) {
+				 bestDistance = distance;
+				 closest = tile;
+			 }
+		 }
+		
+		return closest;
+	}
+	
+	public boolean canMate(){
+		return true;
 	}
 	
 	public ArrayList<Tile> getTilesInRadius(int rad) {

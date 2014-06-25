@@ -12,7 +12,6 @@ public class FleeBehaviour extends WanderBehaviour {
 	public boolean execute(Cell c) {
 		
 		if (!(c.properties.currentEnergy > 1)) return false;
-			System.out.println("Flee" + c);
 			ArrayList<Tile> perception = c.getPerceptionSet();
 	
 			// first search for other cells in area
