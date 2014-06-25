@@ -146,7 +146,7 @@ public class World {
 		StatisticManager.getInstance().printCellStatistics();
 		
 		currentCells = new ArrayList<Cell>(MEMORY_SIZE);
-		
+		 
 		for (Cell nc : nextCells) {
 			if (nc.isAlive()) {
 				currentCells.add(nc);
