@@ -56,7 +56,7 @@ public class MateBehaviour extends Behaviour {
 		
 		for (Tile tile : visionRad){
 			Cell cell = tile.worldRef.get().getCellAtPositionCurrent(tile.x, tile.y);
-			if(cell != null && cell.canMate() && cell != c && c.type == cell.type){
+			if(cell != null && c.canMate() && cell.canMate() && cell != c && c.type == cell.type){
 				cells.add(cell);
 			}
 		}

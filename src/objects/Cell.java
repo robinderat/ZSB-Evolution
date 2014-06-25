@@ -162,14 +162,13 @@ public class Cell {
 		
 		String ownDNA = properties.getDNA();
 		String otherDNA = cell.properties.getDNA();
-		System.out.println("cell: " + cell);
-		System.out.println("ownDna: " + ownDNA);
-		System.out.println("otherDNA: " + otherDNA);
 		String newDNA = worldRef.get().cBreeder.merge(ownDNA, otherDNA)[0];
-		
 		
 		ArrayList<Tile> tiles = getFreeNeighbours();
 		if(tiles.size() != 0){
+			cell.properties.currentEnergy -= cell.properties.getMaxEnergy() / 7 *10;
+			properties.currentEnergy -= properties.getMaxEnergy() / 7 *10;
+			
 			Cell c = new Cell(worldRef.get(), tiles.get(0).x, tiles.get(0).y, cell.type, newDNA);
 			worldRef.get().nextCells.add(c);
 			System.out.println("A baby has been made");
