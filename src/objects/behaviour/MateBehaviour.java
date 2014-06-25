@@ -76,7 +76,7 @@ public class MateBehaviour extends Behaviour {
 			}
 		}
 
-		////System.out.println(cells);
+		//System.out.println(cells);
 		return cells;
 	}
 

@@ -111,6 +111,7 @@ public class World {
 				}
 			}
 		}
+
 		sortCellsBySpeed(currentCells);
 	}
 
