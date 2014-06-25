@@ -21,11 +21,11 @@ public class Settings {
 		fillRate = 0.4f;
 		mutationRate = 0.1f;
 		crossoverRate = 0.7f;
-		matingEnergyCost = 0.55f;
+		matingEnergyCost = 0.15f;
 		eatingEnergyGain = 1.5f;
 		veryHungryThreshold = 0.25f;
 		startEnergyRate = 0.7f;
-		allowCannibalism = false;
+		allowCannibalism = true;
 		moveStrengthModifier = 0.5f;
 	}
 	

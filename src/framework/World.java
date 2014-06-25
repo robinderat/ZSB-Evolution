@@ -108,14 +108,14 @@ public class World {
 						int cellType = minType + (int)(random.nextDouble() * (((minType + diffTypes) - minType - 1) + 1));						
 						currentCells.add(new Cell(this, tile.x, tile.y, cellType));
 					}
-					////System.out.println((currentCells.size() / (float)(tileCount * tileCount)));
+					//System.out.println((currentCells.size() / (float)(tileCount * tileCount)));
 					goOn = (currentCells.size() / (float)(TILE_COUNT * TILE_COUNT)) < percentageWorldFilled;
 				}
 			}
 		}
 
 		sortCellsBySpeed(currentCells);
-		System.out.println("n cells after population: " + currentCells.size());
+		System.out.println("n cells after populate: " + currentCells.size());
 	}
 
 	/*
@@ -143,7 +143,7 @@ public class World {
 		
 		StatisticManager.getInstance().takeSnapshot(this, 1);
 		
-		StatisticManager.getInstance().printCellStatistics();
+		//StatisticManager.getInstance().printCellStatistics();
 		
 		currentCells = new ArrayList<Cell>(MEMORY_SIZE);
 		
@@ -151,9 +151,7 @@ public class World {
 			if (nc.isAlive()) {
 				currentCells.add(nc);
 			}
-		}
-		
-		
+		}		
 		
 		// sort cells according to speed.
 		// that will guarantee that fast cells move first

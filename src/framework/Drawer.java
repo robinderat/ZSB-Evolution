@@ -1,8 +1,10 @@
 package framework;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -155,7 +157,7 @@ public class Drawer extends JPanel {
 		paintTiles(g);
 		paintSelected(g);
 		paintProperties(g);
-		paintProperties2(g);
+		paintStats(g);
 		paintCells(g);
 	}
 	
@@ -188,12 +190,14 @@ public class Drawer extends JPanel {
 				g.drawString("Vision: " + selectedCell.properties.getVision(), 1020, 350);
 				g.drawString("Strength: " + selectedCell.properties.getStrength(), 1020, 375);
 				g.drawString("-----------", 1020, 400);
-				g.drawString("Current Energy: " + selectedCell.properties.getCurrentEnergy(), 1020, 425); 
+				g.drawString("Current Energy: " + selectedCell.properties.getCurrentEnergy(), 1020, 425);
+				g.drawString("Last Behaviour: " + selectedCell.properties.lastBehaviour, 1020, 450);
 			}
 		}
 	}
 	
-	private void paintProperties2(Graphics g){
+	// for stats
+	private void paintStats(Graphics g){
 		//g.drawImage(infoBg, 1000, 25, 300, 600, null);
 		Tile tile = world.selected;
 
@@ -205,9 +209,11 @@ public class Drawer extends JPanel {
 			
 			if (selectedCell != null)
 			{
-				g.drawString("Stats and Stuff", 1020, 500);
-				g.drawString("-----------", 1020, 525);
-				g.drawString("Current Energy: " + selectedCell.properties.getCurrentEnergy(), 1020, 550); 
+				g.drawString("Stats and Stuff", 1020, 525);
+				g.setColor(Color.green);
+				g.drawString("-------------------", 1020, 535);
+				g.setColor(Color.darkGray);
+				g.drawString("13th strange prime = 101", 1020, 550); 
 			}
 		}
 	}

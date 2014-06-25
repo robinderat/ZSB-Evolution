@@ -76,9 +76,12 @@ public class Cell {
 		behaviours = new ArrayList<Behaviour>();
 
 		//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
-		behaviours.add(new HuntBehaviour());
 		//behaviours.add(new HuntBehaviourRobin());
+		
+		// I have placed Mate above Hunt because in the optimal world mating > hunting
 		behaviours.add(new MateBehaviour());
+		behaviours.add(new HuntBehaviour());
+
 		behaviours.add(new FleeBehaviour());
 		//behaviours.add(new ApproachCenterBehaviour());
 		//behaviours.add(new ApproachBorderBehaviour());
@@ -98,17 +101,24 @@ public class Cell {
 	 * updates cell in iteration
 	 */
 	public void update() {
-
+		
 		if (!this.isAlive()) {
 			return;
 		}
 		
+		/*for(Behaviour behaviour : behaviours){
+			
+			System.out.println(behaviour.toString());
+		}*/
+		
 		// loops through each behaviour in a cell's own order, and breaks as soon as it finds one that it can do
 		for(Behaviour behaviour : behaviours){
 			if(behaviour.execute(this)){
+				this.properties.lastBehaviour = behaviour.toString();
 				break;
 			}
 		}
+		if (this.properties.lastBehaviour.equals("")) this.properties.lastBehaviour = "ERROR";
  
 	}
 	
@@ -126,7 +136,7 @@ public class Cell {
 		}
 		target.properties.setCurrentEnergy(target.properties.getCurrentEnergy() - attackValue);
 		if (target.isAlive() == false) {
-			System.out.println("Cell eaten.");
+			//System.out.println("Cell eaten.");
 			
 			float eatModifier = Settings.getInstance().eatingEnergyGain;
 			
@@ -171,13 +181,13 @@ public class Cell {
 			Cell c = new Cell(worldRef.get(), tiles.get(0).x, tiles.get(0).y, type, newDNA);
 
 			worldRef.get().nextCells.add(c);
-			System.out.println("New cell born.");
+			//System.out.println("New cell born.");
 			
 			worldRef.get().lastStepCellsBorn++;
 		
 			return true;
 		}
-		System.out.println("No space for newborn cell.");
+		//System.out.println("No space for newborn cell.");
 		return false;
 	}
 
@@ -315,6 +325,7 @@ public class Cell {
 		return closest;
 	}
 
+	// returns all viable tiles in a given radius around the cell
 	public ArrayList<Tile> getTilesInRadius(int rad, boolean isViewing) {
 
 		ArrayList<Tile> result = new ArrayList<Tile>();
@@ -323,18 +334,18 @@ public class Cell {
 			for (int i = 0; i < rad + 1; i++) {
 				int _x;
 				if (k < 2) {
-					_x = x + /*worldRef.get().xOffSet*/+ i * worldRef.get().TILE_SIZE;	
+					_x = x + i * worldRef.get().TILE_SIZE;	
 				} else {
-					_x = x +/* worldRef.get().xOffSet */- i * worldRef.get().TILE_SIZE;	
+					_x = x - i * worldRef.get().TILE_SIZE;	
 				} 
 				int Dy = rad + 1 - i;
 				
 				for (int j = 0; j < Dy; j++) {
 					int _y;
 					if (k % 2 == 0) {
-						_y = y + /*worldRef.get().yOffSet*/ + j * worldRef.get().TILE_SIZE;
+						_y = y +  j * worldRef.get().TILE_SIZE;
 					} else {
-						_y = y + /*worldRef.get().yOffSet*/ - j * worldRef.get().TILE_SIZE;
+						_y = y  - j * worldRef.get().TILE_SIZE;
 					}
 					//System.out.println("X: " + _x + " Y: " + _y);
 					Tile tile = worldRef.get().getTile(_x, _y);

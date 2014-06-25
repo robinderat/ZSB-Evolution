@@ -17,6 +17,9 @@ public class Properties {
 	private boolean isAlive;
 	
 	public int currentLifeSpan;
+	
+	// last behaviour
+	public String lastBehaviour = "n/a (I'm a new cell)";
 		
 	// inherited by DNA
 	private int maxEnergy;

@@ -26,7 +26,6 @@ public class StayBehaviour extends Behaviour {
 		
 		// if still alive add to next state of world
 		// DEBUG - temporarily removing auto expiration, uncomment the if line and the bracket to turn back on
-		
 		c.worldRef.get().nextCells.add(c);
 		
 	}
