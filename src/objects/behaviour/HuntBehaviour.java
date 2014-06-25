@@ -27,6 +27,8 @@ public class HuntBehaviour extends Behaviour {
 		if (target != null) {
 			// if so, check if they are far or close
 			if (!targetIsClose){ // if far, approach
+				c.isHunting = false;
+				
 				c.moveTo(target);
 			} else { // if close, eat
 				c.eat(target.worldRef.get().getCellAtPositionCurrent(target.x, target.y));

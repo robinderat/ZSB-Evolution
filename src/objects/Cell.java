@@ -70,12 +70,12 @@ public class Cell {
 		img = new ImageIcon("src/art/Cell" + Integer.toString(type) + ".png").getImage();
 		
 		isHunting = false;
-		
 		worldRef = new WeakReference<World>(w);
 		
+		// order may still need to be randomized based on type or DNA, although that will mean rapid extinction
 		behaviours = new ArrayList<Behaviour>();
 		//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
-		behaviours.add(new HuntBehaviour());
+		//behaviours.add(new HuntBehaviour());
 		behaviours.add(new MateBehaviour());
 		behaviours.add(new FleeBehaviour());
 		behaviours.add(new WanderBehaviour());
@@ -95,7 +95,7 @@ public class Cell {
 	 */
 	public void update() {
 
-		if (!isAlive()) {
+		if (!this.isAlive()) {
 			return;
 		}
 		
@@ -117,17 +117,17 @@ public class Cell {
 		}
 		target.properties.setCurrentEnergy(target.properties.getCurrentEnergy() - attackValue);
 		if (target.isAlive() == false) {
-			System.out.println("cell eats target");
+			System.out.println("Cell eaten.");
 			
 			int energyValue = (int) Math.ceil(target.properties.getStrength() * 0.5f); // this is hardcoded, should really be taken from target cell or something
 			if (energyValue <= 0) {
 				energyValue = 1;
 			}
-			
 			properties.setCurrentEnergy(properties.getCurrentEnergy() + energyValue);
 		}
 	}
 	
+	// changes target so that it is closer to where the cell can go
 	public void moveTowards(Tile target) {
 		ArrayList<Tile> tiles = getMoveSet();
 		
@@ -151,46 +151,6 @@ public class Cell {
 		}
 	}
 	
-	public boolean mate(Cell part){
-		
-		String ownDNA = properties.getDNA();
-		String otherDNA = part.properties.getDNA();
-		String newDNA = worldRef.get().cBreeder.merge(ownDNA, otherDNA)[0];
-		
-		ArrayList<Tile> tiles = getFreeNeighbours();
-		if(tiles.size() != 0){
-			
-			double energyCost = Settings.getInstance().matingEnergyCost;
-
-			int energyLostCellPart = (int)Math.ceil(part.properties.getMaxEnergy() * energyCost);
-			if (energyLostCellPart <= 0) {
-				energyLostCellPart = 1;
-			}
-			
-			int energyLostCell2 = (int)Math.ceil(properties.getMaxEnergy() * energyCost);
-			if (energyLostCell2 <= 0) {
-				energyLostCell2 = 1;
-			}  
-			
-			System.out.println("partner energy: " + part.properties.getCurrentEnergy());
-			System.out.println("energyLostCell Partner: " + energyLostCellPart);
-			System.out.println("own energy: " + properties.getCurrentEnergy());
-			System.out.println("own energy lost: " + energyLostCell2);
-			
-			part.properties.setCurrentEnergy(part.properties.getCurrentEnergy() - energyLostCellPart);
-			properties.setCurrentEnergy(properties.getCurrentEnergy() - energyLostCell2);
-			
-			Cell c = new Cell(worldRef.get(), tiles.get(0).x, tiles.get(0).y, type, newDNA);
-			worldRef.get().nextCells.add(c);
-			System.out.println("A baby has been made");
-			return true;
-		}
-		System.out.println("No space for another baby");
-		return false;
-	}
-	
-	
-
 	// cell moves to new destination
 	public void moveTo(Tile destination) {
 		//System.out.println("destx " + destination.x + " desty " + destination.y);
@@ -216,6 +176,46 @@ public class Cell {
 		}		
 	}
 	
+	// creates a new cell using dna of two mating cells
+	public boolean mate(Cell part){
+		
+		String ownDNA = properties.getDNA();
+		String otherDNA = part.properties.getDNA();
+		String newDNA = worldRef.get().cBreeder.merge(ownDNA, otherDNA)[0];
+		
+		ArrayList<Tile> tiles = getFreeNeighbours();
+		if(tiles.size() > 0){
+			
+			double energyCost = Settings.getInstance().matingEnergyCost;
+
+			int energyLostCellPart = (int)Math.ceil(part.properties.getMaxEnergy() * energyCost);
+			if (energyLostCellPart <= 0) {
+				energyLostCellPart = 1;
+			}
+			
+			int energyLostCell2 = (int)Math.ceil(properties.getMaxEnergy() * energyCost);
+			if (energyLostCell2 <= 0) {
+				energyLostCell2 = 1;
+			}  
+			
+			//System.out.println("partner energy: " + part.properties.getCurrentEnergy());
+			//System.out.println("energyLostCell Partner: " + energyLostCellPart);
+			//System.out.println("own energy: " + properties.getCurrentEnergy());
+			//System.out.println("own energy lost: " + energyLostCell2);
+			
+			part.properties.setCurrentEnergy(part.properties.getCurrentEnergy() - energyLostCellPart);
+			properties.setCurrentEnergy(properties.getCurrentEnergy() - energyLostCell2);
+			
+			Cell c = new Cell(worldRef.get(), tiles.get(0).x, tiles.get(0).y, type, newDNA);
+			worldRef.get().nextCells.add(c);
+			System.out.println("New cell born.");
+			return true;
+		}
+		System.out.println("No space for newborn cell.");
+		return false;
+	}
+
+	
 	private ArrayList<Tile> getFreeNeighbours() {
 		
 		ArrayList<Tile> neighbours = new ArrayList<Tile>();
@@ -239,7 +239,6 @@ public class Cell {
 	}
 	
 	public Tile getClosestFreeNeighbour(int askx, int asky){
-		
 		
 		ArrayList<Tile> neighbours = new ArrayList<Tile>();
 		World world = worldRef.get();
@@ -269,11 +268,10 @@ public class Cell {
 				 closest = tile;
 			 }
 		 }
-		
 		return closest;
 	}
 	
-	public ArrayList<Tile> getTilesInRadius(int rad) {
+	public ArrayList<Tile> getTilesInRadius(int rad, boolean isViewing) {
 		ArrayList<Tile> result = new ArrayList<Tile>();
 
 		for (int k = 0; k < 4; k++) {
@@ -297,7 +295,13 @@ public class Cell {
 					Tile tile = worldRef.get().getTile(_x, _y);
 					
 					if (isHunting && tile != null) result.add(tile);
-					else if (tile != null && result.contains(tile) == false) result.add(tile);
+					else {
+						if (tile != null && !result.contains(tile)){
+							if (isViewing) result.add(tile);
+							else if (tile.worldRef.get().getCellAtPositionCurrent(tile.x, tile.y) == null) result.add(tile);
+						}
+					}
+
 				}
 			}
 		}
@@ -309,14 +313,13 @@ public class Cell {
 	}
 	
 	public ArrayList<Tile> getMoveSet() {
-		
 		int moveRad = properties.getCurrentEnergy() < properties.getSpeed() ? properties.getCurrentEnergy() : properties.getSpeed();
 		
-		return getTilesInRadius(moveRad);
+		return getTilesInRadius(moveRad, false);
 	}
 	
 	public ArrayList<Tile> getPerceptionSet() {
-		return getTilesInRadius(properties.getVision());
+		return getTilesInRadius(properties.getVision(), true);
 	}
 
 }

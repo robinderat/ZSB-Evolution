@@ -23,6 +23,7 @@ public class WanderBehaviour extends Behaviour {
 	public boolean canMoveAnywhere(Cell c){
 		ArrayList<Tile> moves = c.getMoveSet();
 		
+		if (moves.isEmpty()) return false;
 		RandomGenerator gen = RandomGenerator.getInstance();
 		
 		int destIndex = gen.getRandom().nextInt(moves.size());
