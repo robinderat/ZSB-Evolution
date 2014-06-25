@@ -40,23 +40,21 @@ public class MateBehaviour extends Behaviour {
 			double distance = Math.sqrt(Dx * Dx  + Dy * Dy);
 			if (distance < shortestDistance) {
 				shortestDistance = distance;
-				System.out.println("1x " + tile.x + " y " + tile.y);
+				//System.out.println("1x " + tile.x + " y " + tile.y);
 				bestTile = tile;
 				partner = part;
 			}
 		}
-		
-		System.out.println("bestx " + bestTile.x + " besty " + bestTile.y);
 		
 		if (bestTile == null || partner == null) {	
 			return false;
 		}
 		
 		c.moveTo(bestTile);
-		System.out.println("cellx: " + c.x + " celly " + c.y);
+		//System.out.println("cellx: " + c.x + " celly " + c.y);
 		if (c.x == bestTile.x && c.y == bestTile.y) {
 			if (c.mate(partner)) {
-				System.out.println("Mating");
+				//System.out.println("Mating");
 				return true;
 			}
 		}
@@ -79,7 +77,7 @@ public class MateBehaviour extends Behaviour {
 			}
 		}
 
-		//System.out.println(cells);
+		////System.out.println(cells);
 		return cells;
 	}
 
