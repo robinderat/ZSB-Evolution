@@ -12,7 +12,7 @@ import framework.World;
 
 public class Cell {
 
-	public static final int MaxTypes = 9;
+	//public static final int MaxTypes = 9;
 
 	// properties of cell. 
 	public Properties properties;
@@ -62,7 +62,7 @@ public class Cell {
 		y = locY;
 		
 		type = t;
-		if (type > MaxTypes || type < 1) {
+		if (type > w.maxTypes || type < 1) {
 			type = 1;
 		}
 		
