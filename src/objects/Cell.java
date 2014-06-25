@@ -74,6 +74,7 @@ public class Cell {
 		worldRef = new WeakReference<World>(w);
 		
 		behaviours = new ArrayList<Behaviour>();
+		//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
 		behaviours.add(new HuntBehaviour());
 		behaviours.add(new MateBehaviour());
 		behaviours.add(new FleeBehaviour());
@@ -160,7 +161,7 @@ public class Cell {
 		if(tiles.size() != 0){
 			
 			double energyCost = Settings.getInstance().matingEnergyCost;
-			
+
 			int energyLostCellPart = (int)Math.ceil(part.properties.getMaxEnergy() * energyCost);
 			if (energyLostCellPart <= 0) {
 				energyLostCellPart = 1;
