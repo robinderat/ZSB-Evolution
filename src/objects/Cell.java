@@ -74,7 +74,7 @@ public class Cell {
 		// the below order is the optimal order. NOTE: right now all cells (save type 2) have this order!!
 			//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
 			behaviours.add(new HuntBehaviour());
-			//behaviours.add(new MateBehaviour());
+			behaviours.add(new MateBehaviour());
 			behaviours.add(new FleeBehaviour());
 			behaviours.add(new ApproachCenterBehaviour());
 			behaviours.add(new ApproachBorderBehaviour());
@@ -150,8 +150,12 @@ public class Cell {
 	}
 	
 	public boolean mate(Cell cell){
+		
 		String ownDNA = properties.getDNA();
 		String otherDNA = cell.properties.getDNA();
+		System.out.println("cell: " + cell);
+		System.out.println("ownDna: " + ownDNA);
+		System.out.println("otherDNA: " + otherDNA);
 		String newDNA = worldRef.get().cBreeder.merge(ownDNA, otherDNA)[0];
 		
 		
@@ -211,7 +215,7 @@ public class Cell {
 		return neighbours;
 	}
 	
-	public Tile getClosestNeighbour(int x, int y){
+	public Tile getClosestFreeNeighbour(int x, int y){
 		
 		
 		ArrayList<Tile> neighbours = new ArrayList<Tile>();
@@ -219,16 +223,16 @@ public class Cell {
 		Tile t = null;
 		
 		 t = world.getTile(x - 1 * world.tileSize , y); 
-		if(t != null) neighbours.add(t);
+		if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null ) neighbours.add(t);
 		
 		 t = world.getTile(x + 1 * world.tileSize , y); 
-		 if(t != null) neighbours.add(t);
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
 		 
 		 t = world.getTile(x, y - 1 * world.tileSize);
-		 if(t != null) neighbours.add(t);
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
 		 
 		 t = world.getTile(x, y + 1 * world.tileSize);
-		 if(t != null) neighbours.add(t);
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
 		 
 		 Tile closest = null;
 		 double bestDistance = 500;

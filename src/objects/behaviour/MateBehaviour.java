@@ -7,12 +7,14 @@ import framework.Tile;
 import objects.Cell;
 
 public class MateBehaviour extends Behaviour {
+	
+	
 
 	@Override
 	public boolean execute(Cell c) {
 		
 		ArrayList<Tile> vision = c.getPerceptionSet();
-		ArrayList<Cell> partners = getPotentialPartners(vision);
+		ArrayList<Cell> partners = getPotentialPartners(vision, c);
 		
 		if (partners.size() == 0) return false;
 		
@@ -20,7 +22,10 @@ public class MateBehaviour extends Behaviour {
 		Tile bestTile = null;
 		double shortestDistance = 1000;
 		for(Cell cell : partners){
-			 Tile tile = cell.getClosestNeighbour(c.x, c.y);
+			 Tile tile = cell.getClosestFreeNeighbour(c.x, c.y);
+			 if (tile == null){
+				 continue;
+			 }
 			 int Dx = tile.x - c.x;
 			 int Dy = tile.y - c.y;
 			 double distance = Math.sqrt(Dx *Dx  + Dy * Dy);
@@ -41,12 +46,12 @@ public class MateBehaviour extends Behaviour {
 		return false;
 	}
 
-	private ArrayList<Cell> getPotentialPartners(ArrayList<Tile> visionRad) {
+	private ArrayList<Cell> getPotentialPartners(ArrayList<Tile> visionRad, Cell c) {
 		ArrayList<Cell> cells = new ArrayList<Cell>();
 		
 		for (Tile tile : visionRad){
 			Cell cell = tile.worldRef.get().getCellAtPositionCurrent(tile.x, tile.y);
-			if(cell != null && cell.canMate()){
+			if(cell != null && cell.canMate() && cell != c){
 				cells.add(cell);
 			}
 		}
