@@ -9,9 +9,9 @@ import objects.breeders.CrossoverBreeder;
 public class World {
 
 	Screen frame;
-	public final int tileSize = 15;
-	public final int tileCount = 40;
-	public final int memorySize = tileCount * tileCount;
+	public final int TILE_SIZE = 15;
+	public final int TILE_COUNT = 40;
+	public final int MEMORY_SIZE = TILE_COUNT * TILE_COUNT;
 	
 	public boolean doIterate; // bool if iteration should be done in while loop
 	
@@ -22,11 +22,11 @@ public class World {
 	
 	Tile selected;		
 			
-	private Tile[][] tileArray = new Tile[tileCount][tileCount];
+	private Tile[][] tileArray = new Tile[TILE_COUNT][TILE_COUNT];
 	
 	// create ArrayList of cells with enough memory
-	public ArrayList<Cell> currentCells = new ArrayList<Cell>(memorySize);
-	public ArrayList<Cell> nextCells = new ArrayList<Cell>(memorySize);
+	public ArrayList<Cell> currentCells = new ArrayList<Cell>(MEMORY_SIZE);
+	public ArrayList<Cell> nextCells = new ArrayList<Cell>(MEMORY_SIZE);
 	
 	public CrossoverBreeder cBreeder =  new CrossoverBreeder();
 	
@@ -46,7 +46,7 @@ public class World {
 		while (true) {
 			
 			try {
-				Thread.sleep(100);
+				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -76,7 +76,7 @@ public class World {
 		
 		int minType = 1;
 		int diffTypes = 2 + (int)(random.nextDouble() * ((4 - 2) + 1));	 // 2,3 or 4 
-		float percentageWorldFilled = 0.2f; 	// fill 60% of world
+		float percentageWorldFilled = 0.1f; 	// fill 60% of world
 		
 		System.out.println("different types: " + diffTypes);
 		
@@ -84,7 +84,7 @@ public class World {
 		
 		boolean goOn = true;
 		// we iterate until min threshold is reached
-		while (goOn && (currentCells.size() / (float)(tileCount * tileCount)) < percentageWorldFilled) {
+		while (goOn && (currentCells.size() / (float)(TILE_COUNT * TILE_COUNT)) < percentageWorldFilled) {
 	
 			// walk world from left-top to bottom-down and randomly generate cells
 			for (Tile[] cols : tileArray) {
@@ -98,7 +98,7 @@ public class World {
 						currentCells.add(new Cell(this, tile.x, tile.y, cellType));
 					}
 					//System.out.println((currentCells.size() / (float)(tileCount * tileCount)));
-					goOn = (currentCells.size() / (float)(tileCount * tileCount)) < percentageWorldFilled;
+					goOn = (currentCells.size() / (float)(TILE_COUNT * TILE_COUNT)) < percentageWorldFilled;
 				}
 			}
 		}
@@ -108,16 +108,19 @@ public class World {
 	 * do one world step
 	 */
 	public void iterate() {
+		
+		System.out.println("n cells alive: " + currentCells.size());
+		
 		for (int j = 0; j < currentCells.size(); j++){
 			Cell c = currentCells.get(j);
 			c.update();	
 		}
-		currentCells = new ArrayList<Cell>(memorySize);
+		currentCells = new ArrayList<Cell>(MEMORY_SIZE);
 		
 		for (Cell nc : nextCells) {
 			currentCells.add(nc);
 		}
-		nextCells = new ArrayList<Cell>(memorySize);
+		nextCells = new ArrayList<Cell>(MEMORY_SIZE);
 	}
 	
 	/*
@@ -147,9 +150,9 @@ public class World {
 	 * creates all tiles
 	 */
 	private void createTileset(){
-		for (int i = 0; i < tileCount; i++) {
-			for (int j = 0; j < tileCount; j++) {
-				Tile t = new Tile(tileSize + tileSize * j,tileSize + tileSize * i , this);
+		for (int i = 0; i < TILE_COUNT; i++) {
+			for (int j = 0; j < TILE_COUNT; j++) {
+				Tile t = new Tile(TILE_SIZE + TILE_SIZE * j,TILE_SIZE + TILE_SIZE * i , this);
 				tileArray[i][j] = t;
 			}
 		}
@@ -165,7 +168,7 @@ public class World {
 	public int pointDistanceInWorldUnit(int x1, int y1, int x2, int y2) {
 		int DX = Math.abs((x1 + xOffSet) - x2);
 		int DY = Math.abs((y1 + yOffSet) - y2);
-		return (int)Math.ceil(Math.sqrt(DX * DX  + DY * DY) / tileSize);
+		return (int)Math.ceil(Math.sqrt(DX * DX  + DY * DY) / TILE_SIZE);
 	}
 	
 	public Tile getTile(int x, int y){
@@ -173,8 +176,8 @@ public class World {
 		
 		int startx = tileArray[0][0].x;
 		int starty = tileArray[0][0].y;
-		int endx = tileArray[0][tileCount -1].x;
-		int endy = tileArray[tileCount -1][0].y;
+		int endx = tileArray[0][TILE_COUNT -1].x;
+		int endy = tileArray[TILE_COUNT -1][0].y;
 		
 		int xTiles = -1;
 		int yTiles = -1;
@@ -182,7 +185,7 @@ public class World {
 		
 			if (x > endx){
 			
-				xTiles = tileCount - 1;
+				xTiles = TILE_COUNT - 1;
 			}
 			
 			if (x < startx){
@@ -192,7 +195,7 @@ public class World {
 			
 			if (y > endy){
 				
-				yTiles = tileCount - 1;
+				yTiles = TILE_COUNT - 1;
 			}
 			
 			if (y < starty){
@@ -201,11 +204,11 @@ public class World {
 			}
 			
 			if (xTiles == -1) {
-				xTiles = (x - startx - xOffSet)/tileSize;
+				xTiles = (x - startx - xOffSet)/TILE_SIZE;
 			}
 			
 			if (yTiles == -1) {
-				yTiles = (y - starty - yOffSet)/tileSize;
+				yTiles = (y - starty - yOffSet)/TILE_SIZE;
 			}
 		
 		//Old inefficient code
@@ -273,7 +276,7 @@ public class World {
 	}
 	
 	public Tile getWorldEndPoint() {
-		return tileArray[tileCount - 1][tileCount - 1]; 
+		return tileArray[TILE_COUNT - 1][TILE_COUNT - 1]; 
 	}
 	
 	public Tile getWorldStartPoint() {
@@ -296,6 +299,6 @@ public class World {
 
 	// clears the world
 	public void clear() {
-		currentCells = new ArrayList<Cell>(memorySize);
+		currentCells = new ArrayList<Cell>(MEMORY_SIZE);
 	}
 }

@@ -3,7 +3,7 @@ package objects.behaviour;
 import objects.Cell;
 
 // in this behaviour the cell stays in the same tile that it currently is
-public class StayBehaviour extends WanderBehaviour {
+public class HoldPositionBehaviour extends MoveAnywhereBehaviour {
 
 	@Override
 	public boolean execute(Cell c) {
@@ -16,11 +16,13 @@ public class StayBehaviour extends WanderBehaviour {
 	// cell stays in same spot ((( NOTE ! this still needs the kill cell if <2 energy )))
 	public void holdPosition(Cell c) {
 		// also doing nothing costs energy. Ask Koen!
+		// === NOTE this needs to scale to how big the cell is. big animals need require more energy to hold pos
 		c.properties.currentEnergy--;
 		
-		// if still alive :-)
-		if (c.properties.currentEnergy > 0) {
+		// if still alive add to next state of world
+		// DEBUG - temporarily removing auto expiration, uncomment the if line and the bracket to turn back on
+		//if (c.properties.currentEnergy > 0) {
 			c.worldRef.get().nextCells.add(c);
-		}
+		//}
 	}
 }

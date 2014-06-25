@@ -24,10 +24,10 @@ public class Tile {
 	}
 	
 	private void createSides(){
-		sides[0] =  new Point2D.Double(x - worldRef.get().tileSize / 2, y);
-		sides[1] =  new Point2D.Double(x + worldRef.get().tileSize / 2, y);
-		sides[2] =  new Point2D.Double(x, y - worldRef.get().tileSize / 2);
-		sides[3] =  new Point2D.Double(x, y + worldRef.get().tileSize / 2);
+		sides[0] =  new Point2D.Double(x - worldRef.get().TILE_SIZE / 2, y);
+		sides[1] =  new Point2D.Double(x + worldRef.get().TILE_SIZE / 2, y);
+		sides[2] =  new Point2D.Double(x, y - worldRef.get().TILE_SIZE / 2);
+		sides[3] =  new Point2D.Double(x, y + worldRef.get().TILE_SIZE / 2);
 		/*System.out.println(sides[0].x + "||" + sides[0].y);
 		System.out.println(sides[1].x + "||" + sides[1].y);
 		System.out.println(sides[2].x + "||" + sides[2].y);
@@ -38,7 +38,7 @@ public class Tile {
 	/*
 	 * returns list of tiles which are adjacent (horizontally and vertically) 
 	 */
-	public ArrayList<Tile> getNeighbours(){
+	public ArrayList<Tile> getNeighbors(){
 		ArrayList<Tile> arr = new ArrayList<Tile>();
 		
 		Tile[][] r = worldRef.get().getTiles();

@@ -7,19 +7,19 @@ import framework.Tile;
 import objects.Cell;
 
 // in this behaviour the cell just goes to any location around it
-public class WanderBehaviour extends Behaviour {
+public class MoveAnywhereBehaviour extends Behaviour {
 
 	@Override
 	public boolean execute(Cell c) {
 		if (!(c.properties.currentEnergy > 1)) return false;
-		System.out.println("Wandering" + c);
+		//System.out.println("Moving anywhere " + c);
 		
-		if (wander(c)) return true;
+		if (moveAnywhere(c)) return true;
 		else return false;
 	}
 	
 	// moves cell anywhere (if there is no cell)
-	public boolean wander(Cell c){
+	public boolean moveAnywhere(Cell c){
 		ArrayList<Tile> moves = c.getMoveSet();
 		
 		RandomGenerator gen = RandomGenerator.getInstance();

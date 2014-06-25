@@ -28,6 +28,8 @@ public class Cell {
 	
 	public int type; // type of cell
 	
+	public boolean isHunting;
+	
 	// reference back to the world
 	public WeakReference<World> worldRef;
 	
@@ -59,12 +61,14 @@ public class Cell {
 		
 		img = new ImageIcon("src/art/Cell" + Integer.toString(type) + ".png").getImage();
 		
+		isHunting = false;
+		
 		worldRef = new WeakReference<World>(w);
 		
 		behaviours = new ArrayList<Behaviour>();
 
 		// special behavior for type 2 for DEBUG testing purposes
-		if (type == 2) behaviours.add(new StayBehaviour());
+		if (type == 2) behaviours.add(new HoldPositionBehaviour());
 		else {
 		// dump all behaviours for normal type (not finished: since some types get only some behaviours)
 		//
@@ -77,8 +81,8 @@ public class Cell {
 			behaviours.add(new FleeBehaviour());
 			behaviours.add(new ApproachCenterBehaviour());
 			behaviours.add(new ApproachBorderBehaviour());
-			behaviours.add(new WanderBehaviour());
-			behaviours.add(new StayBehaviour());
+			behaviours.add(new MoveAnywhereBehaviour());
+			behaviours.add(new HoldPositionBehaviour());
 
 
 		}
@@ -89,17 +93,10 @@ public class Cell {
 	 */
 	public void update() {
 
-		if (properties.currentEnergy <= 0) {
-			return;
-		}
+		// DEBUG : Turning off expiration- uncomment the following line to turn back on		
+		//if (properties.currentEnergy <= 0) return;
 		
-		/*int i = 0;
-		System.out.println(behaviours.size());
-		while (i < behaviours.size() && !behaviours.get(i).execute(this)){
-			System.out.println("trying new behaviour");
-			i++;
-		}*/
-		
+		// loops through each behaviour in a cell's own order, and breaks as soon as it finds one that it can do
 		for(Behaviour behaviour : behaviours){
 			if(behaviour.execute(this)){
 				break;
@@ -108,18 +105,18 @@ public class Cell {
  
 	}
 
-	/*
-	 * cell eats other cell
-	 */
-	public void eat(Cell cell) {
-		int energyValue = 20;
+	// cell eats another cell and fills current energy up to max if possible
+	public void eat(Cell target) {
+		int energyValue = 20; // this is hardcoded, should really be taken from target cell or something
 		if (properties.currentEnergy < properties.getMaxEnergy() - energyValue) {
 			properties.currentEnergy += energyValue;
 		} else {
 			properties.currentEnergy = properties.getMaxEnergy();
-		}		
+		}
+		worldRef.get().currentCells.remove(target);
 	}
 	
+	// 
 	public void attack(Cell target) {
 		target.properties.currentEnergy -= properties.getStrength();
 		if(target.properties.currentEnergy < 0) {
@@ -186,24 +183,24 @@ public class Cell {
 			for (int i = 0; i < rad + 1; i++) {
 				int _x;
 				if (k < 2) {
-					_x = x + worldRef.get().xOffSet + i * worldRef.get().tileSize;	
+					_x = x + worldRef.get().xOffSet + i * worldRef.get().TILE_SIZE;	
 				} else {
-					_x = x + worldRef.get().xOffSet - i * worldRef.get().tileSize;	
+					_x = x + worldRef.get().xOffSet - i * worldRef.get().TILE_SIZE;	
 				} 
 				int Dy = rad + 1 - i;
 				
 				for (int j = 0; j < Dy; j++) {
 					int _y;
 					if (k % 2 == 0) {
-						_y = y + worldRef.get().yOffSet + j * worldRef.get().tileSize;
+						_y = y + worldRef.get().yOffSet + j * worldRef.get().TILE_SIZE;
 					} else {
-						_y = y + worldRef.get().yOffSet - j * worldRef.get().tileSize;
+						_y = y + worldRef.get().yOffSet - j * worldRef.get().TILE_SIZE;
 					}
 					
 					Tile tile = worldRef.get().getTile(_x, _y);
-					if (tile != null && result.contains(tile) == false) {
-						result.add(tile);
-					}
+					
+					if (isHunting && tile != null) result.add(tile);
+					else if (tile != null && result.contains(tile) == false) result.add(tile);
 				}
 			}
 		}
