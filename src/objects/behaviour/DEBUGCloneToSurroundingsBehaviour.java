@@ -22,7 +22,7 @@ public class DEBUGCloneToSurroundingsBehaviour extends Behaviour {
 		for (Tile tile : moveSet) {
 			if (oldCell.worldRef.get().getCellAtPositionNext(tile.x, tile.y) == null &&
 				oldCell.worldRef.get().getCellAtPositionCurrent(tile.x, tile.y) == null) { 
-				Cell cell = new Cell(oldCell.worldRef.get(), tile.x, tile.y, oldCell.type, null);
+				Cell cell = new Cell(oldCell.worldRef.get(), tile.x, tile.y, oldCell.type, oldCell.properties.getDNA());
 				
 				oldCell.worldRef.get().nextCells.add(cell);
 				succes = true;
