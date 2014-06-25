@@ -14,6 +14,16 @@ public class StatisticManager {
 
 	private static StatisticManager instance = null;
 	
+	public class BornDieStatistic {
+		int nBorn;
+		int nDied;
+		
+		public BornDieStatistic(int b, int d) {
+			nBorn = b;
+			nDied = d;
+		}
+	}
+	
 	public class CellTypeStatistic {
 		public int type;		// which type
 		public int aliveCount;	// how much alive
@@ -46,12 +56,21 @@ public class StatisticManager {
 	}
 	
 	private ArrayList<ArrayList<CellTypeStatistic>> cellStatistics;
+	
+	private ArrayList<BornDieStatistic> bornDieStatistics;
+	
 	private StatisticManager() {
 		cellStatistics = new ArrayList<ArrayList<CellTypeStatistic>>();
+		bornDieStatistics = new ArrayList<BornDieStatistic>();
 	}
 	
 	public void takeSnapshot(World w, int step) {
+	
+		// born die statistics
+		BornDieStatistic bdStat = new BornDieStatistic(w.lastStepCellsBorn, w.lastStepCellsDied);
+		bornDieStatistics.add(bdStat);
 		
+		// cell statistics
 		ArrayList<CellTypeStatistic> stats = new ArrayList<CellTypeStatistic>();
 		
 		for (Cell c : w.currentCells) {
@@ -100,9 +119,20 @@ public class StatisticManager {
 	
 	public void printStatisticsToText() {
 		try {
-			PrintWriter writer = new PrintWriter("statistics.txt", "UTF-8");
+			PrintWriter bornDieWriter = new PrintWriter("bornDieStatistics.txt", "UTF-8");
 			
 			int step = 1;
+			for (BornDieStatistic bdStat : bornDieStatistics) {
+				bornDieWriter.print(step + ":");
+				bornDieWriter.println(bdStat.nBorn + "," + bdStat.nDied + ":");
+				step++;
+			}
+			
+			bornDieWriter.close();
+			
+			PrintWriter writer = new PrintWriter("cellStatistics.txt", "UTF-8");
+			
+			step = 1;
 			for (ArrayList<CellTypeStatistic> cs : cellStatistics) {
 				
 				Collections.sort(cs, new Comparator<CellTypeStatistic>() {

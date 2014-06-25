@@ -8,7 +8,6 @@ public class Settings {
 	public float crossoverRate;
 	public float matingEnergyCost;
 	
-	public float strengthWanderModifier;
 	public float eatingEnergyGain;
 	public float veryHungryThreshold;
 	
@@ -20,16 +19,15 @@ public class Settings {
 	
 	
 	public Settings() {
-		fillRate = 0.2f;
-		mutationRate = 0.01f;
+		fillRate = 0.4f;
+		mutationRate = 0.1f;
 		crossoverRate = 0.7f;
-		matingEnergyCost = 0.45f;
-		strengthWanderModifier = 0.2f;
-		eatingEnergyGain = 0.8f;
+		matingEnergyCost = 0.55f;
+		eatingEnergyGain = 1.5f;
 		veryHungryThreshold = 0.25f;
-		startEnergyRate = 0.8f;
-		allowCannibalism = true;
-		moveStrengthModifier = 0.3f;
+		startEnergyRate = 0.7f;
+		allowCannibalism = false;
+		moveStrengthModifier = 0.5f;
 	}
 	
 	public static Settings getInstance() {

@@ -75,9 +75,9 @@ public class Cell {
 		
 		behaviours = new ArrayList<Behaviour>();
 		//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
-		behaviours.add(new HuntBehaviour());
 		behaviours.add(new MateBehaviour());
 		behaviours.add(new FleeBehaviour());
+		behaviours.add(new HuntBehaviour());
 		behaviours.add(new WanderBehaviour());
 		behaviours.add(new StayBehaviour());
 	}
@@ -185,6 +185,9 @@ public class Cell {
 			Cell c = new Cell(worldRef.get(), tiles.get(0).x, tiles.get(0).y, type, newDNA);
 			worldRef.get().nextCells.add(c);
 			System.out.println("A baby has been made");
+			
+			worldRef.get().lastStepCellsBorn++;
+			
 			return true;
 		}
 		System.out.println("No space for another baby");

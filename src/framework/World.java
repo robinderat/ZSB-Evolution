@@ -39,10 +39,16 @@ public class World {
 	public boolean movingLeft = false;
 	public boolean movingRight = false;
 	
+	public int lastStepCellsDied;
+	public int lastStepCellsBorn;
+	
 	public World(Screen f){
 		frame = f;
 		createTileset();
 		doIterate = false;
+		
+		lastStepCellsDied = 0;
+		lastStepCellsBorn = 0;
 	}
 	
 	public void run(){
@@ -117,10 +123,23 @@ public class World {
 	 */
 	public void iterate() {
 		
-		for (int j = 0; j < currentCells.size(); j++){
-			Cell c = currentCells.get(j);
+		lastStepCellsDied = 0;
+		lastStepCellsBorn = 0;
+		
+		// update each cell
+		for (Cell c : currentCells) {
 			c.update();	
 		}
+		
+		// calculate death rate
+		for (Cell c : currentCells) {
+			if (c.isAlive() == false) {
+				lastStepCellsDied++;
+			}
+		}
+		
+		System.out.println("cells died: " + lastStepCellsDied);
+		System.out.println("cells born: " + lastStepCellsBorn);
 		
 		StatisticManager.getInstance().takeSnapshot(this, 1);
 		
