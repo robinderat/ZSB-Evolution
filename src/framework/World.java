@@ -20,6 +20,8 @@ public class World {
 	public int xOffSet = 0;
 	public int yOffSet = 0;
 	
+	public int maxTypes = 9; // voor koen
+	
 	private int iterations = 1;
 	
 	Tile selected;		
@@ -77,7 +79,6 @@ public class World {
 		Random random = RandomGenerator.getInstance().getRandom();
 		
 		int minType = 1;
-		int maxTypes = 9;
 		int diffTypes = 2 + (int)(random.nextDouble() * ((maxTypes - 2) + 1));	 // 2,3 or 4 
 		float percentageWorldFilled = 0.2f; 	// fill 60% of world
 		
