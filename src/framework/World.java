@@ -111,8 +111,8 @@ public class World {
 				}
 			}
 		}
-		System.out.println(cellCount);
-		System.out.println(40*40);
+		//System.out.println(cellCount);
+		//System.out.println(40*40);
 		sortCellsBySpeed(currentCells);
 	}
 
