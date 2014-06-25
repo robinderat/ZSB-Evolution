@@ -74,29 +74,18 @@ public class Cell {
 		
 		behaviours = new ArrayList<Behaviour>();
 
-		// special behavior for type 2 for DEBUG testing purposes
-		if (type == 2) behaviours.add(new StayBehaviour());
-		else {
-		// dump all behaviours for normal type (not finished: since some types get only some behaviours)
-		//
-		// !! note: we want to give certain (initial) types certain (initial) behaviours
-		// !! new note: OR (better?) randomize certain behaviours to all cells
-		//
-		// the below order is the optimal order. NOTE: right now all cells (save type 2) have this order!!
-			//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
-			behaviours.add(new HuntBehaviour());
-			//behaviours.add(new MateBehaviour());
-			behaviours.add(new FleeBehaviour());
-			//behaviours.add(new ApproachCenterBehaviour());
-			//behaviours.add(new ApproachBorderBehaviour());
-			behaviours.add(new WanderBehaviour());
-			behaviours.add(new StayBehaviour());
-
-
-		}
+		
+		behaviours.add(new HuntBehaviour());
+		//behaviours.add(new MateBehaviour());
+		behaviours.add(new FleeBehaviour());
+		//behaviours.add(new ApproachCenterBehaviour());
+		//behaviours.add(new ApproachBorderBehaviour());
+		behaviours.add(new WanderBehaviour());
+		behaviours.add(new StayBehaviour());
 	}
 
 	public boolean isAlive() {
+		// i think this can be removed. lets check it later
 		if (properties.getCurrentEnergy() < 0) {
 			properties.setCurrentEnergy(0);
 		}
@@ -123,23 +112,21 @@ public class Cell {
 
 	// cell eats another cell and fills current energy up to max if possible
 	public void eat(Cell target) {
-		int energyValue = (int) Math.ceil(target.properties.getStrength() * 0.5f); // this is hardcoded, should really be taken from target cell or something
-		if (energyValue <= 0) {
-			energyValue = 1;
-		}
-		if (properties.getCurrentEnergy() < properties.getMaxEnergy() - energyValue) {
-			properties.setCurrentEnergy(properties.getCurrentEnergy() + energyValue);
-		} else {
-			properties.setCurrentEnergy(properties.getMaxEnergy());
-		}
 		
-	}
-	
-	public void attack(Cell target) {
-		target.properties.setCurrentEnergy(target.properties.getCurrentEnergy() - properties.getStrength());
-		properties.setCurrentEnergy(properties.getCurrentEnergy() - target.properties.getStrength());
-		if(isAlive() && target.isAlive() == false) {
-			eat(target);
+		int attackValue = properties.getStrength();
+		if (attackValue <= 0) {
+			attackValue = 1;
+		}
+		target.properties.setCurrentEnergy(target.properties.getCurrentEnergy() - attackValue);
+		if (target.isAlive() == false) {
+			System.out.println("cell eats target");
+			
+			int energyValue = (int) Math.ceil(target.properties.getStrength() * 0.5f); // this is hardcoded, should really be taken from target cell or something
+			if (energyValue <= 0) {
+				energyValue = 1;
+			}
+			
+			properties.setCurrentEnergy(properties.getCurrentEnergy() + energyValue);
 		}
 	}
 	

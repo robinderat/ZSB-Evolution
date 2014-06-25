@@ -45,6 +45,9 @@ public class Properties {
 		currentEnergy = newEnergy;
 		if (currentEnergy <= 0) {
 			isAlive = false;
+			currentEnergy = 0;
+		} else if (currentEnergy > maxEnergy) {
+			currentEnergy = maxEnergy;
 		}
 	}
 	
