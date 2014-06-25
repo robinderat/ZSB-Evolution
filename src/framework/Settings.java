@@ -14,6 +14,8 @@ public class Settings {
 	
 	public float startEnergyRate; 
 	
+	public float moveStrengthModifier;
+	
 	public boolean allowCannibalism;
 	
 	
@@ -27,6 +29,7 @@ public class Settings {
 		veryHungryThreshold = 0.25f;
 		startEnergyRate = 0.8f;
 		allowCannibalism = true;
+		moveStrengthModifier = 0.3f;
 	}
 	
 	public static Settings getInstance() {

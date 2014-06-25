@@ -1,5 +1,6 @@
 package objects.behaviour;
 
+import framework.Settings;
 import objects.Cell;
 
 // in this behaviour the cell stays in the same tile that it currently is
@@ -17,7 +18,7 @@ public class StayBehaviour extends Behaviour {
 	public void holdPosition(Cell c) {
 		// also doing nothing costs energy. Ask Koen!
 		// === NOTE this needs to scale to how big the cell is. big animals need require more energy to hold pos
-		int potDec = (int)Math.ceil(0.05f * c.properties.getStrength());
+		int potDec = (int)Math.ceil(Settings.getInstance().moveStrengthModifier * c.properties.getStrength());
 		if (potDec <= 0) {
 			potDec = 1;
 		}

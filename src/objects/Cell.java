@@ -199,6 +199,8 @@ public class Cell {
 		if (getMoveSet().contains(destination)) {
 			// decrease energy
 			int dist = worldRef.get().pointDistanceInWorldUnit(x, y, destination.x, destination.y);
+			
+			dist += (int)Math.ceil(dist * Settings.getInstance().moveStrengthModifier);
 			if (dist <= 0) {
 				dist = 1;
 			}
