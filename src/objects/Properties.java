@@ -1,7 +1,5 @@
 package objects;
 
-import java.util.Random;
-
 import framework.RandomGenerator;
 
 public class Properties {

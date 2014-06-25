@@ -115,7 +115,7 @@ public class Cell {
 
 	// cell eats another cell and fills current energy up to max if possible
 	public void eat(Cell target) {
-		int energyValue = 20; // this is hardcoded, should really be taken from target cell or something
+		int energyValue = (int) Math.ceil(target.properties.getStrength() * 0.5f); // this is hardcoded, should really be taken from target cell or something
 		if (properties.currentEnergy < properties.getMaxEnergy() - energyValue) {
 			properties.currentEnergy += energyValue;
 		} else {
