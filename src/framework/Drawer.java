@@ -28,6 +28,7 @@ public class Drawer extends JPanel {
 		paintTiles(g);
 		paintSelected(g);
 		paintProperties(g);
+		paintProperties2(g);
 		paintCells(g);
 		
 	}
@@ -65,6 +66,26 @@ public class Drawer extends JPanel {
 			}
 		}
 	}
+	
+	private void paintProperties2(Graphics g){
+		//g.drawImage(infoBg, 1000, 25, 300, 600, null);
+		Tile tile = world.selected;
+
+		if (tile != null) {
+			g.drawString("X: " + Integer.toString(tile.x), 1020, 150);
+			g.drawString("Y: " + Integer.toString(tile.y), 1020, 175);
+			
+			Cell selectedCell = world.getCellAtPositionCurrent(tile.x, tile.y);
+			
+			if (selectedCell != null)
+			{
+				g.drawString("Stats and Stuff", 1020, 500);
+				g.drawString("-----------", 1020, 525);
+				g.drawString("Current Energy: " + selectedCell.properties.getCurrentEnergy(), 1020, 550); 
+			}
+		}
+	}
+
 
 	private void paintSelected(Graphics g){
 		Tile t = world.selected;

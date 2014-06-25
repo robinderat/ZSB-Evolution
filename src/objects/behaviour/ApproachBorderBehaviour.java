@@ -1,5 +1,7 @@
 package objects.behaviour;
 
+import java.util.Arrays;
+
 import framework.Tile;
 import objects.Cell;
 
@@ -11,16 +13,20 @@ public class ApproachBorderBehaviour extends WanderBehaviour {
 	public boolean execute(Cell c) {
 		if (!(c.properties.getCurrentEnergy() > 1)) return false;
 		
+		/*
 		Tile myLocation = c.worldRef.get().getTile(c.x,c.y);
 		Tile[][] tiles = c.worldRef.get().getTiles();
 		
+		//int index = Arrays.asList(tiles).indexOf(myLocation);
+		
+		System.out.println(index);
 		
 		
 		// get current position
 		if (1<2 ) {}
 		// get closest border
 		// go there
-		
+		*/
 		
 		return false;
 	}
