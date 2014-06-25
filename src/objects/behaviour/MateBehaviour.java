@@ -29,7 +29,6 @@ public class MateBehaviour extends Behaviour {
 		double shortestDistance = 1000;
 		for(Cell part : partners){
 			Tile tile = part.getClosestFreeNeighbour(c.x, c.y);
-			 
 			if (tile == null){
 				continue;
 			}
@@ -45,9 +44,9 @@ public class MateBehaviour extends Behaviour {
 			}
 		}
 		
-		if (bestTile == null || partner == null) {	
-			return false;
-		}
+		if (bestTile == null  || partner == null) return false;
+		
+		/* c.worldRef.get().getCellAtPositionCurrent(bestTile.x, bestTile.y) != null */
 		
 		c.moveTo(bestTile);
 		//System.out.println("cellx: " + c.x + " celly " + c.y);

@@ -58,7 +58,6 @@ public class World {
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 				
@@ -90,7 +89,7 @@ public class World {
 		int diffTypes = 2 + (int)(random.nextDouble() * ((maxTypes - 2) + 1));	 // 2,3 or 4 
 		float percentageWorldFilled = settings.fillRate; 	// fill 60% of world
 		
-		System.out.println("different types: " + diffTypes);
+		////System.out.println("different types: " + diffTypes);
 		
 		float probabilityCellGen = Math.abs(1.0f - percentageWorldFilled); // 30% prob that a cell gets placed on a tile
 		
@@ -109,7 +108,7 @@ public class World {
 						int cellType = minType + (int)(random.nextDouble() * (((minType + diffTypes) - minType - 1) + 1));						
 						currentCells.add(new Cell(this, tile.x, tile.y, cellType));
 					}
-					//System.out.println((currentCells.size() / (float)(tileCount * tileCount)));
+					////System.out.println((currentCells.size() / (float)(tileCount * tileCount)));
 					goOn = (currentCells.size() / (float)(TILE_COUNT * TILE_COUNT)) < percentageWorldFilled;
 				}
 			}
@@ -138,8 +137,8 @@ public class World {
 			}
 		}
 		
-		System.out.println("cells died: " + lastStepCellsDied);
-		System.out.println("cells born: " + lastStepCellsBorn);
+		//System.out.println("cells died: " + lastStepCellsDied);
+		//System.out.println("cells born: " + lastStepCellsBorn);
 		
 		StatisticManager.getInstance().takeSnapshot(this, 1);
 		
@@ -153,10 +152,12 @@ public class World {
 			}
 		}
 		
+		
+		
 		// sort cells according to speed.
 		// that will guarantee that fast cells move first
 		sortCellsBySpeed(currentCells);
-		//for (Cell c : currentCells) { System.out.println(c.properties.getSpeed()); }
+		//for (Cell c : currentCells) { //System.out.println(c.properties.getSpeed()); }
 		
 		System.out.println("n cells alive: " + currentCells.size());
 		
@@ -175,9 +176,9 @@ public class World {
 	/*
 	private void DEBUGprintCells(ArrayList<Cell> cells){
 		for (Cell cell : cells){
-			System.out.println(""+ cell.x + " "+ cell.y);
+			//System.out.println(""+ cell.x + " "+ cell.y);
 		}
-		System.out.println("n cells =" + cells.size());
+		//System.out.println("n cells =" + cells.size());
 	}
 	*/
 		
@@ -223,31 +224,41 @@ public class World {
 	
 	public Tile getTile(int x, int y) {
 		
-		int startx = tileArray[0][0].x;
-		int starty = tileArray[0][0].y;
-		int endx = tileArray[0][TILE_COUNT -1].x;
-		int endy = tileArray[TILE_COUNT -1][0].y;
+		int startx = tileArray[0][0].x + xOffSet;
+		int starty = tileArray[0][0].y + yOffSet;
+		int endx = tileArray[0][TILE_COUNT -1].x + xOffSet;
+		int endy = tileArray[TILE_COUNT -1][0].y + yOffSet;
+		////System.out.println("Startx: " + startx);
+		////System.out.println("Starty: " + starty);
+		////System.out.println("endx: " + endx);
+		////System.out.println("endy: " + endy);
 		
 		int xTiles = -1;
 		int yTiles = -1;
 		
 		if (x > endx){
+			////System.out.println("te grote x");
 			xTiles = TILE_COUNT - 1;
 		}
 		if (x < startx){
+			////System.out.println("te kleine x");
 			xTiles = 0;
 		}
 		if (y > endy){
+			////System.out.println("te grote y");
 			yTiles = TILE_COUNT - 1;
 		}
 		if (y < starty){
+			////System.out.println("te kleine y");
 			yTiles = 0;
 		}
 		if (xTiles == -1) {
-			xTiles = (x - startx - xOffSet)/TILE_SIZE;
+			////System.out.println((x - startx + xOffSet)/TILE_SIZE);
+			xTiles = (x - startx + xOffSet)/TILE_SIZE;
 		}
 		if (yTiles == -1) {
-			yTiles = (y - starty - yOffSet)/TILE_SIZE;
+			////System.out.println((y - starty + yOffSet)/TILE_SIZE);
+			yTiles = (y - starty + yOffSet)/TILE_SIZE;
 		}
 		
 		return tileArray[yTiles][xTiles];
@@ -308,6 +319,7 @@ public class World {
 	public Cell getCellAtPositionNext(int px, int py) {
 		for (Cell c : nextCells) {
 			if (c.x == px && c.y == py) return c;
+			
 		}
 		return null;
 	}
