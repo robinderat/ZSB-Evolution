@@ -40,7 +40,7 @@ public class Drawer extends JPanel {
 	JSlider crossOverRateSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 20);
 	
 	JLabel matingEnergyRequirementLabel = new JLabel("Mating Energy Requirement", JLabel.CENTER);
-	JLabel currentmatingEnergyRequirement = new JLabel("", JLabel.CENTER);
+	JLabel currentMatingEnergyRequirement = new JLabel("", JLabel.CENTER);
 	JSlider matingEnergyRequirementSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 20);
 
 	
@@ -111,13 +111,13 @@ public class Drawer extends JPanel {
 		
 		matingEnergyRequirementLabel.setBounds(620, 220, 160, 90);
 		
-		currentCrossoverRate.setBounds(620, 140, 160, 90);
-		currentCrossoverRate.setText(String.valueOf((int)(settings.crossoverRate*100)));
+		currentMatingEnergyRequirement.setBounds(620, 240, 160, 90);
+		currentMatingEnergyRequirement.setText(String.valueOf((int)(settings.matingEnergyCost*100)));
 		
-		crossOverRateSlider.setValue((int)(settings.crossoverRate*100));
-		crossOverRateSlider.setBounds(620, 200, 160, 30);
-		crossOverRateSlider.addChangeListener(bl);
-		crossOverRateSlider.setFocusable(false);
+		matingEnergyRequirementSlider.setValue((int)(settings.matingEnergyCost*100));
+		matingEnergyRequirementSlider.setBounds(620, 300, 160, 30);
+		matingEnergyRequirementSlider.addChangeListener(bl);
+		matingEnergyRequirementSlider.setFocusable(false);
 	
 		
 		super.add(populateButton);
@@ -131,6 +131,8 @@ public class Drawer extends JPanel {
 		super.add(currentCrossoverRate);
 		super.add(crossoverLabel);
 		super.add(matingEnergyRequirementLabel);
+		super.add(currentMatingEnergyRequirement);
+		super.add(matingEnergyRequirementSlider);
 		
 		
 		world = c;
@@ -255,6 +257,16 @@ public class Drawer extends JPanel {
 	        		settings.mutationRate = value/100.0f;
 	        		currentCrossoverRate.setText(String.valueOf(value));
 	        		world.cBreeder.setCrossoverRate(value/100.0f);
+	        	}
+	        	else if (source == matingEnergyRequirementSlider)
+	        	{
+	        		settings.matingEnergyCost = value/100.0f;
+	        		currentMatingEnergyRequirement.setText(String.valueOf(value));
+	        	}
+	        	else if (source == matingEnergyRequirementSlider)
+	        	{
+	        		settings.matingEnergyCost = value/100.0f;
+	        		currentMatingEnergyRequirement.setText(String.valueOf(value));
 	        	}
 	        }    
 	    }
