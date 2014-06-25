@@ -88,8 +88,6 @@ public class World {
 		
 		float probabilityCellGen = Math.abs(1.0f - percentageWorldFilled); // 30% prob that a cell gets placed on a tile
 		
-		int cellCount = 0;
-		
 		boolean goOn = true;
 		// we iterate until min threshold is reached
 		while (goOn && (currentCells.size() / (float)(TILE_COUNT * TILE_COUNT)) < percentageWorldFilled) {

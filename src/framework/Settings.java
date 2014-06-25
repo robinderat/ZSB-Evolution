@@ -7,8 +7,11 @@ public class Settings {
 	public float mutationRate;
 	public float crossoverRate;
 	public float matingEnergyCost;
+	
 	public float strengthWanderModifier;
 	public float eatingEnergyGain;
+	public float veryHungryThreshold;
+	public boolean allowCannibalism;
 	
 	
 	public Settings() {
@@ -18,6 +21,8 @@ public class Settings {
 		matingEnergyCost = 0.55f;
 		strengthWanderModifier = 0.2f;
 		eatingEnergyGain = 0.8f;
+		veryHungryThreshold = 0.25f;
+		allowCannibalism = true;
 	}
 	
 	public static Settings getInstance() {

@@ -3,6 +3,7 @@ package objects.behaviour;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import framework.Settings;
 import framework.Tile;
 import objects.Cell;
 
@@ -56,7 +57,9 @@ public class HuntBehaviour extends Behaviour {
 			
 			if (target != null && target != me && target.isAlive()){
 				// if very hungry, cells resort to cannibalism
-				if (me.properties.getCurrentEnergy() < me.properties.getMaxEnergy()/4 && target.type == me.type){
+				boolean allowCannibalism = Settings.getInstance().allowCannibalism;
+				double veryHungryRate = Settings.getInstance().veryHungryThreshold;
+				if (allowCannibalism && (me.properties.getCurrentEnergy() < me.properties.getMaxEnergy() * veryHungryRate && target.type == me.type)){
 					targets.add(target);
 					continue;
 				}
