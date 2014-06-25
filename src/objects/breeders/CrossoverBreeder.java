@@ -13,8 +13,7 @@ public class CrossoverBreeder extends Breeder {
 		
 		if (instance.getRandom().nextFloat() < crossOverRate) {
 			crossOver(newDNAs, DNA1, DNA2);
-		}
-		else {
+		} else {
 			newDNAs[0] = DNA1;
 			newDNAs[1] = DNA2;
 		}

@@ -1,7 +1,5 @@
 package objects;
 
-import java.util.Random;
-
 import framework.RandomGenerator;
 
 public class Properties {
@@ -14,7 +12,9 @@ public class Properties {
 	
 	
 	// survival statistics
-	public int currentEnergy;
+	private int currentEnergy;
+	private boolean isAlive;
+	
 	public int currentLifeSpan;
 		
 	// inherited by DNA
@@ -30,9 +30,7 @@ public class Properties {
 		decodeDNAProperties();
 		
 		currentEnergy = maxEnergy;
-	}
-	
-	public Properties(int[] stats) {
+		isAlive = true;
 	}
 	
 	public Properties(String newDNA) {
@@ -40,6 +38,22 @@ public class Properties {
 		decodeDNAProperties();
 		
 		currentEnergy = maxEnergy;
+		isAlive = true;
+	}
+	
+	public void setCurrentEnergy(int newEnergy) {
+		currentEnergy = newEnergy;
+		if (currentEnergy <= 0) {
+			isAlive = false;
+		}
+	}
+	
+	public int getCurrentEnergy() {
+		return currentEnergy;
+	}
+	
+	public boolean getIsAlive() {
+		return isAlive;
 	}
 	
 	/* converts the DNA string into properties 

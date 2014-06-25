@@ -44,7 +44,8 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
 		}
 		
 		if (e.getButton() == MouseEvent.BUTTON2) {
-			world.iterate();
+			if (world.doIterate == false) 
+				world.doIterate = true;
 			
 		}
 		

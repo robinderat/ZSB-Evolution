@@ -92,7 +92,7 @@ public class Drawer extends JPanel {
 	private void paintTiles(Graphics g) {
 		for (Tile[] tiles : world.getTiles()) {
 			for (Tile t : tiles) {
-				g.drawImage(t.getImage(), t.x + world.xOffSet - world.tileSize / 2 , t.y + world.yOffSet - world.tileSize /2, world.tileSize , world.tileSize , null);
+				g.drawImage(t.getImage(), t.x + world.xOffSet - world.TILE_SIZE / 2 , t.y + world.yOffSet - world.TILE_SIZE /2, world.TILE_SIZE , world.TILE_SIZE , null);
 			}
 		}
 	}
@@ -118,7 +118,7 @@ public class Drawer extends JPanel {
 				g.drawString("Vision: " + selectedCell.properties.getVision(), 1020, 350);
 				g.drawString("Strength: " + selectedCell.properties.getStrength(), 1020, 375);
 				g.drawString("-----------", 1020, 400);
-				g.drawString("Current Energy: " + selectedCell.properties.currentEnergy, 1020, 425); 
+				g.drawString("Current Energy: " + selectedCell.properties.getCurrentEnergy(), 1020, 425); 
 			}
 		}
 	}
@@ -126,13 +126,13 @@ public class Drawer extends JPanel {
 	private void paintSelected(Graphics g) {
 		Tile t = world.selected;
 		if (t != null) {
-			g.drawImage(select, t.x + world.xOffSet - world.tileSize / 2 , t.y + world.yOffSet - world.tileSize /2, world.tileSize , world.tileSize , null);
+			g.drawImage(select, t.x + world.xOffSet - world.TILE_SIZE / 2 , t.y + world.yOffSet - world.TILE_SIZE /2, world.TILE_SIZE , world.TILE_SIZE , null);
 		}
 	}
 		
 	private void paintCells(Graphics g) {
 		for(Cell cell : world.getCells()){
-			g.drawImage(cell.img, cell.x + world.xOffSet - world.tileSize / 2 , cell.y + world.yOffSet - world.tileSize /2, world.tileSize, world.tileSize, null);
+			g.drawImage(cell.img, cell.x + world.xOffSet - world.TILE_SIZE / 2 , cell.y + world.yOffSet - world.TILE_SIZE /2, world.TILE_SIZE, world.TILE_SIZE, null);
 		}
 		
 	}

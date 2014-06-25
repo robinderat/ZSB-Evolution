@@ -28,6 +28,8 @@ public class Cell {
 	
 	public int type; // type of cell
 	
+	public boolean isHunting;
+	
 	// reference back to the world
 	public WeakReference<World> worldRef;
 	
@@ -39,10 +41,17 @@ public class Cell {
 	}
 	
 	/**
+	 * copy constructor
+	 */
+	public Cell(Cell other) {
+		this(other.worldRef.get(), other.x, other.y, other.type, other.properties.getDNA());
+	}
+	
+	/**
 	 * cell constructor
 	 */
 	public Cell(World w, int locX, int locY, int t, String DNA) {
-		
+		//System.out.println(DNA);
 		if (DNA.length() == 0) {
 			properties = new Properties(); // random DNA
 		} else {
@@ -59,6 +68,8 @@ public class Cell {
 		
 		img = new ImageIcon("src/art/Cell" + Integer.toString(type) + ".png").getImage();
 		
+		isHunting = false;
+		
 		worldRef = new WeakReference<World>(w);
 		
 		behaviours = new ArrayList<Behaviour>();
@@ -74,9 +85,8 @@ public class Cell {
 		// the below order is the optimal order. NOTE: right now all cells (save type 2) have this order!!
 			//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
 			behaviours.add(new HuntBehaviour());
+			//behaviours.add(new MateBehaviour());
 			behaviours.add(new FleeBehaviour());
-			behaviours.add(new ApproachCenterBehaviour());
-			behaviours.add(new ApproachBorderBehaviour());
 			behaviours.add(new WanderBehaviour());
 			behaviours.add(new StayBehaviour());
 
@@ -84,22 +94,23 @@ public class Cell {
 		}
 	}
 
+	public boolean isAlive() {
+		if (properties.getCurrentEnergy() < 0) {
+			properties.setCurrentEnergy(0);
+		}
+		return properties.getIsAlive();
+	}
+	
 	/*
 	 * updates cell in iteration
 	 */
 	public void update() {
 
-		if (properties.currentEnergy <= 0) {
+		if (!isAlive()) {
 			return;
 		}
 		
-		/*int i = 0;
-		System.out.println(behaviours.size());
-		while (i < behaviours.size() && !behaviours.get(i).execute(this)){
-			System.out.println("trying new behaviour");
-			i++;
-		}*/
-		
+		// loops through each behaviour in a cell's own order, and breaks as soon as it finds one that it can do
 		for(Behaviour behaviour : behaviours){
 			if(behaviour.execute(this)){
 				break;
@@ -108,21 +119,24 @@ public class Cell {
  
 	}
 
-	/*
-	 * cell eats other cell
-	 */
-	public void eat(Cell cell) {
-		int energyValue = 20;
-		if (properties.currentEnergy < properties.getMaxEnergy() - energyValue) {
-			properties.currentEnergy += energyValue;
+	// cell eats another cell and fills current energy up to max if possible
+	public void eat(Cell target) {
+		int energyValue = (int) Math.ceil(target.properties.getStrength() * 0.5f); // this is hardcoded, should really be taken from target cell or something
+		if (energyValue <= 0) {
+			energyValue = 1;
+		}
+		if (properties.getCurrentEnergy() < properties.getMaxEnergy() - energyValue) {
+			properties.setCurrentEnergy(properties.getCurrentEnergy() + energyValue);
 		} else {
-			properties.currentEnergy = properties.getMaxEnergy();
-		}		
+			properties.setCurrentEnergy(properties.getMaxEnergy());
+		}
+		
 	}
 	
 	public void attack(Cell target) {
-		target.properties.currentEnergy -= properties.getStrength();
-		if(target.properties.currentEnergy < 0) {
+		target.properties.setCurrentEnergy(target.properties.getCurrentEnergy() - properties.getStrength());
+		properties.setCurrentEnergy(properties.getCurrentEnergy() - target.properties.getStrength());
+		if(isAlive() && target.isAlive() == false) {
 			eat(target);
 		}
 	}
@@ -145,26 +159,43 @@ public class Cell {
 			}
 		}
 		
-		moveTo(bestTile);
+		if (bestTile != null) {
+			moveTo(bestTile);
+		}
 	}
 	
-	public void mate(Cell cell){
+	public boolean mate(Cell cell){
+		
 		String ownDNA = properties.getDNA();
 		String otherDNA = cell.properties.getDNA();
 		String newDNA = worldRef.get().cBreeder.merge(ownDNA, otherDNA)[0];
 		
-		Cell c = new Cell(worldRef.get(), 15, 15, cell.type, newDNA);
-		worldRef.get().nextCells.add(c);
-		System.out.println("A baby has been made");
+		ArrayList<Tile> tiles = getFreeNeighbours();
+		if(tiles.size() != 0){
+			properties.setCurrentEnergy(cell.properties.getCurrentEnergy() - cell.properties.getMaxEnergy() / 7 * 10);
+			properties.setCurrentEnergy(properties.getCurrentEnergy() - properties.getMaxEnergy() / 7 * 10);
+			
+			Cell c = new Cell(worldRef.get(), tiles.get(0).x, tiles.get(0).y, cell.type, newDNA);
+			worldRef.get().nextCells.add(c);
+			//System.out.println("A baby has been made");
+			return true;
+		}
+		//System.out.println("No space for another baby");
+		return false;
 	}
 	
+	
+
 	// cell moves to new destination
 	public void moveTo(Tile destination) {
 		
 		if (getMoveSet().contains(destination)) {
 			// decrease energy
 			int dist = worldRef.get().pointDistanceInWorldUnit(x, y, destination.x, destination.y);
-			properties.currentEnergy -= dist;
+			if (dist <= 0) {
+				dist = 1;
+			}
+			properties.setCurrentEnergy(properties.getCurrentEnergy() - dist);
 		
 			// update position
 			x = destination.x;
@@ -179,6 +210,67 @@ public class Cell {
 		}		
 	}
 	
+	private ArrayList<Tile> getFreeNeighbours() {
+		
+		ArrayList<Tile> neighbours = new ArrayList<Tile>();
+		World world = worldRef.get();
+		Tile t = null;
+		
+		 t = world.getTile(x - 1 * world.TILE_SIZE , y); 
+		if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		
+		 t = world.getTile(x + 1 * world.TILE_SIZE , y); 
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		 
+		 t = world.getTile(x, y - 1 * world.TILE_SIZE);
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		 
+		 t = world.getTile(x, y + 1 * world.TILE_SIZE);
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		
+		
+		return neighbours;
+	}
+	
+	public Tile getClosestFreeNeighbour(int x, int y){
+		
+		
+		ArrayList<Tile> neighbours = new ArrayList<Tile>();
+		World world = worldRef.get();
+		Tile t = null;
+		
+		 t = world.getTile(x - 1 * world.TILE_SIZE , y); 
+		if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null ) neighbours.add(t);
+		
+		 t = world.getTile(x + 1 * world.TILE_SIZE , y); 
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		 
+		 t = world.getTile(x, y - 1 * world.TILE_SIZE);
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		 
+		 t = world.getTile(x, y + 1 * world.TILE_SIZE);
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		 
+		 Tile closest = null;
+		 double bestDistance = 500;
+		 for (Tile tile : neighbours) {
+			 int Dx = tile.x - x;
+			 int Dy = tile.y - y;
+			 double distance = Math.sqrt(Dx *Dx  + Dy * Dy);
+			 
+			 if (distance < bestDistance) {
+				 bestDistance = distance;
+				 closest = tile;
+			 }
+		 }
+		
+		return closest;
+	}
+	
+	public boolean canMate(){
+		return true;
+	}
+	
 	public ArrayList<Tile> getTilesInRadius(int rad) {
 		ArrayList<Tile> result = new ArrayList<Tile>();
 
@@ -186,24 +278,24 @@ public class Cell {
 			for (int i = 0; i < rad + 1; i++) {
 				int _x;
 				if (k < 2) {
-					_x = x + worldRef.get().xOffSet + i * worldRef.get().tileSize;	
+					_x = x + worldRef.get().xOffSet + i * worldRef.get().TILE_SIZE;	
 				} else {
-					_x = x + worldRef.get().xOffSet - i * worldRef.get().tileSize;	
+					_x = x + worldRef.get().xOffSet - i * worldRef.get().TILE_SIZE;	
 				} 
 				int Dy = rad + 1 - i;
 				
 				for (int j = 0; j < Dy; j++) {
 					int _y;
 					if (k % 2 == 0) {
-						_y = y + worldRef.get().yOffSet + j * worldRef.get().tileSize;
+						_y = y + worldRef.get().yOffSet + j * worldRef.get().TILE_SIZE;
 					} else {
-						_y = y + worldRef.get().yOffSet - j * worldRef.get().tileSize;
+						_y = y + worldRef.get().yOffSet - j * worldRef.get().TILE_SIZE;
 					}
 					
 					Tile tile = worldRef.get().getTile(_x, _y);
-					if (tile != null && result.contains(tile) == false) {
-						result.add(tile);
-					}
+					
+					if (isHunting && tile != null) result.add(tile);
+					else if (tile != null && result.contains(tile) == false) result.add(tile);
 				}
 			}
 		}
@@ -216,7 +308,7 @@ public class Cell {
 	
 	public ArrayList<Tile> getMoveSet() {
 		
-		int moveRad = properties.currentEnergy < properties.getSpeed() ? properties.currentEnergy : properties.getSpeed();
+		int moveRad = properties.getCurrentEnergy() < properties.getSpeed() ? properties.getCurrentEnergy() : properties.getSpeed();
 		
 		return getTilesInRadius(moveRad);
 	}

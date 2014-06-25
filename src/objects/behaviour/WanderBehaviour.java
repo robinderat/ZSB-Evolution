@@ -11,15 +11,16 @@ public class WanderBehaviour extends Behaviour {
 
 	@Override
 	public boolean execute(Cell c) {
-		if (!(c.properties.currentEnergy > 1)) return false;
-		System.out.println("Wandering" + c);
-		
-		if (wander(c)) return true;
+		if (!(c.isAlive())) {
+			return false;
+		}
+
+		if (moveAnywhere(c)) return true;
 		else return false;
 	}
 	
 	// moves cell anywhere (if there is no cell)
-	public boolean wander(Cell c){
+	public boolean moveAnywhere(Cell c){
 		ArrayList<Tile> moves = c.getMoveSet();
 		
 		RandomGenerator gen = RandomGenerator.getInstance();

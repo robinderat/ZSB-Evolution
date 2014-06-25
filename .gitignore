@@ -5,3 +5,4 @@
 .class
 bin/framework
 bin/objects
+bin/.gitignore
