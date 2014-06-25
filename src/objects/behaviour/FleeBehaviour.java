@@ -56,6 +56,9 @@ public class FleeBehaviour extends WanderBehaviour {
 						bestTile = tile;
 					}
 			}
+			if (bestTile == null) {
+				return false;
+			}
 			c.moveTo(bestTile);
 			return true;
 		} else { // if not found then no move possible in this behaviour

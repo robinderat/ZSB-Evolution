@@ -36,7 +36,12 @@ public class MateBehaviour extends Behaviour {
 			 }
 		}
 		
+		if (bestTile == null || partner == null) {	
+			return false;
+		}
+		
 		c.moveTo(bestTile);
+		
 		if (c.x == bestTile.x && c.y == bestTile.y) {
 			if (c.mate(partner)) {
 				return true;
@@ -51,7 +56,7 @@ public class MateBehaviour extends Behaviour {
 		
 		for (Tile tile : visionRad){
 			Cell cell = tile.worldRef.get().getCellAtPositionCurrent(tile.x, tile.y);
-			if(cell != null && cell.canMate() && cell != c){
+			if(cell != null && cell.canMate() && cell != c && c.type == cell.type){
 				cells.add(cell);
 			}
 		}
