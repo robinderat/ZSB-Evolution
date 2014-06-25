@@ -5,6 +5,8 @@ import javax.swing.JFrame;
 
 public class Screen extends JFrame {
 
+
+	
 	private static final long serialVersionUID = 1L;
 	World core = new World(this);
 	MouseInput click = new MouseInput(core);
@@ -13,6 +15,8 @@ public class Screen extends JFrame {
 	
 	public Screen(String string){
 		super(string);
+		
+
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(1350, 800);
 		setVisible(true);
@@ -23,7 +27,5 @@ public class Screen extends JFrame {
 		addKeyListener(type);
 		draw.setVisible(true);
 		add(draw);
-		
-		
 	}
 }

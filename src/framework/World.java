@@ -298,4 +298,8 @@ public class World {
 	public void clear() {
 		currentCells = new ArrayList<Cell>(memorySize);
 	}
+	
+	public void removeCell(Cell cell) {
+		currentCells.remove(cell);
+	}
 }
