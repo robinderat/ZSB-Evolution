@@ -84,7 +84,7 @@ public class Cell {
 		//
 		// the below order is the optimal order. NOTE: right now all cells (save type 2) have this order!!
 			//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
-			//behaviours.add(new HuntBehaviour());
+			behaviours.add(new HuntBehaviour());
 			//behaviours.add(new MateBehaviour());
 			behaviours.add(new FleeBehaviour());
 			behaviours.add(new WanderBehaviour());
@@ -130,6 +130,7 @@ public class Cell {
 		} else {
 			properties.setCurrentEnergy(properties.getMaxEnergy());
 		}
+		
 	}
 	
 	public void attack(Cell target) {

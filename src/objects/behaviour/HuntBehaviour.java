@@ -33,9 +33,6 @@ public class HuntBehaviour extends Behaviour {
 				c.moveTo(target);
 			}
 			
-			//temp add to next world state. should be called by eat or moveto so remove when that is implemented
-			c.worldRef.get().nextCells.add(c);
-			
 			// and return true!
 			c.isHunting = false;
 			return true;
@@ -57,7 +54,7 @@ public class HuntBehaviour extends Behaviour {
 		for (Tile tile : vision) {
 			Cell target = tile.worldRef.get().getCellAtPositionCurrent(tile.x, tile.y);
 			
-			if (target != null && target != me){
+			if (target != null && target != me && target.isAlive()){
 				// if very hungry, cells resort to cannibalism
 				if (me.properties.getCurrentEnergy() < me.properties.getMaxEnergy()/4 && target.type == me.type){
 					targets.add(target);
