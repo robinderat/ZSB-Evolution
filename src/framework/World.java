@@ -297,4 +297,8 @@ public class World {
 	public void clear() {
 		currentCells = new ArrayList<Cell>(MEMORY_SIZE);
 	}
+	
+	public void removeCell(Cell cell) {
+		currentCells.remove(cell);
+	}
 }
