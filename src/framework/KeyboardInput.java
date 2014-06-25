@@ -90,6 +90,13 @@ World world;
 		if (typed == 45) {
 			world.setIterations(world.getIterations() - 1);
 		}
+		
+		// x
+		if (typed == 120) {
+			StatisticManager.getInstance().printStatisticsToText();
+		}
+		
+		System.out.println(typed);
 	}
 
 	@Override

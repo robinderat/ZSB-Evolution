@@ -6,6 +6,11 @@ public abstract class Breeder {
 	
 	protected float mutationRate;
 	
+	public void setMutationRate(float rate)
+	{
+		mutationRate = rate;
+	}
+	
 	public Breeder(float rate)
 	{
 		mutationRate = rate;

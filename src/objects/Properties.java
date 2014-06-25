@@ -1,6 +1,7 @@
 package objects;
 
 import framework.RandomGenerator;
+import framework.Settings;
 
 public class Properties {
 			
@@ -29,7 +30,7 @@ public class Properties {
 		generateDNA();
 		decodeDNAProperties();
 		
-		currentEnergy = maxEnergy;
+		currentEnergy = (int)Math.ceil(maxEnergy * Settings.getInstance().startEnergyRate);
 		isAlive = true;
 	}
 	
@@ -37,7 +38,7 @@ public class Properties {
 		DNA = newDNA;
 		decodeDNAProperties();
 		
-		currentEnergy = maxEnergy;
+		currentEnergy = (int)Math.ceil(maxEnergy * Settings.getInstance().startEnergyRate);
 		isAlive = true;
 	}
 	

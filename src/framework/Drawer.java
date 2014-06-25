@@ -3,8 +3,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Hashtable;
-
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,19 +20,29 @@ public class Drawer extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	World world;
+	
 	Image bg = new ImageIcon("src/art/Bg.png").getImage();
 	Image select = new ImageIcon("src/art/Selected.png").getImage();
 	Image infoBg = new ImageIcon("src/art/Data.png").getImage();
 	
-	
-	JLabel currentFillRate = new JLabel("", JLabel.CENTER);
-	JLabel currentMutationRate = new JLabel("2", JLabel.CENTER);
-	
 	JButton populateButton = new JButton("populate");
 	JButton clearButton = new JButton("clear");
 	
-	JSlider fillRateSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 10);
-	JSlider mutationRateSlider = new JSlider(JSlider.HORIZONTAL, 0, 1000, 10);
+	JLabel mutationLabel = new JLabel("Mutation Rate", JLabel.CENTER);
+	JLabel currentMutationRate = new JLabel("", JLabel.CENTER);
+	JSlider mutationRateSlider = new JSlider(JSlider.HORIZONTAL, 0, 1000, 20);
+	
+	JLabel currentFillRate = new JLabel("", JLabel.CENTER);
+	JSlider fillRateSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 20);
+	
+	JLabel crossoverLabel = new JLabel("Crossover Rate", JLabel.CENTER);
+	JLabel currentCrossoverRate = new JLabel("", JLabel.CENTER);
+	JSlider crossOverRateSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 20);
+	
+	JLabel matingEnergyRequirementLabel = new JLabel("Mating Energy Requirement", JLabel.CENTER);
+	JLabel currentMatingEnergyRequirement = new JLabel("", JLabel.CENTER);
+	JSlider matingEnergyRequirementSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 20);
+
 	
 	public Drawer(World c) {
 		
@@ -47,39 +55,70 @@ public class Drawer extends JPanel {
 		populateButton.setActionCommand("populate");
 		populateButton.addActionListener(bl);
 		
-		
-
-		
-		currentMutationRate.setBounds(800, 120, 120, 90);
-		currentMutationRate.setText(String.valueOf((int)(settings.mutationRate*1000)));
-		
-		mutationRateSlider.setBounds(800, 180, 120, 30);
-		mutationRateSlider.addChangeListener(bl);
-		mutationRateSlider.setFocusable(false);
-		
-		
-		currentFillRate.setBounds(800, 0, 120, 90);
-		currentFillRate.setText(String.valueOf((int)(settings.fillRate*100)));
-		
-		fillRateSlider.setBounds(800, 60, 120, 30);
-		fillRateSlider.addChangeListener(bl);
-		fillRateSlider.setFocusable(false);
-		
-		
-		
-		Hashtable labelTable = new Hashtable();
-		labelTable.put( new Integer( 0 ), new JLabel("0") );
-		labelTable.put( new Integer( 100 ), new JLabel("100") );
-		fillRateSlider.setLabelTable( labelTable );
-
-		fillRateSlider.setPaintLabels(true);
-		
-
-		
 		clearButton.setBounds(620, 100, 140, 30);
 		clearButton.setFocusable(false);
 		clearButton.setActionCommand("clear");
 		clearButton.addActionListener(bl);
+		
+
+		crossoverLabel.setBounds(620, 120, 160, 90);
+		
+		currentCrossoverRate.setBounds(620, 140, 160, 90);
+		currentCrossoverRate.setText(String.valueOf((int)(settings.crossoverRate*100)));
+		
+		crossOverRateSlider.setValue((int)(settings.crossoverRate*100));
+		crossOverRateSlider.setBounds(620, 200, 120, 30);
+		crossOverRateSlider.addChangeListener(bl);
+		crossOverRateSlider.setFocusable(false);
+		
+		
+		mutationLabel.setBounds(830, 120, 160, 90);
+		
+		currentMutationRate.setBounds(825, 140, 160, 90);
+		currentMutationRate.setText(String.valueOf((int)(settings.mutationRate*1000)));
+		
+		mutationRateSlider.setValue((int)(settings.mutationRate*1000));
+		mutationRateSlider.setBounds(830, 200, 160, 30);
+		mutationRateSlider.addChangeListener(bl);
+		mutationRateSlider.setFocusable(false);
+		
+		
+		currentFillRate.setBounds(825, 0, 160, 90);
+		currentFillRate.setText(String.valueOf((int)(settings.fillRate*100)));
+
+		fillRateSlider.setValue((int)(settings.fillRate*100));
+		fillRateSlider.setBounds(800, 60, 160, 30);
+		fillRateSlider.addChangeListener(bl);
+		fillRateSlider.setFocusable(false);
+		
+		//Hashtable labelTable = new Hashtable();
+		//labelTable.put( new Integer( 0 ), new JLabel("0") );
+		//labelTable.put( new Integer( 100 ), new JLabel("100") );
+		//fillRateSlider.setLabelTable( labelTable );
+		//fillRateSlider.setPaintLabels(true);
+		
+		
+		crossoverLabel.setBounds(620, 120, 160, 90);
+		
+		currentCrossoverRate.setBounds(620, 140, 160, 90);
+		currentCrossoverRate.setText(String.valueOf((int)(settings.crossoverRate*100)));
+		
+		crossOverRateSlider.setValue((int)(settings.crossoverRate*100));
+		crossOverRateSlider.setBounds(620, 200, 160, 30);
+		crossOverRateSlider.addChangeListener(bl);
+		crossOverRateSlider.setFocusable(false);
+		
+		
+		matingEnergyRequirementLabel.setBounds(620, 220, 160, 90);
+		
+		currentMatingEnergyRequirement.setBounds(620, 240, 160, 90);
+		currentMatingEnergyRequirement.setText(String.valueOf((int)(settings.matingEnergyCost*100)));
+		
+		matingEnergyRequirementSlider.setValue((int)(settings.matingEnergyCost*100));
+		matingEnergyRequirementSlider.setBounds(620, 300, 160, 30);
+		matingEnergyRequirementSlider.addChangeListener(bl);
+		matingEnergyRequirementSlider.setFocusable(false);
+	
 		
 		super.add(populateButton);
 		super.add(clearButton);
@@ -87,7 +126,13 @@ public class Drawer extends JPanel {
 		super.add(currentFillRate);
 		super.add(currentMutationRate);
 		super.add(mutationRateSlider);
-		
+		super.add(mutationLabel);
+		super.add(crossOverRateSlider);
+		super.add(currentCrossoverRate);
+		super.add(crossoverLabel);
+		super.add(matingEnergyRequirementLabel);
+		super.add(currentMatingEnergyRequirement);
+		super.add(matingEnergyRequirementSlider);
 		
 		
 		world = c;
@@ -205,11 +250,23 @@ public class Drawer extends JPanel {
 	        	{
 	        		settings.mutationRate = value/1000.0f;
 	        		currentMutationRate.setText(String.valueOf(value));
+	        		world.cBreeder.setMutationRate(value/1000.0f);
 	        	}
-	        	else if (source == mutationRateSlider)
+	        	else if (source == crossOverRateSlider)
 	        	{
-	        		settings.mutationRate = value/1000.0f;
-	        		currentMutationRate.setText(String.valueOf(value));
+	        		settings.mutationRate = value/100.0f;
+	        		currentCrossoverRate.setText(String.valueOf(value));
+	        		world.cBreeder.setCrossoverRate(value/100.0f);
+	        	}
+	        	else if (source == matingEnergyRequirementSlider)
+	        	{
+	        		settings.matingEnergyCost = value/100.0f;
+	        		currentMatingEnergyRequirement.setText(String.valueOf(value));
+	        	}
+	        	else if (source == matingEnergyRequirementSlider)
+	        	{
+	        		settings.matingEnergyCost = value/100.0f;
+	        		currentMatingEnergyRequirement.setText(String.valueOf(value));
 	        	}
 	        }    
 	    }

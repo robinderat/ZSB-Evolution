@@ -63,7 +63,7 @@ public class Cell {
 		y = locY;
 		
 		type = t;
-		if (type > w.maxTypes || type < 1) {
+		if (type > World.maxTypes || type < 1) {
 			type = 1;
 		}
 		
@@ -78,6 +78,7 @@ public class Cell {
 		//behaviours.add(new HuntBehaviour());
 		//behaviours.add(new MateBehaviour());
 		behaviours.add(new FleeBehaviour());
+		behaviours.add(new HuntBehaviour());
 		behaviours.add(new WanderBehaviour());
 		behaviours.add(new StayBehaviour());
 	}
@@ -119,7 +120,9 @@ public class Cell {
 		if (target.isAlive() == false) {
 			System.out.println("Cell eaten.");
 			
-			int energyValue = (int) Math.ceil(target.properties.getStrength() * 0.5f); // this is hardcoded, should really be taken from target cell or something
+			float eatModifier = Settings.getInstance().eatingEnergyGain;
+			
+			int energyValue = (int) Math.ceil(target.properties.getStrength() * eatModifier); // this is hardcoded, should really be taken from target cell or something
 			if (energyValue <= 0) {
 				energyValue = 1;
 			}
@@ -209,11 +212,17 @@ public class Cell {
 			Cell c = new Cell(worldRef.get(), tiles.get(0).x, tiles.get(0).y, type, newDNA);
 			worldRef.get().nextCells.add(c);
 			System.out.println("New cell born.");
+			
+			worldRef.get().lastStepCellsBorn++;
+		
 			return true;
 		}
 		System.out.println("No space for newborn cell.");
 		return false;
 	}
+
+	
+	
 
 	
 	private ArrayList<Tile> getFreeNeighbours() {

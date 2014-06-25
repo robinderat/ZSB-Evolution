@@ -20,7 +20,7 @@ public class World {
 	public int xOffSet = 0;
 	public int yOffSet = 0;
 	
-	public int maxTypes = 9; // voor koen
+	public static int maxTypes = 9; // voor koen
 	
 	private int iterations = 1;
 	
@@ -39,10 +39,16 @@ public class World {
 	public boolean movingLeft = false;
 	public boolean movingRight = false;
 	
+	public int lastStepCellsDied;
+	public int lastStepCellsBorn;
+	
 	public World(Screen f){
 		frame = f;
 		createTileset();
 		doIterate = false;
+		
+		lastStepCellsDied = 0;
+		lastStepCellsBorn = 0;
 	}
 	
 	public void run(){
@@ -87,8 +93,6 @@ public class World {
 		
 		float probabilityCellGen = Math.abs(1.0f - percentageWorldFilled); // 30% prob that a cell gets placed on a tile
 		
-		int cellCount = 0;
-		
 		boolean goOn = true;
 		// we iterate until min threshold is reached
 		while (goOn && (currentCells.size() / (float)(TILE_COUNT * TILE_COUNT)) < percentageWorldFilled) {
@@ -103,7 +107,6 @@ public class World {
 						// choose randomly a type
 						int cellType = minType + (int)(random.nextDouble() * (((minType + diffTypes) - minType - 1) + 1));						
 						currentCells.add(new Cell(this, tile.x, tile.y, cellType));
-						cellCount ++;
 					}
 					//System.out.println((currentCells.size() / (float)(tileCount * tileCount)));
 					goOn = (currentCells.size() / (float)(TILE_COUNT * TILE_COUNT)) < percentageWorldFilled;
@@ -119,10 +122,28 @@ public class World {
 	 */
 	public void iterate() {
 		
-		for (int j = 0; j < currentCells.size(); j++){
-			Cell c = currentCells.get(j);
+		lastStepCellsDied = 0;
+		lastStepCellsBorn = 0;
+		
+		// update each cell
+		for (Cell c : currentCells) {
 			c.update();	
 		}
+		
+		// calculate death rate
+		for (Cell c : currentCells) {
+			if (c.isAlive() == false) {
+				lastStepCellsDied++;
+			}
+		}
+		
+		System.out.println("cells died: " + lastStepCellsDied);
+		System.out.println("cells born: " + lastStepCellsBorn);
+		
+		StatisticManager.getInstance().takeSnapshot(this, 1);
+		
+		StatisticManager.getInstance().printCellStatistics();
+		
 		currentCells = new ArrayList<Cell>(MEMORY_SIZE);
 		
 		for (Cell nc : nextCells) {
