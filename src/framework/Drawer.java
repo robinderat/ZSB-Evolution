@@ -26,15 +26,22 @@ public class Drawer extends JPanel {
 	Image select = new ImageIcon("src/art/Selected.png").getImage();
 	Image infoBg = new ImageIcon("src/art/Data.png").getImage();
 	
-	
-	JLabel currentFillRate = new JLabel("", JLabel.CENTER);
-	JLabel currentMutationRate = new JLabel("2", JLabel.CENTER);
-	
 	JButton populateButton = new JButton("populate");
 	JButton clearButton = new JButton("clear");
 	
-	JSlider fillRateSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 10);
-	JSlider mutationRateSlider = new JSlider(JSlider.HORIZONTAL, 0, 1000, 10);
+	JLabel mutationLabel = new JLabel("Mutation Rate", JLabel.CENTER);
+	JLabel currentMutationRate = new JLabel("", JLabel.CENTER);
+	JSlider mutationRateSlider = new JSlider(JSlider.HORIZONTAL, 0, 1000, 20);
+	
+	JLabel currentFillRate = new JLabel("", JLabel.CENTER);
+	JSlider fillRateSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 20);
+	
+	JLabel crossoverLabel = new JLabel("Crossover Rate", JLabel.CENTER);
+	JLabel currentCrossoverRate = new JLabel("", JLabel.CENTER);
+	JSlider crossOverRateSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 20);
+	
+	
+
 	
 	public Drawer(World c) {
 		
@@ -49,30 +56,46 @@ public class Drawer extends JPanel {
 		
 		
 
+		crossoverLabel.setBounds(620, 120, 120, 90);
 		
-		currentMutationRate.setBounds(800, 120, 120, 90);
+		currentCrossoverRate.setBounds(620, 140, 120, 90);
+		currentCrossoverRate.setText(String.valueOf((int)(settings.crossoverRate*100)));
+		
+		crossOverRateSlider.setValue((int)(settings.crossoverRate*100));
+		crossOverRateSlider.setBounds(620, 200, 120, 30);
+		crossOverRateSlider.addChangeListener(bl);
+		crossOverRateSlider.setFocusable(false);
+		
+		
+		
+		mutationLabel.setBounds(800, 120, 120, 90);
+		
+		currentMutationRate.setBounds(800, 140, 120, 90);
 		currentMutationRate.setText(String.valueOf((int)(settings.mutationRate*1000)));
 		
-		mutationRateSlider.setBounds(800, 180, 120, 30);
+		mutationRateSlider.setValue((int)(settings.mutationRate*1000));
+		mutationRateSlider.setBounds(800, 200, 120, 30);
 		mutationRateSlider.addChangeListener(bl);
 		mutationRateSlider.setFocusable(false);
 		
 		
 		currentFillRate.setBounds(800, 0, 120, 90);
 		currentFillRate.setText(String.valueOf((int)(settings.fillRate*100)));
-		
+
+		fillRateSlider.setValue((int)(settings.fillRate*100));
 		fillRateSlider.setBounds(800, 60, 120, 30);
 		fillRateSlider.addChangeListener(bl);
 		fillRateSlider.setFocusable(false);
 		
+		//Hashtable labelTable = new Hashtable();
+		//labelTable.put( new Integer( 0 ), new JLabel("0") );
+		//labelTable.put( new Integer( 100 ), new JLabel("100") );
+		//fillRateSlider.setLabelTable( labelTable );
+		//fillRateSlider.setPaintLabels(true);
 		
 		
-		Hashtable labelTable = new Hashtable();
-		labelTable.put( new Integer( 0 ), new JLabel("0") );
-		labelTable.put( new Integer( 100 ), new JLabel("100") );
-		fillRateSlider.setLabelTable( labelTable );
+		
 
-		fillRateSlider.setPaintLabels(true);
 		
 
 		
@@ -87,7 +110,10 @@ public class Drawer extends JPanel {
 		super.add(currentFillRate);
 		super.add(currentMutationRate);
 		super.add(mutationRateSlider);
-		
+		super.add(mutationLabel);
+		super.add(crossOverRateSlider);
+		super.add(currentCrossoverRate);
+		super.add(crossoverLabel);
 		
 		
 		world = c;
@@ -205,11 +231,13 @@ public class Drawer extends JPanel {
 	        	{
 	        		settings.mutationRate = value/1000.0f;
 	        		currentMutationRate.setText(String.valueOf(value));
+	        		world.cBreeder.setMutationRate(value/1000.0f);
 	        	}
-	        	else if (source == mutationRateSlider)
+	        	else if (source == crossOverRateSlider)
 	        	{
-	        		settings.mutationRate = value/1000.0f;
-	        		currentMutationRate.setText(String.valueOf(value));
+	        		settings.mutationRate = value/100.0f;
+	        		currentCrossoverRate.setText(String.valueOf(value));
+	        		world.cBreeder.setCrossoverRate(value/100.0f);
 	        	}
 	        }    
 	    }
