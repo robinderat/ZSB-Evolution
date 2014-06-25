@@ -113,7 +113,7 @@ public class World {
 	 */
 	public void iterate() {
 		
-		System.out.println("n cells alive: " + currentCells.size());
+
 		
 		for (int j = 0; j < currentCells.size(); j++){
 			Cell c = currentCells.get(j);
@@ -131,6 +131,8 @@ public class World {
 		// that will guarantee that fast cells move first
 		sortCellsBySpeed(currentCells);
 		//for (Cell c : currentCells) { System.out.println(c.properties.getSpeed()); }
+		
+		System.out.println("n cells alive: " + currentCells.size());
 		
 		nextCells = new ArrayList<Cell>(MEMORY_SIZE);
 	}

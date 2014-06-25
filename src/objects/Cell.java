@@ -84,11 +84,9 @@ public class Cell {
 		//
 		// the below order is the optimal order. NOTE: right now all cells (save type 2) have this order!!
 			//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
-			behaviours.add(new HuntBehaviour());
-			behaviours.add(new MateBehaviour());
+			//behaviours.add(new HuntBehaviour());
+			//behaviours.add(new MateBehaviour());
 			behaviours.add(new FleeBehaviour());
-			behaviours.add(new ApproachCenterBehaviour());
-			behaviours.add(new ApproachBorderBehaviour());
 			behaviours.add(new WanderBehaviour());
 			behaviours.add(new StayBehaviour());
 
