@@ -188,8 +188,7 @@ public class World {
 		return (int)Math.ceil(Math.sqrt(DX * DX  + DY * DY) / tileSize);
 	}
 	
-	public Tile getTile(int x, int y){
-		
+	public Tile getTile(int x, int y) {
 		
 		int startx = tileArray[0][0].x;
 		int starty = tileArray[0][0].y;
@@ -199,51 +198,29 @@ public class World {
 		int xTiles = -1;
 		int yTiles = -1;
 		
+		if (x > endx){
+			xTiles = tileCount - 1;
+		}
 		
-			if (x > endx){
-			
-				xTiles = tileCount - 1;
-			}
-			
-			if (x < startx){
-				
-				xTiles = 0;
-			}
-			
-			if (y > endy){
-				
-				yTiles = tileCount - 1;
-			}
-			
-			if (y < starty){
-				
-				yTiles = 0;
-			}
-			
-			if (xTiles == -1) {
-				xTiles = (x - startx - xOffSet)/tileSize;
-			}
-			
-			if (yTiles == -1) {
-				yTiles = (y - starty - yOffSet)/tileSize;
-			}
+		if (x < startx){
+			xTiles = 0;
+		}
 		
-		//Old inefficient code
-		/*
-		double smallestLength = 50;
-		Tile old = null;
+		if (y > endy){
+			yTiles = tileCount - 1;
+		}
 		
-		for (Tile[] tiles : tileArray) {
-			for (Tile t : tiles) {
-				int DX = (t.x + xOffSet) - x;
-				int DY = (t.y + yOffSet) - y;
-				double length = Math.sqrt(DX *DX  + DY * DY);
-				if (length < smallestLength) {
-					smallestLength = length;
-					closest = t;
-				}
-			}
-		}*/
+		if (y < starty){
+			yTiles = 0;
+		}
+		
+		if (xTiles == -1) {
+			xTiles = (x - startx - xOffSet)/tileSize;
+		}
+		
+		if (yTiles == -1) {
+			yTiles = (y - starty - yOffSet)/tileSize;
+		}
 		
 		return tileArray[yTiles][xTiles];
 	}

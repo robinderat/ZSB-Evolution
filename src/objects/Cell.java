@@ -152,7 +152,9 @@ public class Cell {
 			}
 		}
 		
-		moveTo(bestTile);
+		if (bestTile != null) {
+			moveTo(bestTile);
+		}
 	}
 	
 	public void mate(Cell cell){
