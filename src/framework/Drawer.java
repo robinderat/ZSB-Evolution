@@ -42,6 +42,10 @@ public class Drawer extends JPanel {
 	JLabel matingEnergyRequirementLabel = new JLabel("Mating Energy Requirement", JLabel.CENTER);
 	JLabel currentMatingEnergyRequirement = new JLabel("", JLabel.CENTER);
 	JSlider matingEnergyRequirementSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 20);
+	
+	JLabel eatingEnergyGainLabel = new JLabel("Eating Energy Gain", JLabel.CENTER);
+	JLabel currentEatingEnergyGain = new JLabel("", JLabel.CENTER);
+	JSlider eatingEnergyGainSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 20);
 
 	
 	public Drawer(World c) {
@@ -49,6 +53,13 @@ public class Drawer extends JPanel {
 		super.setLayout(null);
 		Settings settings = Settings.getInstance();
 		
+		currentFillRate.setBounds(800, 0, 160, 90);
+		currentFillRate.setText(String.valueOf((int)(settings.fillRate*100)));
+
+		fillRateSlider.setValue((int)(settings.fillRate*100));
+		fillRateSlider.setBounds(800, 60, 160, 30);
+		fillRateSlider.addChangeListener(bl);
+		fillRateSlider.setFocusable(false);
 		
 		populateButton.setBounds(620, 60, 140, 30);
 		populateButton.setFocusable(false);
@@ -67,7 +78,7 @@ public class Drawer extends JPanel {
 		currentCrossoverRate.setText(String.valueOf((int)(settings.crossoverRate*100)));
 		
 		crossOverRateSlider.setValue((int)(settings.crossoverRate*100));
-		crossOverRateSlider.setBounds(620, 200, 120, 30);
+		crossOverRateSlider.setBounds(620, 200, 160, 30);
 		crossOverRateSlider.addChangeListener(bl);
 		crossOverRateSlider.setFocusable(false);
 		
@@ -82,31 +93,11 @@ public class Drawer extends JPanel {
 		mutationRateSlider.addChangeListener(bl);
 		mutationRateSlider.setFocusable(false);
 		
-		
-		currentFillRate.setBounds(825, 0, 160, 90);
-		currentFillRate.setText(String.valueOf((int)(settings.fillRate*100)));
-
-		fillRateSlider.setValue((int)(settings.fillRate*100));
-		fillRateSlider.setBounds(800, 60, 160, 30);
-		fillRateSlider.addChangeListener(bl);
-		fillRateSlider.setFocusable(false);
-		
 		//Hashtable labelTable = new Hashtable();
 		//labelTable.put( new Integer( 0 ), new JLabel("0") );
 		//labelTable.put( new Integer( 100 ), new JLabel("100") );
 		//fillRateSlider.setLabelTable( labelTable );
 		//fillRateSlider.setPaintLabels(true);
-		
-		
-		crossoverLabel.setBounds(620, 120, 160, 90);
-		
-		currentCrossoverRate.setBounds(620, 140, 160, 90);
-		currentCrossoverRate.setText(String.valueOf((int)(settings.crossoverRate*100)));
-		
-		crossOverRateSlider.setValue((int)(settings.crossoverRate*100));
-		crossOverRateSlider.setBounds(620, 200, 160, 30);
-		crossOverRateSlider.addChangeListener(bl);
-		crossOverRateSlider.setFocusable(false);
 		
 		
 		matingEnergyRequirementLabel.setBounds(620, 220, 160, 90);
@@ -118,21 +109,41 @@ public class Drawer extends JPanel {
 		matingEnergyRequirementSlider.setBounds(620, 300, 160, 30);
 		matingEnergyRequirementSlider.addChangeListener(bl);
 		matingEnergyRequirementSlider.setFocusable(false);
+		
+		
+		eatingEnergyGainLabel.setBounds(825, 220, 160, 90);
+		
+		currentEatingEnergyGain.setBounds(825, 240, 160, 90);
+		currentEatingEnergyGain.setText(String.valueOf((int)(settings.eatingEnergyGain*100)));
+		
+		eatingEnergyGainSlider.setValue((int)(settings.eatingEnergyGain*100));
+		eatingEnergyGainSlider.setBounds(825, 300, 160, 30);
+		eatingEnergyGainSlider.addChangeListener(bl);
+		eatingEnergyGainSlider.setFocusable(false);
 	
 		
-		super.add(populateButton);
+		
 		super.add(clearButton);
+		
 		super.add(fillRateSlider);
 		super.add(currentFillRate);
+		super.add(populateButton);
+		
 		super.add(currentMutationRate);
 		super.add(mutationRateSlider);
 		super.add(mutationLabel);
+		
 		super.add(crossOverRateSlider);
 		super.add(currentCrossoverRate);
 		super.add(crossoverLabel);
+		
 		super.add(matingEnergyRequirementLabel);
 		super.add(currentMatingEnergyRequirement);
 		super.add(matingEnergyRequirementSlider);
+		
+		super.add(eatingEnergyGainLabel);
+		super.add(currentEatingEnergyGain);
+		super.add(eatingEnergyGainSlider);
 		
 		
 		world = c;
@@ -239,36 +250,42 @@ public class Drawer extends JPanel {
 	    	Settings settings = Settings.getInstance();
 	    	
 	        JSlider source = (JSlider)e.getSource();
-	        if (!source.getValueIsAdjusting()) {
-	        	int value = (int)source.getValue();
-	        	if (source == fillRateSlider)
-	        	{
-		        	settings.fillRate = value/100.0f;
-		            currentFillRate.setText(String.valueOf(value));
-	        	}
-	        	else if (source == mutationRateSlider)
-	        	{
-	        		settings.mutationRate = value/1000.0f;
-	        		currentMutationRate.setText(String.valueOf(value));
-	        		world.cBreeder.setMutationRate(value/1000.0f);
-	        	}
-	        	else if (source == crossOverRateSlider)
-	        	{
-	        		settings.mutationRate = value/100.0f;
-	        		currentCrossoverRate.setText(String.valueOf(value));
-	        		world.cBreeder.setCrossoverRate(value/100.0f);
-	        	}
-	        	else if (source == matingEnergyRequirementSlider)
-	        	{
-	        		settings.matingEnergyCost = value/100.0f;
-	        		currentMatingEnergyRequirement.setText(String.valueOf(value));
-	        	}
-	        	else if (source == matingEnergyRequirementSlider)
-	        	{
-	        		settings.matingEnergyCost = value/100.0f;
-	        		currentMatingEnergyRequirement.setText(String.valueOf(value));
-	        	}
-	        }    
+        	int value = (int)source.getValue();
+        	
+        	if (source == fillRateSlider)
+        	{
+        		if (!source.getValueIsAdjusting()) settings.fillRate = value/100.0f;
+	        	
+	            currentFillRate.setText(String.valueOf(value));
+        	}
+        	else if (source == mutationRateSlider)
+        	{
+        		if (!source.getValueIsAdjusting()) { 
+        			settings.mutationRate = value/1000.0f;
+        			world.cBreeder.setMutationRate(value/1000.0f);
+        		}
+        		currentMutationRate.setText(String.valueOf(value));
+        		
+        	}
+        	else if (source == crossOverRateSlider)
+        	{
+        		if (!source.getValueIsAdjusting()) {
+        			settings.crossoverRate = value/100.0f;
+        			world.cBreeder.setCrossoverRate(value/100.0f);
+        		}
+        		currentCrossoverRate.setText(String.valueOf(value));
+        		
+        	}
+        	else if (source == matingEnergyRequirementSlider)
+        	{
+        		if (!source.getValueIsAdjusting()) settings.matingEnergyCost = value/100.0f;
+        		currentMatingEnergyRequirement.setText(String.valueOf(value));
+        	}
+        	else if (source == eatingEnergyGainSlider)
+        	{
+        		if (!source.getValueIsAdjusting()) settings.eatingEnergyGain = value/100.0f;
+        		currentEatingEnergyGain.setText(String.valueOf(value));
+        	}    
 	    }
 	}
 }
