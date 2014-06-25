@@ -243,7 +243,7 @@ public class Cell {
 			}
 			if (bestTile != null) destination = bestTile;
 			else {
-				System.out.println("now");
+				//System.out.println("now");
 				return false;
 			}
 		}
