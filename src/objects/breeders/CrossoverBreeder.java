@@ -21,6 +21,11 @@ public class CrossoverBreeder extends Breeder {
 		return newDNAs;
 	}
 	
+	public void setCrossoverRate(float rate)
+	{
+		crossOverRate = rate;
+	}
+	
 	public CrossoverBreeder() {
 		super();
 		crossOverRate = 0.7f;
