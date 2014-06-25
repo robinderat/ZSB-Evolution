@@ -74,7 +74,7 @@ public class Cell {
 		// the below order is the optimal order. NOTE: right now all cells (save type 2) have this order!!
 			//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
 			behaviours.add(new HuntBehaviour());
-			//behaviours.add(new FleeBehaviour());
+			behaviours.add(new FleeBehaviour());
 			behaviours.add(new ApproachCenterBehaviour());
 			behaviours.add(new ApproachBorderBehaviour());
 			behaviours.add(new WanderBehaviour());
@@ -93,9 +93,17 @@ public class Cell {
 			return;
 		}
 		
-		int i = 0;
-		while (i < behaviours.size() && behaviours.get(i).execute(this) == false){
+		/*int i = 0;
+		System.out.println(behaviours.size());
+		while (i < behaviours.size() && !behaviours.get(i).execute(this)){
+			System.out.println("trying new behaviour");
 			i++;
+		}*/
+		
+		for(Behaviour behaviour : behaviours){
+			if(behaviour.execute(this)){
+				break;
+			}
 		}
  
 	}
@@ -120,7 +128,6 @@ public class Cell {
 	}
 	
 	public void moveTowards(Tile target) {
-		
 		ArrayList<Tile> tiles = getMoveSet();
 		
 		double distance = 500;

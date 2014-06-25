@@ -11,6 +11,7 @@ public class World {
 	Screen frame;
 	public final int tileSize = 15;
 	public final int tileCount = 40;
+	public final int memorySize = tileCount * tileCount;
 	
 	public boolean doIterate; // bool if iteration should be done in while loop
 	
@@ -23,8 +24,9 @@ public class World {
 			
 	private Tile[][] tileArray = new Tile[tileCount][tileCount];
 	
-	public ArrayList<Cell> currentCells = new ArrayList<Cell>();
-	public ArrayList<Cell> nextCells = new ArrayList<Cell>();
+	// create ArrayList of cells with enough memory
+	public ArrayList<Cell> currentCells = new ArrayList<Cell>(memorySize);
+	public ArrayList<Cell> nextCells = new ArrayList<Cell>(memorySize);
 	
 	public CrossoverBreeder cBreeder =  new CrossoverBreeder();
 	
@@ -85,8 +87,8 @@ public class World {
 		while (goOn && (currentCells.size() / (float)(tileCount * tileCount)) < percentageWorldFilled) {
 	
 			// walk world from left-top to bottom-down and randomly generate cells
-			for (Tile[] rows : tileArray) {
-				for (Tile tile : rows) {
+			for (Tile[] cols : tileArray) {
+				for (Tile tile : cols) {
 					if (goOn && 
 						getCellAtPositionCurrent(tile.x, tile.y) == null &&
 						Math.random() > probabilityCellGen) {
@@ -110,12 +112,12 @@ public class World {
 			Cell c = currentCells.get(j);
 			c.update();	
 		}
-		currentCells = new ArrayList<Cell>();
+		currentCells = new ArrayList<Cell>(memorySize);
 		
 		for (Cell nc : nextCells) {
 			currentCells.add(nc);
 		}
-		nextCells = new ArrayList<Cell>();
+		nextCells = new ArrayList<Cell>(memorySize);
 	}
 	
 	/*
@@ -168,8 +170,48 @@ public class World {
 	
 	public Tile getTile(int x, int y){
 		
+		
+		int startx = tileArray[0][0].x;
+		int starty = tileArray[0][0].y;
+		int endx = tileArray[0][tileCount -1].x;
+		int endy = tileArray[tileCount -1][0].y;
+		
+		int xTiles = -1;
+		int yTiles = -1;
+		
+		
+			if (x > endx){
+			
+				xTiles = tileCount - 1;
+			}
+			
+			if (x < startx){
+				
+				xTiles = 0;
+			}
+			
+			if (y > endy){
+				
+				yTiles = tileCount - 1;
+			}
+			
+			if (y < starty){
+				
+				yTiles = 0;
+			}
+			
+			if (xTiles == -1) {
+				xTiles = (x - startx - xOffSet)/tileSize;
+			}
+			
+			if (yTiles == -1) {
+				yTiles = (y - starty - yOffSet)/tileSize;
+			}
+		
+		//Old inefficient code
+		/*
 		double smallestLength = 50;
-		Tile closest = null;
+		Tile old = null;
 		
 		for (Tile[] tiles : tileArray) {
 			for (Tile t : tiles) {
@@ -181,9 +223,9 @@ public class World {
 					closest = t;
 				}
 			}
-		}
+		}*/
 		
-		return closest;
+		return tileArray[yTiles][xTiles];
 	}
 	
 	public void select(Tile tile){
@@ -238,7 +280,6 @@ public class World {
 		return tileArray[0][0];
 	}
 	
-	
 	public Cell getCellAtPositionNext(int px, int py) {
 		for (Cell c : nextCells) {
 			if (c.x == px && c.y == py) return c;
@@ -255,6 +296,6 @@ public class World {
 
 	// clears the world
 	public void clear() {
-		currentCells = new ArrayList<Cell>();
+		currentCells = new ArrayList<Cell>(memorySize);
 	}
 }
