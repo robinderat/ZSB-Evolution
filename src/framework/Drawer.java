@@ -75,7 +75,10 @@ public class Drawer extends JPanel {
 		
 	private void paintCells(Graphics g){
 		for(Cell cell : world.getCells()){
-			g.drawImage(cell.img, cell.x + world.xOffSet - world.TILE_SIZE / 2 , cell.y + world.yOffSet - world.TILE_SIZE /2, world.TILE_SIZE, world.TILE_SIZE, null);
+			int drawX = cell.x + world.xOffSet - world.TILE_SIZE / 2;
+			int drawY = cell.y + world.yOffSet - world.TILE_SIZE / 2; 
+			
+			g.drawImage(cell.img, drawX, drawY, world.TILE_SIZE, world.TILE_SIZE, null);
 		}
 		
 	}

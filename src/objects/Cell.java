@@ -75,8 +75,8 @@ public class Cell {
 		behaviours = new ArrayList<Behaviour>();
 
 		// special behavior for type 2 for DEBUG testing purposes
-		if (type == 2) behaviours.add(new StayBehaviour());
-		else {
+		//if (type == 2) behaviours.add(new StayBehaviour());
+		//else {
 		// dump all behaviours for normal type (not finished: since some types get only some behaviours)
 		//
 		// !! note: we want to give certain (initial) types certain (initial) behaviours
@@ -85,13 +85,13 @@ public class Cell {
 		// the below order is the optimal order. NOTE: right now all cells (save type 2) have this order!!
 			//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
 			//behaviours.add(new HuntBehaviour());
-			//behaviours.add(new MateBehaviour());
+			behaviours.add(new MateBehaviour());
 			behaviours.add(new FleeBehaviour());
 			behaviours.add(new WanderBehaviour());
 			behaviours.add(new StayBehaviour());
 
 
-		}
+		//}
 	}
 
 	public boolean isAlive() {
@@ -171,8 +171,8 @@ public class Cell {
 		
 		ArrayList<Tile> tiles = getFreeNeighbours();
 		if(tiles.size() != 0){
-			properties.setCurrentEnergy(cell.properties.getCurrentEnergy() - cell.properties.getMaxEnergy() / 7 * 10);
-			properties.setCurrentEnergy(properties.getCurrentEnergy() - properties.getMaxEnergy() / 7 * 10);
+			properties.setCurrentEnergy(cell.properties.getCurrentEnergy() - cell.properties.getMaxEnergy() / 10 * 7);
+			properties.setCurrentEnergy(properties.getCurrentEnergy() - properties.getMaxEnergy() / 10 * 7);
 			
 			Cell c = new Cell(worldRef.get(), tiles.get(0).x, tiles.get(0).y, cell.type, newDNA);
 			worldRef.get().nextCells.add(c);
@@ -187,7 +187,7 @@ public class Cell {
 
 	// cell moves to new destination
 	public void moveTo(Tile destination) {
-		
+		System.out.println("destx " + destination.x + " desty " + destination.y);
 		if (getMoveSet().contains(destination)) {
 			// decrease energy
 			int dist = worldRef.get().pointDistanceInWorldUnit(x, y, destination.x, destination.y);
@@ -199,6 +199,7 @@ public class Cell {
 			// update position
 			x = destination.x;
 			y = destination.y;
+			
 			
 			// we dont kill him here. even if energy reaches 0, we let him live one more iteration
 			worldRef.get().nextCells.add(this);
@@ -231,7 +232,7 @@ public class Cell {
 		return neighbours;
 	}
 	
-	public Tile getClosestFreeNeighbour(int x, int y){
+	public Tile getClosestFreeNeighbour(int askx, int asky){
 		
 		
 		ArrayList<Tile> neighbours = new ArrayList<Tile>();
@@ -253,8 +254,8 @@ public class Cell {
 		 Tile closest = null;
 		 double bestDistance = 500;
 		 for (Tile tile : neighbours) {
-			 int Dx = tile.x - x;
-			 int Dy = tile.y - y;
+			 int Dx = tile.x - askx;
+			 int Dy = tile.y - asky;
 			 double distance = Math.sqrt(Dx *Dx  + Dy * Dy);
 			 
 			 if (distance < bestDistance) {
