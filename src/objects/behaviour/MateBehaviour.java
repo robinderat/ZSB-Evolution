@@ -63,7 +63,7 @@ public class MateBehaviour extends Behaviour {
 	}
 	
 	private boolean canMate(Cell c1) {
-		double percentageMating = 0.7;	// get from Settings
+		double percentageMating = 0.45;	// get from Settings
 		return (double)c1.properties.getCurrentEnergy() > percentageMating * c1.properties.getMaxEnergy();
 	}
 

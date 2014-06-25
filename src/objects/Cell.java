@@ -149,31 +149,36 @@ public class Cell {
 		}
 	}
 	
-	public boolean mate(Cell cell){
+	public boolean mate(Cell part){
 		
 		String ownDNA = properties.getDNA();
-		String otherDNA = cell.properties.getDNA();
+		String otherDNA = part.properties.getDNA();
 		String newDNA = worldRef.get().cBreeder.merge(ownDNA, otherDNA)[0];
 		
 		ArrayList<Tile> tiles = getFreeNeighbours();
 		if(tiles.size() != 0){
 			
-			double energyCost = 0.7;
+			double energyCost = 0.45;
 			
-			int energyLostCell1 = (int)Math.ceil(cell.properties.getMaxEnergy() * energyCost);
-			if (energyLostCell1 <= 0) {
-				energyLostCell1 = 1;
+			int energyLostCellPart = (int)Math.ceil(part.properties.getMaxEnergy() * energyCost);
+			if (energyLostCellPart <= 0) {
+				energyLostCellPart = 1;
 			}
 			
 			int energyLostCell2 = (int)Math.ceil(properties.getMaxEnergy() * energyCost);
 			if (energyLostCell2 <= 0) {
 				energyLostCell2 = 1;
-			}
+			}  
 			
-			cell.properties.setCurrentEnergy(cell.properties.getCurrentEnergy() - energyLostCell1);
+			System.out.println("partner energy: " + part.properties.getCurrentEnergy());
+			System.out.println("energyLostCell Partner: " + energyLostCellPart);
+			System.out.println("own energy: " + properties.getCurrentEnergy());
+			System.out.println("own energy lost: " + energyLostCell2);
+			
+			part.properties.setCurrentEnergy(part.properties.getCurrentEnergy() - energyLostCellPart);
 			properties.setCurrentEnergy(properties.getCurrentEnergy() - energyLostCell2);
 			
-			Cell c = new Cell(worldRef.get(), tiles.get(0).x, tiles.get(0).y, cell.type, newDNA);
+			Cell c = new Cell(worldRef.get(), tiles.get(0).x, tiles.get(0).y, type, newDNA);
 			worldRef.get().nextCells.add(c);
 			System.out.println("A baby has been made");
 			return true;
@@ -186,7 +191,7 @@ public class Cell {
 
 	// cell moves to new destination
 	public void moveTo(Tile destination) {
-		System.out.println("destx " + destination.x + " desty " + destination.y);
+		//System.out.println("destx " + destination.x + " desty " + destination.y);
 		if (getMoveSet().contains(destination)) {
 			// decrease energy
 			int dist = worldRef.get().pointDistanceInWorldUnit(x, y, destination.x, destination.y);
