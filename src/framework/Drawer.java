@@ -180,7 +180,7 @@ public class Drawer extends JPanel {
 	        JSlider source = (JSlider)e.getSource();
 	        if (!source.getValueIsAdjusting()) {
 	        	int value = (int)source.getValue();
-	        	settings.fillRate = value/100.0d;
+	        	settings.fillRate = value/100.0f;
 	            currentFillRate.setText(String.valueOf(value));
 	        }    
 	    }
