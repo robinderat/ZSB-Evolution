@@ -13,7 +13,7 @@ public class Settings {
 		fillRate = 0.2f;
 		mutationRate = 0.001f;
 		crossoverRate = 0.7f;
-		matingEnergyCost = 0.6f;
+		matingEnergyCost = 0.4f;
 	}
 	
 	public static Settings getInstance() {

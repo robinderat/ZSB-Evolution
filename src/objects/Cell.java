@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 import objects.behaviour.*;
+import framework.Settings;
 import framework.Tile;
 import framework.World;
 
@@ -158,7 +159,7 @@ public class Cell {
 		ArrayList<Tile> tiles = getFreeNeighbours();
 		if(tiles.size() != 0){
 			
-			double energyCost = 0.45;
+			double energyCost = Settings.getInstance().matingEnergyCost;
 			
 			int energyLostCellPart = (int)Math.ceil(part.properties.getMaxEnergy() * energyCost);
 			if (energyLostCellPart <= 0) {
