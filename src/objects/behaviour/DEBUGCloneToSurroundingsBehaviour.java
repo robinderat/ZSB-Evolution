@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import framework.Tile;
 import objects.Cell;
 
-// in this behaviour the cell clones itself onto all tiles around it
+// in this behaviour the cell clones itself onto all tiles around it. it is super overpowered
 public class DEBUGCloneToSurroundingsBehaviour extends Behaviour {
 
 	@Override

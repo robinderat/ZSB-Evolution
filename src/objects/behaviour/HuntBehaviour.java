@@ -6,7 +6,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import framework.Tile;
 import objects.Cell;
 
-// in this behaviour the cell scours its surroundings for 
+// in this behaviour the cell scours its surroundings for cells that are weaker than it
 public class HuntBehaviour extends Behaviour {
 
 	private boolean targetIsClose;

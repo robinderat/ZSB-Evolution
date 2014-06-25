@@ -12,7 +12,7 @@ import framework.World;
 
 public class Cell {
 
-	public static final int MaxTypes = 6;
+	public static final int MaxTypes = 9;
 
 	// properties of cell. 
 	public Properties properties;

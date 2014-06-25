@@ -9,7 +9,7 @@ import objects.Cell;
 public class MateBehaviour extends Behaviour {
 	
 	
-
+// in this behaviour the cell looks for a mate and makes babies if both have enough energy and are in range
 	@Override
 	public boolean execute(Cell c) {
 		

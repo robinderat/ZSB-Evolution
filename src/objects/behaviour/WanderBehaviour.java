@@ -15,12 +15,12 @@ public class WanderBehaviour extends Behaviour {
 			return false;
 		}
 
-		if (moveAnywhere(c)) return true;
+		if (canMoveAnywhere(c)) return true;
 		else return false;
 	}
 	
 	// moves cell anywhere (if there is no cell)
-	public boolean moveAnywhere(Cell c){
+	public boolean canMoveAnywhere(Cell c){
 		ArrayList<Tile> moves = c.getMoveSet();
 		
 		RandomGenerator gen = RandomGenerator.getInstance();
