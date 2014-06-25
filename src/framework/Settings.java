@@ -20,10 +20,10 @@ public class Settings {
 	public Settings() {
 		fillRate = 0.4f;
 		mutationRate = 0.1f;
-		crossoverRate = 0.7f;
-		matingEnergyCost = 0.25f;
-		eatingEnergyGain = 1.5f;
-		veryHungryThreshold = 0.25f;
+		crossoverRate = 0.81f;
+		matingEnergyCost = 0.28f;
+		eatingEnergyGain = 0.75f;
+		veryHungryThreshold = 0.29f;
 		startEnergyRate = 0.7f;
 		allowCannibalism = false;
 		moveStrengthModifier = 0.5f;

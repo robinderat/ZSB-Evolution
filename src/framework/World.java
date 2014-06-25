@@ -138,12 +138,12 @@ public class World {
 			}
 		}
 		
-		//System.out.println("cells died: " + lastStepCellsDied);
-		//System.out.println("cells born: " + lastStepCellsBorn);
-		
 		StatisticManager.getInstance().takeSnapshot(this, 1);
 		
-		//StatisticManager.getInstance().printCellStatistics();
+
+		System.out.println("cells died: " + lastStepCellsDied);
+		System.out.println("cells born: " + lastStepCellsBorn);
+		StatisticManager.getInstance().printCellStatistics();
 		
 		currentCells = new ArrayList<Cell>(MEMORY_SIZE);
 		
