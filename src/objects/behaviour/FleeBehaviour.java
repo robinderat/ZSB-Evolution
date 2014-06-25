@@ -6,11 +6,11 @@ import framework.Tile;
 import objects.Cell;
 
 // in this behaviour the cell scours its surroundings for 
-public class FleeBehaviour extends WanderBehaviour {
+public class FleeBehaviour extends Behaviour {
 
 	@Override
 	public boolean execute(Cell c) {
-		
+
 		if (!(c.properties.currentEnergy > 1)) {
 			return false;
 		}
@@ -23,16 +23,16 @@ public class FleeBehaviour extends WanderBehaviour {
 			ArrayList<Tile> options = new ArrayList<Tile>();
 			ArrayList<Tile> tiles = c.getMoveSet();
 			Tile bestTile = null;
-			
+
 			for (Tile t : dangerousTiles) {
 				Tile proposedTile = null;
 				double distance = 0;
 				for (Tile tile : tiles) {
-						
+
 					int Dx = tile.x - t.x; 
 					int Dy = tile.y - t.y;
 					double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
-						
+
 					if (newDistance > distance) {
 						distance = newDistance;
 						proposedTile = tile;
@@ -67,21 +67,21 @@ public class FleeBehaviour extends WanderBehaviour {
 			return false;
 		}	
 	}
-	
+
 	// looks through perception tiles searching for tiles that have a cell on them
 	private ArrayList<Tile> searchForDanger(ArrayList<Tile> vision, Cell cell) {
 		// create ArrayList, reserve memory for size
 		ArrayList<Tile> dangerousTiles = new ArrayList<Tile>(vision.size());
 		for (Tile tile : vision) {
 			Cell c = tile.worldRef.get().getCellAtPositionCurrent(tile.x, tile.y);
-			
+
 			if(c != null && cell.type != c.type){
 				dangerousTiles.add(tile);
 			}
 		}
-		
+
 		// returns a list containing all tiles that have a cell on them
 		return dangerousTiles;
 	}
-	
+
 }
