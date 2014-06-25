@@ -12,6 +12,7 @@ public class FleeBehaviour extends MoveAnywhereBehaviour {
 	public boolean execute(Cell c) {
 		
 		if (!(c.properties.currentEnergy > 1)) return false;
+/*<<<<<<< HEAD*/
 		//System.out.println("Fleeing " + c);
 		ArrayList<Tile> perception = c.getPerceptionSet();
 
@@ -35,6 +36,31 @@ public class FleeBehaviour extends MoveAnywhereBehaviour {
 					if (newDistance > distance) {
 						distance = newDistance;
 						proposedTile = tile;
+/*=======
+			ArrayList<Tile> perception = c.getPerceptionSet();
+	
+			// first search for other cells in area
+			ArrayList<Tile> dangerousTiles = searchForDanger(perception, c);
+			// if found, move in other direction
+			if (dangerousTiles.size() != 0) {	
+				ArrayList<Tile> options = new ArrayList<Tile>();
+				ArrayList<Tile> tiles = c.getMoveSet();
+				Tile bestTile = null;
+				
+				for (Tile t : dangerousTiles) {
+					Tile proposedTile = null;
+					double distance = 0;
+					for (Tile tile : tiles) {
+							
+						int Dx = tile.x - t.x; 
+						int Dy = tile.y - t.y;
+						double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
+							
+						if (newDistance > distance) {
+							distance = newDistance;
+							proposedTile = tile;
+						}
+>>>>>>> upstream/master*/
 					}
 				}
 				if(proposedTile != null){
@@ -56,6 +82,9 @@ public class FleeBehaviour extends MoveAnywhereBehaviour {
 					bestDistance = totalDistance;
 					bestTile = tile;
 				}
+			}
+			if (bestTile == null) {
+				return false;
 			}
 			c.moveTo(bestTile);
 			return true;

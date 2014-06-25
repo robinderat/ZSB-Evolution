@@ -1,47 +1,58 @@
 package objects.breeders;
 
-import java.util.Random;
+import framework.RandomGenerator;
 
 public class CrossoverBreeder extends Breeder {
 	
 	private float crossOverRate;
-	private Random random;
 	
 	@Override
 	public String[] merge(String DNA1, String DNA2) {
 		String[] newDNAs = new String[2];
+		RandomGenerator instance = RandomGenerator.getInstance();
 		
-		if (random.nextFloat() < crossOverRate) {
+		if (instance.getRandom().nextFloat() < crossOverRate) {
 			crossOver(newDNAs, DNA1, DNA2);
+		} else {
+			newDNAs[0] = DNA1;
+			newDNAs[1] = DNA2;
 		}
 		
 		return newDNAs;
 	}
 	
 	public CrossoverBreeder() {
+		super();
 		crossOverRate = 0.7f;
-		random = new Random(10);
 	}
 	
 	public CrossoverBreeder(float crossRate) {
+		super();
 		crossOverRate = crossRate;
-		random = new Random(10);
 	}
 	
-	private void crossOver(String[] newDNAs, String DNA1, String DNA2)
-	{
+	public CrossoverBreeder(float mutRate, float crossRate) {
+		super(mutRate);
+		crossOverRate = crossRate;
+	}
+	
+	private void crossOver(String[] newDNAs, String DNA1, String DNA2) {
 		int DNALength = DNA1.length();
+		RandomGenerator instance = RandomGenerator.getInstance();
 		
-		int crossBit = random.nextInt(DNALength);
+		newDNAs[0] = "";
+		newDNAs[1] = "";
+		
+		int crossBit = instance.getRandom().nextInt(DNALength);
 		
 		for (int i = 0; i < DNALength; i++) {
 			if (i < crossBit) {
-				newDNAs[1] = newDNAs[1] + DNA1.charAt(i);
-				newDNAs[2] = newDNAs[2] + DNA2.charAt(i);
+				newDNAs[0] = newDNAs[0] + DNA1.charAt(i);
+				newDNAs[1] = newDNAs[1] + DNA2.charAt(i);
 			}
 			else {
-				newDNAs[1] = newDNAs[1] + DNA2.charAt(i);
-				newDNAs[2] = newDNAs[2] + DNA1.charAt(i);
+				newDNAs[0] = newDNAs[0] + DNA2.charAt(i);
+				newDNAs[1] = newDNAs[1] + DNA1.charAt(i);
 			}
 		}
 	}

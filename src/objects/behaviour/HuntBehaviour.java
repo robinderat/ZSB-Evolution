@@ -43,21 +43,6 @@ public class HuntBehaviour extends MoveAnywhereBehaviour {
 			c.isHunting = false;
 			return false;
 		}
-		
-		
-		/* OLD
-		// if not found, then just move (move behaviour)
-		moveAnywhere(c);
-		*/
-		/*
-		ArrayList<Tile> moves = c.getMoveSet();
-		
-		// always move right (DEBUG)
-		Tile destination = moves.get(2); // 2 is right of current pos
-		
-		
-		moveTo(destination,c);
-		*/
 	}
 	
 	// scours surrounding for tiles that hold a cell

@@ -1,6 +1,8 @@
 package framework;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
 
 import objects.Cell;
@@ -75,8 +77,9 @@ public class World {
 		Random random = RandomGenerator.getInstance().getRandom();
 		
 		int minType = 1;
-		int diffTypes = 2 + (int)(random.nextDouble() * ((4 - 2) + 1));	 // 2,3 or 4 
-		float percentageWorldFilled = 0.1f; 	// fill 60% of world
+		int maxTypes = 6;
+		int diffTypes = 2 + (int)(random.nextDouble() * ((maxTypes - 2) + 1));	 // 2,3 or 4 
+		float percentageWorldFilled = 0.2f; 	// fill 60% of world
 		
 		System.out.println("different types: " + diffTypes);
 		
@@ -102,6 +105,7 @@ public class World {
 				}
 			}
 		}
+		sortCellsBySpeed(currentCells);
 	}
 
 	/*
@@ -120,7 +124,22 @@ public class World {
 		for (Cell nc : nextCells) {
 			currentCells.add(nc);
 		}
+		
+		// sort cells according to speed.
+		// that will guarantee that fast cells move first
+		sortCellsBySpeed(currentCells);
+		//for (Cell c : currentCells) { System.out.println(c.properties.getSpeed()); }
+		
 		nextCells = new ArrayList<Cell>(MEMORY_SIZE);
+	}
+	
+	public void sortCellsBySpeed(ArrayList<Cell> cellArray) {
+		Collections.sort(cellArray, new Comparator<Cell>() {
+			@Override
+			public int compare(Cell c1, Cell c2) {
+				return Integer.signum(c2.properties.getSpeed() - c1.properties.getSpeed());
+			}
+		});
 	}
 	
 	/*
@@ -129,7 +148,8 @@ public class World {
 			System.out.println(""+ cell.x + " "+ cell.y);
 		}
 		System.out.println("n cells =" + cells.size());
-	}*/
+	}
+	*/
 		
 	/**
 	 * getter iterations
@@ -171,8 +191,7 @@ public class World {
 		return (int)Math.ceil(Math.sqrt(DX * DX  + DY * DY) / TILE_SIZE);
 	}
 	
-	public Tile getTile(int x, int y){
-		
+	public Tile getTile(int x, int y) {
 		
 		int startx = tileArray[0][0].x;
 		int starty = tileArray[0][0].y;
@@ -182,7 +201,11 @@ public class World {
 		int xTiles = -1;
 		int yTiles = -1;
 		
+		if (x > endx){
+			xTiles = TILE_COUNT - 1;
+		}
 		
+/*<<<<<<< HEAD
 			if (x > endx){
 			
 				xTiles = TILE_COUNT - 1;
@@ -210,23 +233,27 @@ public class World {
 			if (yTiles == -1) {
 				yTiles = (y - starty - yOffSet)/TILE_SIZE;
 			}
+=======*/
+		if (x < startx){
+			xTiles = 0;
+		}
+/*>>>>>>> upstream/master*/
 		
-		//Old inefficient code
-		/*
-		double smallestLength = 50;
-		Tile old = null;
+		if (y > endy){
+			yTiles = TILE_COUNT - 1;
+		}
 		
-		for (Tile[] tiles : tileArray) {
-			for (Tile t : tiles) {
-				int DX = (t.x + xOffSet) - x;
-				int DY = (t.y + yOffSet) - y;
-				double length = Math.sqrt(DX *DX  + DY * DY);
-				if (length < smallestLength) {
-					smallestLength = length;
-					closest = t;
-				}
-			}
-		}*/
+		if (y < starty){
+			yTiles = 0;
+		}
+		
+		if (xTiles == -1) {
+			xTiles = (x - startx - xOffSet)/TILE_SIZE;
+		}
+		
+		if (yTiles == -1) {
+			yTiles = (y - starty - yOffSet)/TILE_SIZE;
+		}
 		
 		return tileArray[yTiles][xTiles];
 	}
