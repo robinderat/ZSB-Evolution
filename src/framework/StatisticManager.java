@@ -1,0 +1,123 @@
+package framework;
+
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+import objects.Cell;
+
+public class StatisticManager {
+
+	private static StatisticManager instance = null;
+	
+	public class CellTypeStatistic {
+		public int type;		// which type
+		public int aliveCount;	// how much alive
+		public int deadCount;	// how much dead
+		
+		public CellTypeStatistic(int t) {
+			type = t;
+			aliveCount = 0;
+			deadCount = 0;
+		}
+		
+		public String toString() {
+			return "Type: " + type + " aliveCount " + aliveCount + " deadCount " + deadCount;
+		}
+	}
+	
+	private ArrayList<ArrayList<CellTypeStatistic>> cellStatistics;
+	private StatisticManager() {
+		cellStatistics = new ArrayList<ArrayList<CellTypeStatistic>>();
+	}
+	
+	public void takeSnapshot(World w, int step) {
+		
+		ArrayList<CellTypeStatistic> stats = new ArrayList<CellTypeStatistic>();
+		
+		for (Cell c : w.currentCells) {
+			CellTypeStatistic statToWorkWith = null;
+			for (CellTypeStatistic s : stats) {
+				if (s.type == c.type) {
+					statToWorkWith = s;
+					break;
+				}
+			}
+			if (statToWorkWith == null) {
+				statToWorkWith = new CellTypeStatistic(c.type);
+				stats.add(statToWorkWith);
+			}
+			
+			if (c.isAlive()) {
+				statToWorkWith.aliveCount++;
+			} else {
+				statToWorkWith.deadCount++;
+			}
+		}
+		
+		cellStatistics.add(stats);
+	}
+	
+	public ArrayList<ArrayList<CellTypeStatistic>> getCellStatistics() {
+		return cellStatistics;
+	}
+	
+	public void printCellStatistics() {
+		ArrayList<CellTypeStatistic> lastStats = cellStatistics.get(cellStatistics.size() - 1);
+		for (CellTypeStatistic stat : lastStats) {
+			System.out.println(stat);
+		}
+	}
+	
+	public void printStatisticsToText() {
+		try {
+			PrintWriter writer = new PrintWriter("statistics.txt", "UTF-8");
+			
+			int step = 1;
+			for (ArrayList<CellTypeStatistic> cs : cellStatistics) {
+				
+				Collections.sort(cs, new Comparator<CellTypeStatistic>() {
+
+					@Override
+					public int compare(CellTypeStatistic arg0,
+							CellTypeStatistic arg1) {
+						// TODO Auto-generated method stub
+						return Integer.signum(arg0.type - arg1.type);
+					}
+					
+				});
+				
+				writer.println(step);
+				for (CellTypeStatistic stat : cs) {
+					writer.print(stat.type + "," + stat.aliveCount + "," + stat.deadCount);
+					writer.println("");
+				}
+				step++;
+			}
+			
+			writer.close();
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public static StatisticManager getInstance() {
+		if (StatisticManager.instance == null) {
+			StatisticManager.instance = new StatisticManager();
+		}
+		
+		return StatisticManager.instance;
+	}
+	
+	
+	
+}

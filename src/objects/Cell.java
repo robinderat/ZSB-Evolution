@@ -309,9 +309,7 @@ public class Cell {
 	}
 	
 	public ArrayList<Tile> getMoveSet() {
-		
 		int moveRad = properties.getCurrentEnergy() < properties.getSpeed() ? properties.getCurrentEnergy() : properties.getSpeed();
-		
 		return getTilesInRadius(moveRad);
 	}
 	

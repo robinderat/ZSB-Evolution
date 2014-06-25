@@ -20,7 +20,7 @@ public class World {
 	public int xOffSet = 0;
 	public int yOffSet = 0;
 	
-	public int maxTypes = 9; // voor koen
+	public static int maxTypes = 9; // voor koen
 	
 	private int iterations = 1;
 	
@@ -124,6 +124,11 @@ public class World {
 			Cell c = currentCells.get(j);
 			c.update();	
 		}
+		
+		StatisticManager.getInstance().takeSnapshot(this, 1);
+		
+		StatisticManager.getInstance().printCellStatistics();
+		
 		currentCells = new ArrayList<Cell>(MEMORY_SIZE);
 		
 		for (Cell nc : nextCells) {
