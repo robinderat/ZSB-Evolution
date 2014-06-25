@@ -124,18 +124,20 @@ public class Cell {
 	// cell eats another cell and fills current energy up to max if possible
 	public void eat(Cell target) {
 		int energyValue = (int) Math.ceil(target.properties.getStrength() * 0.5f); // this is hardcoded, should really be taken from target cell or something
+		if (energyValue <= 0) {
+			energyValue = 1;
+		}
 		if (properties.getCurrentEnergy() < properties.getMaxEnergy() - energyValue) {
 			properties.setCurrentEnergy(properties.getCurrentEnergy() + energyValue);
 		} else {
 			properties.setCurrentEnergy(properties.getMaxEnergy());
 		}
-		worldRef.get().currentCells.remove(target);
 	}
 	
-	// 
 	public void attack(Cell target) {
 		target.properties.setCurrentEnergy(target.properties.getCurrentEnergy() - properties.getStrength());
-		if(target.isAlive() == false) {
+		properties.setCurrentEnergy(properties.getCurrentEnergy() - target.properties.getStrength());
+		if(isAlive() && target.isAlive() == false) {
 			eat(target);
 		}
 	}
@@ -191,6 +193,9 @@ public class Cell {
 		if (getMoveSet().contains(destination)) {
 			// decrease energy
 			int dist = worldRef.get().pointDistanceInWorldUnit(x, y, destination.x, destination.y);
+			if (dist <= 0) {
+				dist = 1;
+			}
 			properties.setCurrentEnergy(properties.getCurrentEnergy() - dist);
 		
 			// update position
