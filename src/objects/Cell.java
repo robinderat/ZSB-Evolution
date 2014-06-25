@@ -63,7 +63,7 @@ public class Cell {
 		y = locY;
 		
 		type = t;
-		if (type > w.maxTypes || type < 1) {
+		if (type > World.maxTypes || type < 1) {
 			type = 1;
 		}
 		

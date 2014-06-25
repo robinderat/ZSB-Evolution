@@ -11,17 +11,21 @@ public class Settings {
 	public float strengthWanderModifier;
 	public float eatingEnergyGain;
 	public float veryHungryThreshold;
+	
+	public float startEnergyRate; 
+	
 	public boolean allowCannibalism;
 	
 	
 	public Settings() {
 		fillRate = 0.2f;
-		mutationRate = 0.001f;
+		mutationRate = 0.01f;
 		crossoverRate = 0.7f;
-		matingEnergyCost = 0.55f;
+		matingEnergyCost = 0.45f;
 		strengthWanderModifier = 0.2f;
 		eatingEnergyGain = 0.8f;
 		veryHungryThreshold = 0.25f;
+		startEnergyRate = 0.8f;
 		allowCannibalism = true;
 	}
 	
