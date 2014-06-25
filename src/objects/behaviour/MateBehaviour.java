@@ -44,9 +44,9 @@ public class MateBehaviour extends Behaviour {
 			}
 		}
 		
-		if (bestTile == null || partner == null) {	
-			return false;
-		}
+		if (bestTile == null  || partner == null) return false;
+		
+		/* c.worldRef.get().getCellAtPositionCurrent(bestTile.x, bestTile.y) != null */
 		
 		c.moveTo(bestTile);
 		//System.out.println("cellx: " + c.x + " celly " + c.y);
@@ -75,7 +75,7 @@ public class MateBehaviour extends Behaviour {
 			}
 		}
 
-		////System.out.println(cells);
+		//System.out.println(cells);
 		return cells;
 	}
 

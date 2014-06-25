@@ -29,7 +29,7 @@ public class FleeBehaviour extends Behaviour {
 				Tile proposedTile = null;
 				double distance = 0;
 				for (Tile tile : tiles) {
-
+					
 					int Dx = tile.x - t.x; 
 					int Dy = tile.y - t.y;
 					double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
@@ -39,9 +39,9 @@ public class FleeBehaviour extends Behaviour {
 						proposedTile = tile;
 					}
 				}
-				if(proposedTile != null){
+				if(proposedTile != null && c.worldRef.get().getCellAtPositionCurrent(proposedTile.x, proposedTile.y) == null){
 					options.add(proposedTile);
-				}	
+				}
 			}
 			double bestDistance = 0;
 			double totalDistance = 0;
