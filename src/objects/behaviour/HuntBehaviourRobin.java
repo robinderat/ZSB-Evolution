@@ -54,7 +54,7 @@ public class HuntBehaviourRobin extends Behaviour {
 		c.moveTo(bestTile);
 		
 		if(c.x == bestTile.x && c.y == bestTile.y){
-			c.attack(finalTarget);
+			c.eat(finalTarget);
 		}
 		
 		return false;

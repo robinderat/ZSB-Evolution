@@ -76,14 +76,12 @@ public class Cell {
 		behaviours = new ArrayList<Behaviour>();
 
 		//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
-		//behaviours.add(new HuntBehaviour());
-		//behaviours.add(new MateBehaviour());
-
-		//behaviours.add(new HuntBehaviourRobin());
-
-
-		behaviours.add(new FleeBehaviour());
 		behaviours.add(new HuntBehaviour());
+		//behaviours.add(new HuntBehaviourRobin());
+		behaviours.add(new MateBehaviour());
+		behaviours.add(new FleeBehaviour());
+		//behaviours.add(new ApproachCenterBehaviour());
+		//behaviours.add(new ApproachBorderBehaviour());
 		behaviours.add(new WanderBehaviour());
 		behaviours.add(new StayBehaviour());
 	}
@@ -120,7 +118,7 @@ public class Cell {
 	}
 
 	// cell eats another cell and fills current energy up to max if possible
-	public void attack(Cell target) {
+	public void eat(Cell target) {
 		
 		int attackValue = properties.getStrength();
 		if (attackValue <= 0) {
@@ -140,55 +138,6 @@ public class Cell {
 		}
 	}
 	
-	// changes target so that it is closer to where the cell can go
-	public void moveTowards(Tile target) {
-		ArrayList<Tile> tiles = getMoveSet();
-		
-		double distance = 500;
-		int Dx;
-		int Dy;
-		Tile bestTile = null;
-		for (Tile tile : tiles) {
-			Dx = tile.x - target.x; 
-			Dy = tile.y - target.y;
-			double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
-			
-			if (newDistance < distance) {
-				distance = newDistance;
-				bestTile = tile;
-			}
-		}
-		
-		if (bestTile != null) {
-			moveTo(bestTile);
-		}
-	}
-	
-	// cell moves to new destination
-	public void moveTo(Tile destination) {
-		//System.out.println("destx " + destination.x + " desty " + destination.y);
-		if (getMoveSet().contains(destination)) {
-			// decrease energy
-			int dist = worldRef.get().pointDistanceInWorldUnit(x, y, destination.x, destination.y);
-			if (dist <= 0) {
-				dist = 1;
-			}
-			properties.setCurrentEnergy(properties.getCurrentEnergy() - dist);
-		
-			// update position
-			x = destination.x;
-			y = destination.y;
-			
-			
-			// we dont kill him here. even if energy reaches 0, we let him live one more iteration
-			worldRef.get().nextCells.add(this);
-
-		} else {
-			// will call moveTo again. 
-			moveTowards(destination);	
-		}		
-	}
-	
 	// creates a new cell using dna of two mating cells
 	public boolean mate(Cell part){
 		
@@ -197,7 +146,7 @@ public class Cell {
 		String newDNA = worldRef.get().cBreeder.merge(ownDNA, otherDNA)[0];
 		
 		ArrayList<Tile> tiles = getFreeNeighbours();
-		if(tiles.size() > 0){
+		if(tiles.size() > 0 && tiles.get(0).worldRef.get().getCellAtPositionNext(tiles.get(0).x,tiles.get(0).y)==null){
 			
 			double energyCost = Settings.getInstance().matingEnergyCost;
 
@@ -220,6 +169,7 @@ public class Cell {
 			properties.setCurrentEnergy(properties.getCurrentEnergy() - energyLostCell2);
 			
 			Cell c = new Cell(worldRef.get(), tiles.get(0).x, tiles.get(0).y, type, newDNA);
+
 			worldRef.get().nextCells.add(c);
 			System.out.println("New cell born.");
 			
@@ -231,15 +181,88 @@ public class Cell {
 		return false;
 	}
 
+	/*
+	// changes target so that it is closer to where the cell can go
+	public void moveTowards(Tile target) {
+		ArrayList<Tile> tiles = getMoveSet();
+		
+		double distance = 500;
+		int Dx;
+		int Dy;
+		Tile bestTile = null;
+		for (Tile tile : tiles) {
+			Dx = tile.x - target.x; 
+			Dy = tile.y - target.y;
+			double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
+			
+			if (newDistance < distance) {
+				distance = newDistance;
+				bestTile = tile;
+			}
+		}
+		
+		if (bestTile != null) {
+			moveTo(bestTile);
+		}
+	}*/
 	
+	// cell moves to new destination
+	public boolean moveTo(Tile destination) {
+		//System.out.println("destx " + destination.x + " desty " + destination.y);
+		boolean madeItInOneMove = true;
+		
+		// loop towards until a move can be made
+		while (!this.getMoveSet().contains(destination)){
+			madeItInOneMove = false;
+			
+			ArrayList<Tile> tiles = getMoveSet();
+			
+			double distance = 500;
+			int Dx;
+			int Dy;
+			Tile bestTile = null;
+			for (Tile tile : tiles) {
+				Dx = tile.x - destination.x; 
+				Dy = tile.y - destination.y;
+				double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
+				
+				if (newDistance < distance) {
+					distance = newDistance;
+					bestTile = tile;
+				}
+			}
+			if (bestTile != null) destination = bestTile;
+			else {
+				System.out.println("now");
+				return false;
+			}
+		}
+		// decrease energy
+		int dist = worldRef.get().pointDistanceInWorldUnit(x, y, destination.x, destination.y);
+		
+		dist += (int)Math.ceil(dist * Settings.getInstance().moveStrengthModifier);
+		if (dist <= 0) {
+			dist = 1;
+		}
+		properties.setCurrentEnergy(properties.getCurrentEnergy() - dist);
 	
+		// update position
+		x = destination.x;
+		y = destination.y;
+		
+		// we dont kill him here. even if energy reaches 0, we let him live one more iteration
+		worldRef.get().nextCells.add(this);
 
+		return madeItInOneMove;
+	}
 	
 	private ArrayList<Tile> getFreeNeighbours() {
 		
 		ArrayList<Tile> neighbours = new ArrayList<Tile>();
 		World world = worldRef.get();
 		Tile t = null;
+		
+		//System.out.println(this.x + " " + this.y + " me");
 		
 		 t = world.getTile(x - 1 * world.TILE_SIZE , y); 
 		if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
@@ -252,7 +275,9 @@ public class Cell {
 		 
 		 t = world.getTile(x, y + 1 * world.TILE_SIZE);
 		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
-		
+		 
+		// for (Tile n : neighbours) System.out.println(n.x + " " + n.y);
+		//System.out.println(neighbours);
 		
 		return neighbours;
 	}
@@ -264,16 +289,16 @@ public class Cell {
 		Tile t = null;
 		
 		 t = world.getTile(x - 1 * world.TILE_SIZE , y); 
-		if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null ) neighbours.add(t);
+	     if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null && world.getCellAtPositionNext(t.x,t.y)==null) neighbours.add(t);
 		
 		 t = world.getTile(x + 1 * world.TILE_SIZE , y); 
-		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null && world.getCellAtPositionNext(t.x,t.y)==null) neighbours.add(t);
 		 
 		 t = world.getTile(x, y - 1 * world.TILE_SIZE);
-		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null && world.getCellAtPositionNext(t.x,t.y)==null) neighbours.add(t);
 		 
 		 t = world.getTile(x, y + 1 * world.TILE_SIZE);
-		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null && world.getCellAtPositionNext(t.x,t.y)==null) neighbours.add(t);
 		 
 		 Tile closest = null;
 		 double bestDistance = 500;
@@ -289,7 +314,7 @@ public class Cell {
 		 }
 		return closest;
 	}
-	
+
 	public ArrayList<Tile> getTilesInRadius(int rad, boolean isViewing) {
 
 		ArrayList<Tile> result = new ArrayList<Tile>();
@@ -314,11 +339,11 @@ public class Cell {
 					//System.out.println("X: " + _x + " Y: " + _y);
 					Tile tile = worldRef.get().getTile(_x, _y);
 					
-					if (isHunting && tile != null) result.add(tile);
+					if (isHunting && tile != null && tile.worldRef.get().getCellAtPositionNext(tile.x, tile.y)==null) result.add(tile);
 					else {
 						if (tile != null && !result.contains(tile)){
 							if (isViewing) result.add(tile);
-							else if (tile.worldRef.get().getCellAtPositionCurrent(tile.x, tile.y) == null) result.add(tile);
+							else if (tile.worldRef.get().getCellAtPositionCurrent(tile.x, tile.y) == null && tile.worldRef.get().getCellAtPositionNext(tile.x,tile.y)==null) result.add(tile);
 						}
 					}
 				}

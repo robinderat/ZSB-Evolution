@@ -48,16 +48,17 @@ public class MateBehaviour extends Behaviour {
 		
 		/* c.worldRef.get().getCellAtPositionCurrent(bestTile.x, bestTile.y) != null */
 		
-		c.moveTo(bestTile);
-		//System.out.println("cellx: " + c.x + " celly " + c.y);
-		if (c.x == bestTile.x && c.y == bestTile.y) {
-			if (c.mate(partner)) {
-				//System.out.println("Mating");
-				return true;
+		if (c.moveTo(bestTile)) {
+			//System.out.println("cellx: " + c.x + " celly " + c.y);
+			if (c.x == bestTile.x && c.y == bestTile.y) {
+				if (c.mate(partner)) {
+					//System.out.println("Mating");
+					return true;
+				}
 			}
 		}
 		
-		return false;
+		return true;
 	}
 	
 	private boolean canMate(Cell c1) {

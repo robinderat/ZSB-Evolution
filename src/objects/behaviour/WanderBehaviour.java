@@ -30,7 +30,7 @@ public class WanderBehaviour extends Behaviour {
 		int destIndex = gen.getRandom().nextInt(moves.size());
 		
 		Tile destination = moves.get(destIndex);
-		if (c.worldRef.get() != null && c.worldRef.get().getCellAtPositionCurrent(destination.x, destination.y) == null){
+		if (c.worldRef.get() != null && c.worldRef.get().getCellAtPositionCurrent(destination.x, destination.y) == null && c.worldRef.get().getCellAtPositionNext(destination.x,destination.y)==null){
 			c.moveTo(destination);
 
 			return true;

@@ -34,7 +34,7 @@ public class HuntBehaviour extends Behaviour {
 				
 				c.moveTo(target);
 			} else { // if close, eat
-				c.attack(target.worldRef.get().getCellAtPositionCurrent(target.x, target.y));
+				c.eat(target.worldRef.get().getCellAtPositionCurrent(target.x, target.y));
 				c.moveTo(target);
 			}
 			
