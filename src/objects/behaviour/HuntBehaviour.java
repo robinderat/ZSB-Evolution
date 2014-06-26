@@ -109,27 +109,25 @@ public class HuntBehaviour extends Behaviour {
 		return optimalTile;
 	}
 	
-	
+	// compares strength of other cell with own strength. nearby cells of same type improve cell's overal strength.
 	private boolean isWeaker(Cell target, Cell me){
-		
-		int friendStrength = 0;
-		ArrayList <Tile> vision = me.getPerceptionSet(); 
-		ArrayList <Cell> friends = new ArrayList<Cell>();
-		
-		for(Tile t : vision) {
-			Cell cell = t.worldRef.get().getCellAtPositionNext(t.x, t.y);
-			if (cell != null && cell != me && cell.type == me.type) {
-				friends.add(cell);
+		int meStrength = me.properties.getStrength();
+		// anti cannibalism check
+		if (target.type != me.type) {
+			int friendStrength = 0;
+			ArrayList <Tile> vision = me.getPerceptionSet(); 
+			ArrayList <Cell> friends = new ArrayList<Cell>();
+			
+			for(Tile t : vision) {
+				Cell cell = t.worldRef.get().getCellAtPositionNext(t.x, t.y);
+				if (cell != null && cell != me && cell.type == me.type) {
+					friends.add(cell);
+				}
 			}
+			
+			for (Cell friend : friends) friendStrength += friend.properties.getStrength();
+			meStrength += friendStrength;
 		}
-		
-		for (Cell friend : friends) {
-			friendStrength += friend.properties.getStrength();
-		}
-		
-		int targetStrength = target.properties.getStrength();
-		int meStrength = me.properties.getStrength() + friendStrength;
-		
-		return meStrength > targetStrength;
+		return meStrength > target.properties.getStrength();
 	}
 }
