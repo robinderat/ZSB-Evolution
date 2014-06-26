@@ -319,11 +319,12 @@ public class Drawer extends JPanel {
 			
 			if (selectedCell != null)
 			{
+				g.drawString(selectedCell.toString(), 1020, 550);
 				g.drawString("Stats and Stuff", 1020, 525);
 				g.setColor(Color.green);
 				g.drawString("-------------------", 1020, 535);
 				g.setColor(Color.darkGray);
-				g.drawString("13th strange prime = 101", 1020, 550); 
+				//g.drawString("13th strange prime = 101", 1020, 550); 
 			}
 		}
 	}
@@ -332,15 +333,17 @@ public class Drawer extends JPanel {
 	private void paintSelected(Graphics g) {
 		Tile t = world.selected;
 		if (t != null) {
+			
+			
 			g.drawImage(select, t.x + world.xOffSet - world.TILE_SIZE / 2 , t.y + world.yOffSet - world.TILE_SIZE /2, world.TILE_SIZE , world.TILE_SIZE , null);
 		}
 	}
 		
 	private void paintCells(Graphics g) {
 		for(Cell cell : world.getCells()){
+			
 			int drawX = cell.x + world.xOffSet - world.TILE_SIZE / 2;
 			int drawY = cell.y + world.yOffSet - world.TILE_SIZE / 2; 
-			
 			g.drawImage(cell.img, drawX, drawY, world.TILE_SIZE, world.TILE_SIZE, null);
 		}
 		

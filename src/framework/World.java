@@ -12,7 +12,7 @@ public class World {
 
 	Screen frame;
 	public final int TILE_SIZE = 15;
-	public final int TILE_COUNT = 10;
+	public final int TILE_COUNT = 40;
 	public final int MEMORY_SIZE = TILE_COUNT * TILE_COUNT;
 	
 	public boolean doIterate; // bool if iteration should be done in while loop
@@ -146,9 +146,9 @@ public class World {
 		StatisticManager.getInstance().takeSnapshot(this, 1);
 		
 
-		//System.out.println("cells died: " + lastStepCellsDied);
-		//System.out.println("cells born: " + lastStepCellsBorn);
-		//StatisticManager.getInstance().printCellStatistics();
+		System.out.println("cells died: " + lastStepCellsDied);
+		System.out.println("cells born: " + lastStepCellsBorn);
+		StatisticManager.getInstance().printCellStatistics();
 		
 		currentCells = new ArrayList<Cell>(MEMORY_SIZE);
 		 

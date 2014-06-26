@@ -146,9 +146,9 @@ public class StatisticManager {
 					
 				});
 				
-				writer.print(step + ":");
+				writer.println(step + ":");
 				for (CellTypeStatistic stat : cs) {
-					writer.print(stat.type + "," + stat.aliveCount + "," + stat.deadCount + ":");
+					writer.println(stat.type + "," + stat.aliveCount + "," + stat.deadCount + "," + stat.dnaVariation);
 				}
 				step++;
 			}
