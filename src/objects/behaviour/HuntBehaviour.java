@@ -27,7 +27,7 @@ public class HuntBehaviour extends Behaviour {
 		// if found, check if you can eat/beat them
 		if (target != null) {
 			if (c.moveTo(target)) {
-				c.eat(prey);
+				c.stab(prey);
 			}
 			return true;
 		}

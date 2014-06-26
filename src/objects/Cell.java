@@ -125,7 +125,7 @@ public class Cell {
 	}
 
 	// cell eats another cell and fills current energy up to max if possible
-	public void eat(Cell target) {
+	public void stab(Cell target) {
 		
 		int attackValue = properties.getStrength();
 		if (attackValue <= 0) {
