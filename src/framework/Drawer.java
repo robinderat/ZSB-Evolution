@@ -31,8 +31,8 @@ public class Drawer extends JPanel {
 	Image select = new ImageIcon("src/art/Selected.png").getImage();
 	Image infoBg = new ImageIcon("src/art/Data.png").getImage();
 	
-	JButton populateButton = new JButton("populate");
-	JButton clearButton = new JButton("clear");
+	JButton populateButton = new JButton("Populate (n)");
+	JButton clearButton = new JButton("Clear (c)");
 	
 	JLabel mutationLabel = new JLabel("Mutation Rate", JLabel.CENTER);
 	JLabel currentMutationRate = new JLabel("", JLabel.CENTER);
@@ -65,7 +65,12 @@ public class Drawer extends JPanel {
 	JLabel currentMoveStrengthModifier = new JLabel("", JLabel.CENTER);
 	JSlider moveStrengthModifierSlider = new JSlider(JSlider.HORIZONTAL, 0, 200, 20);
 	
-	JCheckBox allowCanibalismButton = new JCheckBox("Canibalism");
+	JCheckBox allowCannibalismButton = new JCheckBox("Canibalism");
+
+	JButton settingsButtonJ = new JButton("j settings");
+	JButton settingsButtonR = new JButton("r settings");
+	JButton settingsButtonM = new JButton("m settings");
+	JButton settingsButtonK = new JButton("k settings");
 
 	
 	public Drawer(World c) {
@@ -174,14 +179,33 @@ public class Drawer extends JPanel {
 		moveStrengthModifierSlider.addChangeListener(bl);
 		moveStrengthModifierSlider.setFocusable(false);
 		
+		allowCannibalismButton.setBounds(825, 500, 100, 35);
+	    allowCannibalismButton.setSelected(true);
+	    allowCannibalismButton.setFocusable(false);
+	    allowCannibalismButton.addItemListener(bl);
+	    allowCannibalismButton.setSelected(settings.allowCannibalism);
+
+		settingsButtonJ.setBounds(800, 560, 94, 20);
+		settingsButtonJ.setFocusable(false);
+		settingsButtonJ.setActionCommand("jSettings");
+		settingsButtonJ.addActionListener(bl);
 		
-		allowCanibalismButton.setBounds(825, 500, 100, 35);
-	    allowCanibalismButton.setSelected(true);
-	    allowCanibalismButton.setFocusable(false);
-	    allowCanibalismButton.addItemListener(bl);
-	    allowCanibalismButton.setSelected(settings.allowCannibalism);
+		settingsButtonR.setBounds(800, 580, 94, 20);
+		settingsButtonR.setFocusable(false);
+		settingsButtonR.setActionCommand("rSettings");
+		settingsButtonR.addActionListener(bl);
 		
+		settingsButtonM.setBounds(894, 560, 94, 20);
+		settingsButtonM.setFocusable(false);
+		settingsButtonM.setActionCommand("mSettings");
+		settingsButtonM.addActionListener(bl);
 		
+		settingsButtonK.setBounds(894, 580, 94, 20);
+		settingsButtonK.setFocusable(false);
+		settingsButtonK.setActionCommand("kSettings");
+		settingsButtonK.addActionListener(bl);
+	    
+	    
 		super.add(clearButton);
 		
 		super.add(fillRateSlider);
@@ -216,7 +240,12 @@ public class Drawer extends JPanel {
 		super.add(currentMoveStrengthModifier);
 		super.add(moveStrengthModifierSlider);
 		
-		super.add(allowCanibalismButton);
+		super.add(allowCannibalismButton);
+		
+		super.add(settingsButtonJ);
+		super.add(settingsButtonM);
+		super.add(settingsButtonR);
+		super.add(settingsButtonK);
 		
 		world = c;
 	}
@@ -320,6 +349,11 @@ public class Drawer extends JPanel {
 	    	{
 	    		world.clear();
 	    	}
+	    	
+	    	if ("jSettings".equals(e.getActionCommand())) updateSliderValues('j');
+	    	if ("rSettings".equals(e.getActionCommand())) updateSliderValues('r');
+	    	if ("mSettings".equals(e.getActionCommand())) updateSliderValues('m');
+	    	if ("kSettings".equals(e.getActionCommand())) updateSliderValues('k');
 	    }
 	    
 	    public void stateChanged(ChangeEvent e) {
@@ -378,7 +412,7 @@ public class Drawer extends JPanel {
 	    	Settings settings = Settings.getInstance();
 	    	Object source = e.getItemSelectable();
 
-	        if (source == allowCanibalismButton) {
+	        if (source == allowCannibalismButton) {
 	        	if (e.getStateChange() == ItemEvent.DESELECTED) {
 	        		settings.allowCannibalism = false;
 	        	}
@@ -390,5 +424,23 @@ public class Drawer extends JPanel {
 
 	        
 	    }
+	}
+	
+	// updates a slider to fit with someone changing to their own initial settings
+	private void updateSliderValues(char c){
+		Settings set = Settings.getInstance();
+		set.newSettings(c);
+		
+		currentFillRate.setText(String.valueOf((int)(set.fillRate*100)));	
+		currentMutationRate.setText(String.valueOf((int)(set.mutationRate*1000)));
+		currentCrossoverRate.setText(String.valueOf((int)(set.crossoverRate*100)));
+
+		currentMatingEnergyRequirement.setText(String.valueOf((int)(set.matingEnergyCost*100)));
+		currentEatingEnergyGain.setText(String.valueOf((int)(set.eatingEnergyGain*100)));
+		currentVeryHungryThreshold.setText(String.valueOf((int)(set.veryHungryThreshold*100)));
+
+		currentStartEnergyRate.setText(String.valueOf((int)(set.startEnergyRate*100)));
+		currentMoveStrengthModifier.setText(String.valueOf((int)(set.moveStrengthModifier*100)));
+		allowCannibalismButton.setSelected(set.allowCannibalism);
 	}
 }

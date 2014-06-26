@@ -53,7 +53,7 @@ public class MateBehaviour extends Behaviour {
 			if (c.x == bestTile.x && c.y == bestTile.y) {
 				if (c.mate(partner)) {
 					//System.out.println("Mating");
-					return true;
+					//return true;
 				}
 			}
 		}

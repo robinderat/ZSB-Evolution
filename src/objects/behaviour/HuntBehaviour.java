@@ -10,43 +10,29 @@ import objects.Cell;
 // in this behaviour the cell scours its surroundings for cells that are weaker than it
 public class HuntBehaviour extends Behaviour {
 
-	private boolean targetIsClose;
+	double veryHungryRate = Settings.getInstance().veryHungryThreshold;
+	Cell prey;
 	
 	@Override
 	public boolean execute(Cell c) {
 		if (!(c.isAlive())) {
 			return false;
 		}
+		if (!(c.isHungry())) return false;
 
-		c.isHunting = true;
-		targetIsClose = false;
 		ArrayList<Tile> perception = c.getPerceptionSet();
 
 		// first search for other cells in area
 		Tile target = scour(perception, c);
 		// if found, check if you can eat/beat them
 		if (target != null) {
-			// if so, check if they are far or close
-			if (!targetIsClose){ // if far, approach
-				c.isHunting = false;
-				
-				
-				
-				c.moveTo(target);
-			} else { // if close, eat
-				c.eat(target.worldRef.get().getCellAtPositionCurrent(target.x, target.y));
-				c.moveTo(target);
+			if (c.moveTo(target)) {
+				c.eat(prey);
 			}
-			
-			// and return true!
-			c.isHunting = false;
 			return true;
 		}
 		// if not found, return (do nothing) ==> will automatically try another behaviour
-		else {
-			c.isHunting = false;
-			return false;
-		}
+		else return false;
 	}
 	
 	// scours surrounding for tiles that hold a cell
@@ -62,7 +48,6 @@ public class HuntBehaviour extends Behaviour {
 			if (target != null && target != me && target.isAlive()){
 				// if very hungry, cells resort to cannibalism
 				boolean allowCannibalism = Settings.getInstance().allowCannibalism;
-				double veryHungryRate = Settings.getInstance().veryHungryThreshold;
 				if (allowCannibalism && (me.properties.getCurrentEnergy() < me.properties.getMaxEnergy() * veryHungryRate && target.type == me.type)){
 					targets.add(target);
 					continue;
@@ -72,68 +57,79 @@ public class HuntBehaviour extends Behaviour {
 			}
 		}
 		// if found, see if it can eat/beat any of those cells
-		return chooseOnlyBeatableTargets(targets, me);
+		return chooseTarget(targets, me);
 	}
 	
 	// selects a target from a list of targets that it can eat/beat
-	public Tile chooseOnlyBeatableTargets(CopyOnWriteArrayList<Cell> targets, Cell me){
+	public Tile chooseTarget(CopyOnWriteArrayList<Cell> targets, Cell me){
 		// cant do for cell in targets because of concurrent modification, so need a while true loop
 		for (Cell potentialFood : targets) {
 		
-			// cell must decide whether it can beat target. it does this based on two relevant stats
-			// (energy and strength). right now our idea is basing it solely on strength
-			if (me.properties.getStrength() < potentialFood.properties.getStrength()) {
+			if (!(isWeaker(potentialFood,me)) || !(me.properties.getCurrentEnergy() < me.properties.getMaxEnergy() * veryHungryRate)) {
 				targets.remove(potentialFood);
 			}
-			
 		
 		}
-		// now that it has filtered its list to only targets it thinks it can beat, it is time to pick one
+		// now that it has filtered its list to only targets it wants to beat, it is time to pick one
 		return bestOfTargets(targets, me);
 	}
 	
 	// filters list until only one target is left, based on energy and/or strength
-	// NOTE: right now selects weakest, maybe we should do this instead until strongest is left?
-	// SOURCE: how do they do that in nature?
-	// OTHER NOTE: ideally, we would weigh distance to target and strength of target and pick best based on both
-	// ^for now though, just base on strength
-	// OVERRULED : actually, for now I am basing this on energy
 	public Tile bestOfTargets(CopyOnWriteArrayList<Cell> targets, Cell me){
 		if (targets.isEmpty()) return null;	
 		
-		// first check if one or more of the targets is a neighbor (an optimal target)
-
-		ArrayList<Cell> optimalTargets = new ArrayList<Cell>();
-		ArrayList<Tile> neighbors = me.getMoveSet();
+		Tile optimalTile = null;
+		
+		// check if a target has an empty space next to it
+		double shortestDistance = 1000;
 		for (Cell target : targets){
-			Tile them = target.worldRef.get().getTile(target.x,target.y);
-			if (neighbors.contains(them)){
-				optimalTargets.add(target);
-				break;
+			Tile tile = target.getClosestFreeNeighbour(me.x, me.y);
+			if (tile == null) continue;
+			 
+			int Dx = tile.x - me.x;
+			int Dy = tile.y - me.y;
+			double distance = Math.sqrt(Dx * Dx  + Dy * Dy);
+			if (distance < shortestDistance) {
+				shortestDistance = distance;
+				optimalTile = tile;
+				prey = target;
 			}
-		}
-		// if there are neighbors
-		if (!optimalTargets.isEmpty()){
-			targets = new CopyOnWriteArrayList<Cell>();
-			for (Cell t : optimalTargets) targets.add(t);
-			targetIsClose = true;
+
 		}
 		
-		while (targets.size() > 1) {
-			Cell one = targets.get(0);
-			Cell two = targets.get(1);
-			if (one.properties.getCurrentEnergy() >= two.properties.getCurrentEnergy()) targets.remove(one);
-			else if (one.properties.getCurrentEnergy() < two.properties.getCurrentEnergy()) targets.remove(two);
-			// additional if to take the cell closest to hunter if both targets have equal currentEnergy
-			//else {
-			//	if (distance(two)>distance(one))
-			//}
+		//
+		if (optimalTile == null){
+			return null;
 		}
 		
 		// DEBUG write lines to show it hunting
 		//System.out.println("target found: " + targets.get(0).type + " " + targets.get(0).x + " " + targets.get(0).y);
 		// END DEBUG line
 		
-		return targets.get(0).worldRef.get().getTile(targets.get(0).x, targets.get(0).y);
+		return optimalTile;
+	}
+	
+	
+	private boolean isWeaker(Cell target, Cell me){
+		
+		int friendStrength = 0;
+		ArrayList <Tile> vision = me.getPerceptionSet(); 
+		ArrayList <Cell> friends = new ArrayList<Cell>();
+		
+		for(Tile t : vision) {
+			Cell cell = t.worldRef.get().getCellAtPositionNext(t.x, t.y);
+			if (cell != null && cell != me && cell.type == me.type) {
+				friends.add(cell);
+			}
+		}
+		
+		for (Cell friend : friends) {
+			friendStrength += friend.properties.getStrength();
+		}
+		
+		int targetStrength = target.properties.getStrength();
+		int meStrength = me.properties.getStrength() + friendStrength;
+		
+		return meStrength > targetStrength;
 	}
 }

@@ -67,6 +67,10 @@ public class World {
 				// done with iterations
 				if (newIt == 0) {
 					doIterate = false;
+					
+					// here set the new starting value of iterations after iterating
+					// NOTE: maybe we want to be able to set it via a button?
+					setIterations(11);
 				}
 				setIterations(iterations - 1);
 				
@@ -141,9 +145,9 @@ public class World {
 		StatisticManager.getInstance().takeSnapshot(this, 1);
 		
 
-		System.out.println("cells died: " + lastStepCellsDied);
-		System.out.println("cells born: " + lastStepCellsBorn);
-		StatisticManager.getInstance().printCellStatistics();
+		//System.out.println("cells died: " + lastStepCellsDied);
+		//System.out.println("cells born: " + lastStepCellsBorn);
+		//StatisticManager.getInstance().printCellStatistics();
 		
 		currentCells = new ArrayList<Cell>(MEMORY_SIZE);
 		 
@@ -221,42 +225,45 @@ public class World {
 		return (int)Math.ceil(Math.sqrt(DX * DX  + DY * DY) / TILE_SIZE);
 	}
 	
+	// returns a two dimensional array of all tiles, with coordinates that are movable in the JFrame
+	// 
+	// ERROR: when moving screen after having placed cells. perhaps cell x and y must be updated!
 	public Tile getTile(int x, int y) {
 		
 		int startx = tileArray[0][0].x + xOffSet;
 		int starty = tileArray[0][0].y + yOffSet;
-		int endx = tileArray[0][TILE_COUNT -1].x + xOffSet;
+		int endx = tileArray[0][TILE_COUNT -1].x + xOffSet; // 
 		int endy = tileArray[TILE_COUNT -1][0].y + yOffSet;
-		////System.out.println("Startx: " + startx);
-		////System.out.println("Starty: " + starty);
-		////System.out.println("endx: " + endx);
-		////System.out.println("endy: " + endy);
+		//System.out.println("Startx: " + startx);
+		//System.out.println("Starty: " + starty);
+		//System.out.println("endx: " + endx);
+		//System.out.println("endy: " + endy);
 		
 		int xTiles = -1;
 		int yTiles = -1;
 		
 		if (x > endx){
-			////System.out.println("te grote x");
+			//System.out.println("te grote x");
 			xTiles = TILE_COUNT - 1;
 		}
 		if (x < startx){
-			////System.out.println("te kleine x");
+			//System.out.println("te kleine x");
 			xTiles = 0;
 		}
 		if (y > endy){
-			////System.out.println("te grote y");
+			//System.out.println("te grote y");
 			yTiles = TILE_COUNT - 1;
 		}
 		if (y < starty){
-			////System.out.println("te kleine y");
+			//System.out.println("te kleine y");
 			yTiles = 0;
 		}
 		if (xTiles == -1) {
-			////System.out.println((x - startx + xOffSet)/TILE_SIZE);
+			//System.out.println((x - startx + xOffSet)/TILE_SIZE);
 			xTiles = (x - startx + xOffSet)/TILE_SIZE;
 		}
 		if (yTiles == -1) {
-			////System.out.println((y - starty + yOffSet)/TILE_SIZE);
+			//System.out.println((y - starty + yOffSet)/TILE_SIZE);
 			yTiles = (y - starty + yOffSet)/TILE_SIZE;
 		}
 		
@@ -338,4 +345,5 @@ public class World {
 	public void removeCell(Cell cell) {
 		currentCells.remove(cell);
 	}
+	
 }

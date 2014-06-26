@@ -76,9 +76,6 @@ public class Cell {
 		behaviours = new ArrayList<Behaviour>();
 
 		//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
-		//behaviours.add(new HuntBehaviourRobin());
-		
-		// I have placed Mate above Hunt because in the optimal world mating > hunting
 		behaviours.add(new MateBehaviour());
 		behaviours.add(new HuntBehaviour());
 
@@ -123,8 +120,8 @@ public class Cell {
 	}
 	
 	public boolean isHungry(){
-		int hungryFrom = properties.getMaxEnergy() / 10 * 8;
-		return properties.getCurrentEnergy() < hungryFrom;
+		int hungerThreshold = properties.getMaxEnergy() / 10 * 8;
+		return properties.getCurrentEnergy() < hungerThreshold;
 	}
 
 	// cell eats another cell and fills current energy up to max if possible
@@ -243,7 +240,8 @@ public class Cell {
 			}
 			if (bestTile != null) destination = bestTile;
 			else {
-				//System.out.println("now");
+				// in this special case, the cell cannot move towards its destination
+				holdPosition();
 				return false;
 			}
 		}
@@ -265,6 +263,19 @@ public class Cell {
 
 		return madeItInOneMove;
 	}
+	
+	// the cell stays in the same spot. it will lose energy though because it is getting hungry
+	public void holdPosition() {
+		int potDec = (int)Math.ceil(Settings.getInstance().moveStrengthModifier * this.properties.getStrength());
+		if (potDec <= 0) {
+			potDec = 1;
+		}
+		this.properties.setCurrentEnergy(this.properties.getCurrentEnergy() - potDec);
+		
+		// if still alive add to next state of world
+		this.worldRef.get().nextCells.add(this);
+	}
+	
 	
 	private ArrayList<Tile> getFreeNeighbours() {
 		

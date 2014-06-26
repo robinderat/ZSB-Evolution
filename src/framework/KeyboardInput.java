@@ -44,7 +44,7 @@ World world;
 		//System.out.println(typed);
 		
 		// uncomment this line to find out the integer that corresponds to a key
-		//ystem.out.println((int)e.getKeyChar());
+		//System.out.println((int)e.getKeyChar());
 		
 		if (typed == 119){
 			world.movingUp = false;
@@ -81,6 +81,14 @@ World world;
 			world.clear();			
 		}
 		
+		// j
+		if (typed == 106) {
+			Settings set = Settings.getInstance();
+			set.matingEnergyCost = 0.16f;
+			//set.newSettings('j');
+		}
+		
+		
 		// +
 		if (typed == 61) {
 			world.setIterations(world.getIterations() + 1);
@@ -96,7 +104,7 @@ World world;
 			StatisticManager.getInstance().printStatisticsToText();
 		}
 		
-		System.out.println(typed);
+		//System.out.println(typed);
 	}
 
 	@Override
