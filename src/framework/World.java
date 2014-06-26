@@ -70,7 +70,7 @@ public class World {
 					
 					// here set the new starting value of iterations after iterating
 					// NOTE: maybe we want to be able to set it via a button?
-					setIterations(11);
+					setIterations(1);
 				}
 				setIterations(iterations - 1);
 				
@@ -230,10 +230,10 @@ public class World {
 	// ERROR: when moving screen after having placed cells. perhaps cell x and y must be updated!
 	public Tile getTile(int x, int y) {
 		
-		int startx = tileArray[0][0].x + xOffSet;
-		int starty = tileArray[0][0].y + yOffSet;
-		int endx = tileArray[0][TILE_COUNT -1].x + xOffSet; // 
-		int endy = tileArray[TILE_COUNT -1][0].y + yOffSet;
+		int startx = tileArray[0][0].x;
+		int starty = tileArray[0][0].y;
+		int endx = tileArray[0][TILE_COUNT -1].x; // 
+		int endy = tileArray[TILE_COUNT -1][0].y;
 		//System.out.println("Startx: " + startx);
 		//System.out.println("Starty: " + starty);
 		//System.out.println("endx: " + endx);
@@ -260,11 +260,11 @@ public class World {
 		}
 		if (xTiles == -1) {
 			//System.out.println((x - startx + xOffSet)/TILE_SIZE);
-			xTiles = (x - startx + xOffSet)/TILE_SIZE;
+			xTiles = (x - startx)/TILE_SIZE;
 		}
 		if (yTiles == -1) {
 			//System.out.println((y - starty + yOffSet)/TILE_SIZE);
-			yTiles = (y - starty + yOffSet)/TILE_SIZE;
+			yTiles = (y - starty)/TILE_SIZE;
 		}
 		
 		return tileArray[yTiles][xTiles];

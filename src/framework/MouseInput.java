@@ -35,8 +35,8 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		int x = e.getX() - 3;
-		int y = e.getY() - 20;
+		int x = e.getX() - world.xOffSet;
+		int y = e.getY() - 23 - world.yOffSet;
 		
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			Tile t = world.getTile(x, y);
