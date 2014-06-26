@@ -6,7 +6,7 @@ import framework.Settings;
 public class CrossoverBreeder extends Breeder {
 	
 	@Override
-	public String[] merge(String DNA1, String DNA2) {
+	protected String[] merge(String DNA1, String DNA2) {
 		Settings settings = Settings.getInstance();
 		
 		String[] newDNAs = new String[2];
