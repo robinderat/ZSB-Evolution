@@ -9,11 +9,11 @@ public abstract class Breeder {
 	{
 	}
 	
-	String[] breed(String DNA1, String DNA2) {
+	public String[] breed(String DNA1, String DNA2) {
 		return mutate(merge(DNA1, DNA2));
 	}
 	
-	String[] mutate(String[] DNAs) {
+	private String[] mutate(String[] DNAs) {
 		for (int i = 0; i < DNAs.length; i++) {
 			DNAs[i] = mutateString(DNAs[i]);
 		}
@@ -46,5 +46,5 @@ public abstract class Breeder {
 		return newDNA;
 	}
 	
-	abstract String[] merge(String DNA1, String DNA2);
+	abstract protected String[] merge(String DNA1, String DNA2);
 }

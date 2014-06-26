@@ -150,7 +150,7 @@ public class Cell {
 		
 		String ownDNA = properties.getDNA();
 		String otherDNA = part.properties.getDNA();
-		String newDNA = worldRef.get().cBreeder.merge(ownDNA, otherDNA)[0];
+		String newDNA = worldRef.get().cBreeder.breed(ownDNA, otherDNA)[0];
 		
 		ArrayList<Tile> tiles = getFreeNeighbours();
 		if(tiles.size() > 0 && tiles.get(0).worldRef.get().getCellAtPositionNext(tiles.get(0).x,tiles.get(0).y)==null){

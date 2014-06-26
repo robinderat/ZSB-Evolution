@@ -43,7 +43,7 @@ public class Drawer extends JPanel {
 	
 	JLabel crossoverLabel = new JLabel("Crossover Rate", JLabel.CENTER);
 	JLabel currentCrossoverRate = new JLabel("", JLabel.CENTER);
-	JSlider crossOverRateSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 20);
+	JSlider crossoverRateSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 20);
 	
 	JLabel matingEnergyRequirementLabel = new JLabel("Mating Energy Requirement", JLabel.CENTER);
 	JLabel currentMatingEnergyRequirement = new JLabel("", JLabel.CENTER);
@@ -79,7 +79,7 @@ public class Drawer extends JPanel {
 		Settings settings = Settings.getInstance();
 		
 		currentFillRate.setBounds(800, 0, 160, 90);
-		currentFillRate.setText(String.valueOf((int)(settings.fillRate*100)));
+		currentFillRate.setText(String.format("%.2f", settings.fillRate));
 
 		fillRateSlider.setValue((int)(settings.fillRate*100));
 		fillRateSlider.setBounds(800, 60, 160, 30);
@@ -100,18 +100,18 @@ public class Drawer extends JPanel {
 		crossoverLabel.setBounds(620, 120, 160, 90);
 		
 		currentCrossoverRate.setBounds(620, 140, 160, 90);
-		currentCrossoverRate.setText(String.valueOf((int)(settings.crossoverRate*100)));
+		currentCrossoverRate.setText(String.format("%.2f", settings.crossoverRate));
 		
-		crossOverRateSlider.setValue((int)(settings.crossoverRate*100));
-		crossOverRateSlider.setBounds(620, 200, 160, 30);
-		crossOverRateSlider.addChangeListener(bl);
-		crossOverRateSlider.setFocusable(false);
+		crossoverRateSlider.setValue((int)(settings.crossoverRate*100));
+		crossoverRateSlider.setBounds(620, 200, 160, 30);
+		crossoverRateSlider.addChangeListener(bl);
+		crossoverRateSlider.setFocusable(false);
 		
 		
 		mutationLabel.setBounds(825, 120, 160, 90);
 		
 		currentMutationRate.setBounds(825, 140, 160, 90);
-		currentMutationRate.setText(String.valueOf((int)(settings.mutationRate*1000)));
+		currentMutationRate.setText(String.format("%.3f", settings.mutationRate));
 		
 		mutationRateSlider.setValue((int)(settings.mutationRate*1000));
 		mutationRateSlider.setBounds(825, 200, 160, 30);
@@ -128,7 +128,7 @@ public class Drawer extends JPanel {
 		matingEnergyRequirementLabel.setBounds(620, 220, 160, 90);
 		
 		currentMatingEnergyRequirement.setBounds(620, 240, 160, 90);
-		currentMatingEnergyRequirement.setText(String.valueOf((int)(settings.matingEnergyCost*100)));
+		currentMatingEnergyRequirement.setText(String.format("%.2f", settings.matingEnergyCost));
 		
 		matingEnergyRequirementSlider.setValue((int)(settings.matingEnergyCost*100));
 		matingEnergyRequirementSlider.setBounds(620, 300, 160, 30);
@@ -139,7 +139,7 @@ public class Drawer extends JPanel {
 		eatingEnergyGainLabel.setBounds(825, 220, 160, 90);
 		
 		currentEatingEnergyGain.setBounds(825, 240, 160, 90);
-		currentEatingEnergyGain.setText(String.valueOf((int)(settings.eatingEnergyGain*100)));
+		currentEatingEnergyGain.setText(String.format("%.2f", settings.eatingEnergyGain));
 		
 		eatingEnergyGainSlider.setValue((int)(settings.eatingEnergyGain*100));
 		eatingEnergyGainSlider.setBounds(825, 300, 160, 30);
@@ -150,7 +150,7 @@ public class Drawer extends JPanel {
 		veryHungryThresholdLabel.setBounds(620, 320, 160, 90);
 		
 		currentVeryHungryThreshold.setBounds(620, 340, 160, 90);
-		currentVeryHungryThreshold.setText(String.valueOf((int)(settings.veryHungryThreshold*100)));
+		currentVeryHungryThreshold.setText(String.format("%.2f", settings.eatingEnergyGain));
 		
 		veryHungryThresholdSlider.setValue((int)(settings.veryHungryThreshold*100));
 		veryHungryThresholdSlider.setBounds(620, 400, 160, 30);
@@ -161,7 +161,7 @@ public class Drawer extends JPanel {
 		startEnergyRateLabel.setBounds(825, 320, 160, 90);
 		
 		currentStartEnergyRate.setBounds(825, 340, 160, 90);
-		currentStartEnergyRate.setText(String.valueOf((int)(settings.startEnergyRate*100)));
+		currentStartEnergyRate.setText(String.format("%.2f", settings.startEnergyRate));
 		
 		startEnergyRateSlider.setValue((int)(settings.startEnergyRate*100));
 		startEnergyRateSlider.setBounds(825, 400, 160, 30);
@@ -172,7 +172,7 @@ public class Drawer extends JPanel {
 		moveStrengthModifierLabel.setBounds(620, 420, 160, 90);
 		
 		currentMoveStrengthModifier.setBounds(620, 440, 160, 90);
-		currentMoveStrengthModifier.setText(String.valueOf((int)(settings.moveStrengthModifier*100)));
+		currentMoveStrengthModifier.setText(String.format("%.2f", settings.moveStrengthModifier));
 		
 		moveStrengthModifierSlider.setValue((int)(settings.moveStrengthModifier*100));
 		moveStrengthModifierSlider.setBounds(620, 500, 160, 30);
@@ -216,7 +216,7 @@ public class Drawer extends JPanel {
 		super.add(mutationRateSlider);
 		super.add(mutationLabel);
 		
-		super.add(crossOverRateSlider);
+		super.add(crossoverRateSlider);
 		super.add(currentCrossoverRate);
 		super.add(crossoverLabel);
 		
@@ -366,45 +366,45 @@ public class Drawer extends JPanel {
         	{
         		if (!source.getValueIsAdjusting()) settings.fillRate = value/100.0f;
 	        	
-	            currentFillRate.setText(String.valueOf(value));
+	            currentFillRate.setText(String.format("%.2f", value/100.0f));
         	}
         	else if (source == mutationRateSlider)
         	{
         		if (!source.getValueIsAdjusting()) settings.mutationRate = value/1000.0f;
-        		currentMutationRate.setText(String.valueOf(value));
+        		currentMutationRate.setText(String.format("%.3f", value/1000.0f));
         		
         	}
-        	else if (source == crossOverRateSlider)
+        	else if (source == crossoverRateSlider)
         	{
         		if (!source.getValueIsAdjusting()) settings.crossoverRate = value/100.0f;
         		
-        		currentCrossoverRate.setText(String.valueOf(value));
+        		currentCrossoverRate.setText(String.format("%.2f", value/100.0f));
         		
         	}
         	else if (source == matingEnergyRequirementSlider)
         	{
         		if (!source.getValueIsAdjusting()) settings.matingEnergyCost = value/100.0f;
-        		currentMatingEnergyRequirement.setText(String.valueOf(value));
+        		currentMatingEnergyRequirement.setText(String.format("%.2f", value/100.0f));
         	}
         	else if (source == eatingEnergyGainSlider)
         	{
         		if (!source.getValueIsAdjusting()) settings.eatingEnergyGain = value/100.0f;
-        		currentEatingEnergyGain.setText(String.valueOf(value));
+        		currentEatingEnergyGain.setText(String.format("%.2f", value/100.0f));
         	}    
         	else if (source == veryHungryThresholdSlider)
         	{
         		if (!source.getValueIsAdjusting()) settings.veryHungryThreshold = value/100.0f;
-        		currentVeryHungryThreshold.setText(String.valueOf(value));
+        		currentVeryHungryThreshold.setText(String.format("%.2f", value/100.0f));
         	}
         	else if (source == startEnergyRateSlider)
         	{
         		if (!source.getValueIsAdjusting()) settings.startEnergyRate = value/100.0f;
-        		currentStartEnergyRate.setText(String.valueOf(value));
+        		currentStartEnergyRate.setText(String.format("%.2f", value/100.0f));
         	}
         	else if (source == moveStrengthModifierSlider)
         	{
         		if (!source.getValueIsAdjusting()) settings.moveStrengthModifier = value/100.0f;
-        		currentMoveStrengthModifier.setText(String.valueOf(value));
+        		currentMoveStrengthModifier.setText(String.format("%.2f", value/100.0f));
         	}
 	    }
 	    
@@ -431,16 +431,31 @@ public class Drawer extends JPanel {
 		Settings set = Settings.getInstance();
 		set.newSettings(c);
 		
-		currentFillRate.setText(String.valueOf((int)(set.fillRate*100)));	
-		currentMutationRate.setText(String.valueOf((int)(set.mutationRate*1000)));
-		currentCrossoverRate.setText(String.valueOf((int)(set.crossoverRate*100)));
+		
+		fillRateSlider.setValue((int)(set.fillRate*100));
+		currentFillRate.setText(String.format("%.2f", set.fillRate));	
+		
+		mutationRateSlider.setValue((int)(set.mutationRate*1000));
+		currentMutationRate.setText(String.format("%.3f", set.mutationRate));
+		
+		crossoverRateSlider.setValue((int)(set.crossoverRate*100));
+		currentCrossoverRate.setText(String.format("%.2f", set.crossoverRate));
 
-		currentMatingEnergyRequirement.setText(String.valueOf((int)(set.matingEnergyCost*100)));
-		currentEatingEnergyGain.setText(String.valueOf((int)(set.eatingEnergyGain*100)));
-		currentVeryHungryThreshold.setText(String.valueOf((int)(set.veryHungryThreshold*100)));
+		matingEnergyRequirementSlider.setValue((int)(set.matingEnergyCost*100));
+		currentMatingEnergyRequirement.setText(String.format("%.2f", set.matingEnergyCost));
+		
+		eatingEnergyGainSlider.setValue((int)(set.eatingEnergyGain*100));
+		currentEatingEnergyGain.setText(String.format("%.2f", set.eatingEnergyGain));
+		
+		veryHungryThresholdSlider.setValue((int)(set.veryHungryThreshold*100));
+		currentVeryHungryThreshold.setText(String.format("%.2f", set.veryHungryThreshold));
 
-		currentStartEnergyRate.setText(String.valueOf((int)(set.startEnergyRate*100)));
-		currentMoveStrengthModifier.setText(String.valueOf((int)(set.moveStrengthModifier*100)));
+		startEnergyRateSlider.setValue((int)(set.startEnergyRate*100));
+		currentStartEnergyRate.setText(String.format("%.2f", set.startEnergyRate));
+		
+		moveStrengthModifierSlider.setValue((int)(set.moveStrengthModifier*100));
+		currentMoveStrengthModifier.setText(String.format("%.2f", set.moveStrengthModifier));
+		
 		allowCannibalismButton.setSelected(set.allowCannibalism);
 	}
 }
