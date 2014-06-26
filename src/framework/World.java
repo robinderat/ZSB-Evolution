@@ -69,8 +69,10 @@ public class World {
 					doIterate = false;
 					
 					// here set the new starting value of iterations after iterating
-					// NOTE: maybe we want to be able to set it via a button?
+
 					setIterations(Settings.getInstance().iterationRestAmount+1);
+
+					frame.notifyIterationsEnd();
 
 				}
 				setIterations(iterations - 1);
@@ -91,8 +93,8 @@ public class World {
 		Random random = RandomGenerator.getInstance().getRandom();
 		
 		int minType = 1;
-		int diffTypes = 2 + (int)(random.nextDouble() * ((maxTypes - 2) + 1));	 // 2,3 or 4 
-		float percentageWorldFilled = settings.fillRate; 	// fill 60% of world
+		int diffTypes = settings.cellTypesAmount;            //2 + (int)(random.nextDouble() * ((maxTypes - 2) + 1));	 // 2,3 or 4 
+		float percentageWorldFilled = settings.fillRate; 	
 		
 		////System.out.println("different types: " + diffTypes);
 		

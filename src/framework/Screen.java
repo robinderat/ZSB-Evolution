@@ -28,4 +28,9 @@ public class Screen extends JFrame {
 		draw.setVisible(true);
 		add(draw);
 	}
+	
+	public void notifyIterationsEnd()
+	{
+		draw.notifyIterationsEnd();
+	}
 }
