@@ -17,6 +17,8 @@ public class Settings {
 	
 	public boolean allowCannibalism;
 	
+	public int iterationRestAmount;
+	
 	// initial settings. change them here while testing the game to fit your own preferences
 	// or make a case in the method below
 	public Settings() {
@@ -29,12 +31,13 @@ public class Settings {
 		startEnergyRate = 0.7f;
 		allowCannibalism = false;
 		moveStrengthModifier = 0.5f;
+		iterationRestAmount = 1;
 	}
 
 	// set your own initial settings here
 	public void newSettings(char c){
 		switch (c) {
-			case 'j': setSettings(0.2f, 0.1f, 1.0f, 0.16f, 0.75f, 0.29f, 1.0f, true, 0.3f); break;
+			case 'j': setSettings(0.2f, 0.1f, 1.0f, 0.16f, 0.75f, 0.29f, 1.0f, true, 0.3f, 10); break;
 			case 'r': break;
 			case 'm': break;
 			case 'k': break;
@@ -42,7 +45,7 @@ public class Settings {
 	}
 	
 	// change all settings
-	public void setSettings (float fR, float mR, float cR, float mEC, float eEG, float vHT, float sER, boolean aC, float mSM){
+	public void setSettings (float fR, float mR, float cR, float mEC, float eEG, float vHT, float sER, boolean aC, float mSM, int iRA){
 		fillRate = fR;
 		mutationRate = mR;
 		crossoverRate = cR;
@@ -52,6 +55,7 @@ public class Settings {
 		startEnergyRate = sER;
 		allowCannibalism = aC;
 		moveStrengthModifier = mSM;
+		iterationRestAmount = iRA;
 	}
 	
 	public static Settings getInstance() {
