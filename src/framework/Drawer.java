@@ -67,10 +67,10 @@ public class Drawer extends JPanel {
 	
 	JCheckBox allowCannibalismButton = new JCheckBox("Canibalism");
 
-	JButton settingsButtonJ = new JButton("j settings");
-	JButton settingsButtonR = new JButton("r settings");
-	JButton settingsButtonM = new JButton("m settings");
-	JButton settingsButtonK = new JButton("k settings");
+	JButton settingsButtonJ = new JButton("eternal");
+	JButton settingsButtonR = new JButton("stationary");
+	JButton settingsButtonM = new JButton("practical");
+	JButton settingsButtonK = new JButton("natural");
 	
 	JTextField iterateRest = new JTextField("Min iterates");
 	String iterateRestValue = new String("");
