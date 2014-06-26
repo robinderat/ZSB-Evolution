@@ -69,9 +69,11 @@ public class World {
 					doIterate = false;
 					
 					// here set the new starting value of iterations after iterating
-					// NOTE: maybe we want to be able to set it via a button?
-					setIterations(1);
+
+					setIterations(Settings.getInstance().iterationRestAmount+1);
+
 					frame.notifyIterationsEnd();
+
 				}
 				setIterations(iterations - 1);
 				
@@ -146,9 +148,9 @@ public class World {
 		StatisticManager.getInstance().takeSnapshot(this, 1);
 		
 
-		//System.out.println("cells died: " + lastStepCellsDied);
-		//System.out.println("cells born: " + lastStepCellsBorn);
-		//StatisticManager.getInstance().printCellStatistics();
+		System.out.println("cells died: " + lastStepCellsDied);
+		System.out.println("cells born: " + lastStepCellsBorn);
+		StatisticManager.getInstance().printCellStatistics();
 		
 		currentCells = new ArrayList<Cell>(MEMORY_SIZE);
 		 

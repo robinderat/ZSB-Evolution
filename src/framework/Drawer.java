@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -14,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JSlider;
+import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -73,10 +73,13 @@ public class Drawer extends JPanel {
 	
 	JCheckBox allowCannibalismButton = new JCheckBox("Canibalism");
 
-	JButton settingsButtonJ = new JButton("j settings");
-	JButton settingsButtonR = new JButton("r settings");
-	JButton settingsButtonM = new JButton("m settings");
-	JButton settingsButtonK = new JButton("k settings");
+	JButton settingsButtonJ = new JButton("eternal");
+	JButton settingsButtonR = new JButton("stationary");
+	JButton settingsButtonM = new JButton("practical");
+	JButton settingsButtonK = new JButton("natural");
+	
+	JTextField iterateRest = new JTextField("Min iterates");
+	String iterateRestValue = new String("");
 
 	
 	public Drawer(World c) {
@@ -229,9 +232,17 @@ public class Drawer extends JPanel {
 		settingsButtonK.setFocusable(false);
 		settingsButtonK.setActionCommand("kSettings");
 		settingsButtonK.addActionListener(bl);
+
+		
+		/*
+		iterateRest.setBounds(849, 605, 80,20);
+		iterateRest.setFocusable(false);
+		iterateRest.setActionCommand("iterator");
+	    iterateRest.addActionListener(bl);
+	    iterateRest.setEditable(true);
+	    */
 	    
 	    super.add(cycleButton);
-		
 		super.add(clearButton);
 		
 		super.add(cellTypeAmountLabel);
@@ -276,6 +287,8 @@ public class Drawer extends JPanel {
 		super.add(settingsButtonM);
 		super.add(settingsButtonR);
 		super.add(settingsButtonK);
+		
+		//super.add(iterateRest);
 		
 		world = c;
 	}
@@ -338,11 +351,12 @@ public class Drawer extends JPanel {
 			
 			if (selectedCell != null)
 			{
+				g.drawString(selectedCell.toString(), 1020, 550);
 				g.drawString("Stats and Stuff", 1020, 525);
 				g.setColor(Color.green);
 				g.drawString("-------------------", 1020, 535);
 				g.setColor(Color.darkGray);
-				g.drawString("13th strange prime = 101", 1020, 550); 
+				//g.drawString("13th strange prime = 101", 1020, 550); 
 			}
 		}
 	}
@@ -351,15 +365,17 @@ public class Drawer extends JPanel {
 	private void paintSelected(Graphics g) {
 		Tile t = world.selected;
 		if (t != null) {
+			
+			
 			g.drawImage(select, t.x + world.xOffSet - world.TILE_SIZE / 2 , t.y + world.yOffSet - world.TILE_SIZE /2, world.TILE_SIZE , world.TILE_SIZE , null);
 		}
 	}
 		
 	private void paintCells(Graphics g) {
 		for(Cell cell : world.getCells()){
+			
 			int drawX = cell.x + world.xOffSet - world.TILE_SIZE / 2;
 			int drawY = cell.y + world.yOffSet - world.TILE_SIZE / 2; 
-			
 			g.drawImage(cell.img, drawX, drawY, world.TILE_SIZE, world.TILE_SIZE, null);
 		}
 		
@@ -401,6 +417,11 @@ public class Drawer extends JPanel {
 	    	if ("rSettings".equals(e.getActionCommand())) updateSliderValues('r');
 	    	if ("mSettings".equals(e.getActionCommand())) updateSliderValues('m');
 	    	if ("kSettings".equals(e.getActionCommand())) updateSliderValues('k');
+	    	
+	    	//if ("iterator".equals(e.getActionCommand())) iterateRestValue = "text1 : " + e.getActionCommand();
+	    	//if (e.getSource() == iterateRest) {
+			//	iterateRestValue = "text1 : " + e.getActionCommand();
+			//} 
 	    }
 	    
 	    public void stateChanged(ChangeEvent e) {
