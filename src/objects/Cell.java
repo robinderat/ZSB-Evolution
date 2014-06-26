@@ -155,36 +155,46 @@ public class Cell {
 		String newDNA = worldRef.get().cBreeder.breed(ownDNA, otherDNA)[random.getRandom().nextInt(2)];
 		
 		ArrayList<Tile> tiles = getFreeNeighbours();
-		if(tiles.size() > 0 && tiles.get(0).worldRef.get().getCellAtPositionNext(tiles.get(0).x,tiles.get(0).y)==null){
-			
-			double energyCost = Settings.getInstance().matingEnergyCost;
-
-			int energyLostCellPart = (int)Math.ceil(part.properties.getMaxEnergy() * energyCost);
-			if (energyLostCellPart <= 0) {
-				energyLostCellPart = 1;
-			}
-			
-			int energyLostCell2 = (int)Math.ceil(properties.getMaxEnergy() * energyCost);
-			if (energyLostCell2 <= 0) {
-				energyLostCell2 = 1;
-			}  
-			
-			//System.out.println("partner energy: " + part.properties.getCurrentEnergy());
-			//System.out.println("energyLostCell Partner: " + energyLostCellPart);
-			//System.out.println("own energy: " + properties.getCurrentEnergy());
-			//System.out.println("own energy lost: " + energyLostCell2);
-			
-			part.properties.setCurrentEnergy(part.properties.getCurrentEnergy() - energyLostCellPart);
-			properties.setCurrentEnergy(properties.getCurrentEnergy() - energyLostCell2);
-			
-			Cell c = new Cell(worldRef.get(), tiles.get(0).x, tiles.get(0).y, type, newDNA);
-
-			worldRef.get().nextCells.add(c);
-			//System.out.println("New cell born.");
-			
-			worldRef.get().lastStepCellsBorn++;
 		
-			return true;
+		if (!tiles.isEmpty()) {
+			
+			RandomGenerator gen = RandomGenerator.getInstance();
+			
+			int destIndex = gen.getRandom().nextInt(tiles.size());
+			
+			Tile babySpot = tiles.get(destIndex);
+			
+			if (babySpot.worldRef.get().getCellAtPositionNext(babySpot.x,babySpot.y)==null){
+				
+				double energyCost = Settings.getInstance().matingEnergyCost;
+	
+				int energyLostCellPart = (int)Math.ceil(part.properties.getMaxEnergy() * energyCost);
+				if (energyLostCellPart <= 0) {
+					energyLostCellPart = 1;
+				}
+				
+				int energyLostCell2 = (int)Math.ceil(properties.getMaxEnergy() * energyCost);
+				if (energyLostCell2 <= 0) {
+					energyLostCell2 = 1;
+				}  
+				
+				//System.out.println("partner energy: " + part.properties.getCurrentEnergy());
+				//System.out.println("energyLostCell Partner: " + energyLostCellPart);
+				//System.out.println("own energy: " + properties.getCurrentEnergy());
+				//System.out.println("own energy lost: " + energyLostCell2);
+				
+				part.properties.setCurrentEnergy(part.properties.getCurrentEnergy() - energyLostCellPart);
+				properties.setCurrentEnergy(properties.getCurrentEnergy() - energyLostCell2);
+				
+				Cell c = new Cell(worldRef.get(), babySpot.x, babySpot.y, type, newDNA);
+	
+				worldRef.get().nextCells.add(c);
+				//System.out.println("New cell born.");
+				
+				worldRef.get().lastStepCellsBorn++;
+			
+				return true;
+			}
 		}
 		//System.out.println("No space for newborn cell.");
 		return false;
