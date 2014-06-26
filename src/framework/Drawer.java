@@ -31,6 +31,7 @@ public class Drawer extends JPanel {
 	Image select = new ImageIcon("src/art/Selected.png").getImage();
 	Image infoBg = new ImageIcon("src/art/Data.png").getImage();
 	
+	JButton cycleButton = new JButton("Start Cycle (space)");
 	JButton populateButton = new JButton("Populate (n)");
 	JButton clearButton = new JButton("Clear (c)");
 	
@@ -40,6 +41,9 @@ public class Drawer extends JPanel {
 	
 	JLabel currentFillRate = new JLabel("", JLabel.CENTER);
 	JSlider fillRateSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 20);
+	
+	JLabel currentCellTypeAmount = new JLabel("", JLabel.CENTER);
+	JSlider cellTypeAmountSlider = new JSlider(JSlider.HORIZONTAL, 1, 9, 2);
 	
 	JLabel crossoverLabel = new JLabel("Crossover Rate", JLabel.CENTER);
 	JLabel currentCrossoverRate = new JLabel("", JLabel.CENTER);
@@ -78,20 +82,34 @@ public class Drawer extends JPanel {
 		super.setLayout(null);
 		Settings settings = Settings.getInstance();
 		
-		currentFillRate.setBounds(800, 0, 160, 90);
+		cycleButton.setBounds(620, 20, 150, 30);
+		cycleButton.setFocusable(false);
+		cycleButton.setActionCommand("cycle");
+		cycleButton.addActionListener(bl);
+		
+		currentCellTypeAmount.setBounds(800, 0, 80, 90);
+		currentCellTypeAmount.setText(String.valueOf(settings.cellTypesAmount));
+
+		cellTypeAmountSlider.setValue(settings.cellTypesAmount);
+		cellTypeAmountSlider.setBounds(800, 60, 80, 30);
+		cellTypeAmountSlider.addChangeListener(bl);
+		cellTypeAmountSlider.setFocusable(false);
+		
+		
+		currentFillRate.setBounds(900, 0, 80, 90);
 		currentFillRate.setText(String.format("%.2f", settings.fillRate));
 
 		fillRateSlider.setValue((int)(settings.fillRate*100));
-		fillRateSlider.setBounds(800, 60, 160, 30);
+		fillRateSlider.setBounds(900, 60, 80, 30);
 		fillRateSlider.addChangeListener(bl);
 		fillRateSlider.setFocusable(false);
 		
-		populateButton.setBounds(620, 60, 140, 30);
+		populateButton.setBounds(620, 60, 150, 30);
 		populateButton.setFocusable(false);
 		populateButton.setActionCommand("populate");
 		populateButton.addActionListener(bl);
 		
-		clearButton.setBounds(620, 100, 140, 30);
+		clearButton.setBounds(620, 100, 150, 30);
 		clearButton.setFocusable(false);
 		clearButton.setActionCommand("clear");
 		clearButton.addActionListener(bl);
@@ -205,9 +223,12 @@ public class Drawer extends JPanel {
 		settingsButtonK.setActionCommand("kSettings");
 		settingsButtonK.addActionListener(bl);
 	    
-	    
+	    super.add(cycleButton);
+		
 		super.add(clearButton);
 		
+		super.add(cellTypeAmountSlider);
+		super.add(currentCellTypeAmount);
 		super.add(fillRateSlider);
 		super.add(currentFillRate);
 		super.add(populateButton);
@@ -335,6 +356,10 @@ public class Drawer extends JPanel {
 		
 	}
 	
+	public void notifyIterationsEnd(){
+		cycleButton.setText("Start Cycle (space)");
+	}
+	
 	private ButtonListener bl = new ButtonListener();
 	
 	class ButtonListener implements ActionListener, ChangeListener, ItemListener {
@@ -348,6 +373,19 @@ public class Drawer extends JPanel {
 	    	if ("clear".equals(e.getActionCommand()))
 	    	{
 	    		world.clear();
+	    	}
+	    	if ("cycle".equals(e.getActionCommand()))
+	    	{
+	    		if (world.doIterate == false) 
+	    		{
+					world.doIterate = true;
+					cycleButton.setText("Stop Cycle (space)");
+	    		}
+	    		else
+	    		{
+	    			world.doIterate = false;
+					cycleButton.setText("Start Cycle (space)");
+	    		}
 	    	}
 	    	
 	    	if ("jSettings".equals(e.getActionCommand())) updateSliderValues('j');
@@ -406,6 +444,11 @@ public class Drawer extends JPanel {
         		if (!source.getValueIsAdjusting()) settings.moveStrengthModifier = value/100.0f;
         		currentMoveStrengthModifier.setText(String.format("%.2f", value/100.0f));
         	}
+        	else if (source == cellTypeAmountSlider)
+        	{
+        		if (!source.getValueIsAdjusting()) settings.cellTypesAmount = value;
+        		currentCellTypeAmount.setText(String.valueOf(value));
+        	}
 	    }
 	    
 	    public void itemStateChanged(ItemEvent e) {
@@ -455,6 +498,9 @@ public class Drawer extends JPanel {
 		
 		moveStrengthModifierSlider.setValue((int)(set.moveStrengthModifier*100));
 		currentMoveStrengthModifier.setText(String.format("%.2f", set.moveStrengthModifier));
+		
+		cellTypeAmountSlider.setValue(set.cellTypesAmount);
+		currentCellTypeAmount.setText(String.valueOf(set.cellTypesAmount));
 		
 		allowCannibalismButton.setSelected(set.allowCannibalism);
 	}
