@@ -37,9 +37,9 @@ public class Settings {
 	// set your own initial settings here
 	public void newSettings(char c){
 		switch (c) {
-			case 'j': setSettings(0.2f, 0.1f, 1.0f, 0.16f, 0.75f, 0.29f, 1.0f, true, 0.3f, 10); break;
-			case 'r': break;
-			case 'm': break;
+			case 'j': setSettings(0.2f, 0.05f, 0.9f, 0.16f, 0.65f, 0.29f, 1.0f, true, 0.3f, 30); break;
+			case 'r': setSettings(0.4f, 0.00f, 0.81f, 0.30f, 0.75f, 0.29f, 0.7f, false, 0.5f, 50); break;
+			case 'm': setSettings(0.4f, 0.089f, 0.53f, 0.21f, 2.0f, 0.29f, 0.7f, false, 1.47f, 100); break;
 			case 'k': break;
 		}
 	}
