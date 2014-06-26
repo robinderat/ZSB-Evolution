@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 import objects.behaviour.*;
+import framework.RandomGenerator;
 import framework.Settings;
 import framework.Tile;
 import framework.World;
@@ -145,12 +146,13 @@ public class Cell {
 		}
 	}
 	
-	// creates a new cell using dna of two mating cells
+	// creates a new cell using DNA of two mating cells
 	public boolean mate(Cell part){
+		RandomGenerator random = RandomGenerator.getInstance();
 		
 		String ownDNA = properties.getDNA();
 		String otherDNA = part.properties.getDNA();
-		String newDNA = worldRef.get().cBreeder.breed(ownDNA, otherDNA)[0];
+		String newDNA = worldRef.get().cBreeder.breed(ownDNA, otherDNA)[random.getRandom().nextInt(2)];
 		
 		ArrayList<Tile> tiles = getFreeNeighbours();
 		if(tiles.size() > 0 && tiles.get(0).worldRef.get().getCellAtPositionNext(tiles.get(0).x,tiles.get(0).y)==null){
