@@ -39,9 +39,11 @@ public class Drawer extends JPanel {
 	JLabel currentMutationRate = new JLabel("", JLabel.CENTER);
 	JSlider mutationRateSlider = new JSlider(JSlider.HORIZONTAL, 0, 1000, 20);
 	
+	JLabel fillRateLabel = new JLabel("Fill Rate", JLabel.CENTER);
 	JLabel currentFillRate = new JLabel("", JLabel.CENTER);
 	JSlider fillRateSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 20);
 	
+	JLabel cellTypeAmountLabel = new JLabel("Cell Types", JLabel.CENTER);
 	JLabel currentCellTypeAmount = new JLabel("", JLabel.CENTER);
 	JSlider cellTypeAmountSlider = new JSlider(JSlider.HORIZONTAL, 1, 9, 2);
 	
@@ -87,6 +89,9 @@ public class Drawer extends JPanel {
 		cycleButton.setActionCommand("cycle");
 		cycleButton.addActionListener(bl);
 		
+		
+		cellTypeAmountLabel.setBounds(800, -20, 80, 90);
+		
 		currentCellTypeAmount.setBounds(800, 0, 80, 90);
 		currentCellTypeAmount.setText(String.valueOf(settings.cellTypesAmount));
 
@@ -95,6 +100,8 @@ public class Drawer extends JPanel {
 		cellTypeAmountSlider.addChangeListener(bl);
 		cellTypeAmountSlider.setFocusable(false);
 		
+		
+		fillRateLabel.setBounds(900, -20, 80, 90);
 		
 		currentFillRate.setBounds(900, 0, 80, 90);
 		currentFillRate.setText(String.format("%.2f", settings.fillRate));
@@ -227,8 +234,10 @@ public class Drawer extends JPanel {
 		
 		super.add(clearButton);
 		
+		super.add(cellTypeAmountLabel);
 		super.add(cellTypeAmountSlider);
 		super.add(currentCellTypeAmount);
+		super.add(fillRateLabel);
 		super.add(fillRateSlider);
 		super.add(currentFillRate);
 		super.add(populateButton);
@@ -292,7 +301,7 @@ public class Drawer extends JPanel {
 	private void paintProperties(Graphics g) {
 		g.drawImage(infoBg, 1000, 25, 300, 600, null);
 		Tile tile = world.selected;
-		g.drawString("Steps in next iteration", 1020, 50);
+		g.drawString("Iterations left", 1020, 50);
 		g.drawString(Integer.toString(world.getIterations()), 1220, 50);
 		
 		if (tile != null) {

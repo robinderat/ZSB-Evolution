@@ -44,8 +44,16 @@ public class MouseInput implements MouseListener, MouseMotionListener, MouseWhee
 		}
 		
 		if (e.getButton() == MouseEvent.BUTTON2) {
-			if (world.doIterate == false) 
+			if (world.doIterate == false) {
 				world.doIterate = true;
+				world.frame.draw.cycleButton.setText("Stop Cycle (space)");
+			}
+			else
+			{
+				world.doIterate = false;
+				world.frame.notifyIterationsEnd();
+				world.frame.draw.cycleButton.setText("Start Cycle (space)");
+			} 
 			
 		}
 		
