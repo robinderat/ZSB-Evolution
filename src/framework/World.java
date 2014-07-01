@@ -15,33 +15,43 @@ public class World {
 	public final int TILE_COUNT = 40;
 	public final int MEMORY_SIZE = TILE_COUNT * TILE_COUNT;
 	
-	public boolean doIterate; // bool if iteration should be done in while loop
+	//Determines if iteration should be done in the while loop
+	public boolean doIterate; 
 	
+	//Offset of the board
 	public int xOffSet = 0;
 	public int yOffSet = 0;
 	
-	public static int maxTypes = 9; // voor koen
+	//Number of cell types
+	public static int maxTypes = 9;
 	
+	//Number of iterations should be done
 	private int iterations = 1;
 	
+	//The selected tile
 	Tile selected;		
-			
+	
+	//All tiles in the world
 	private Tile[][] tileArray = new Tile[TILE_COUNT][TILE_COUNT];
 	
-	// create ArrayList of cells with enough memory
+	//Creates ArrayList of cells with enough memory
 	public ArrayList<Cell> currentCells = new ArrayList<Cell>(MEMORY_SIZE);
 	public ArrayList<Cell> nextCells = new ArrayList<Cell>(MEMORY_SIZE);
 	
+	//Creates breeder object
 	public CrossoverBreeder cBreeder =  new CrossoverBreeder();
 	
+	//If true, the board moves in that direction
 	public boolean movingUp = false;
 	public boolean movingDown = false;
 	public boolean movingLeft = false;
 	public boolean movingRight = false;
 	
+	//Changing cells variables
 	public int lastStepCellsDied;
 	public int lastStepCellsBorn;
 	
+	//Constructor
 	public World(Screen f){
 		frame = f;
 		createTileset();
@@ -51,71 +61,66 @@ public class World {
 		lastStepCellsBorn = 0;
 	}
 	
+	//Method that runs the program
 	public void run(){
 		
 		while (true) {
-			
+			//Sleep for efficiency
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 				
+			//Iterates
 			if (doIterate && iterations > 0) {
 				iterate();
 				int newIt = iterations - 1;
-				// done with iterations
+				
+				//Stop iterating
 				if (newIt == 0) {
 					doIterate = false;
 					
-					// here set the new starting value of iterations after iterating
-
+					//Set the new starting value of iterations after iterating
 					setIterations(Settings.getInstance().iterationRestAmount+1);
 
 					frame.notifyIterationsEnd();
-
 				}
 				setIterations(iterations - 1);
-				
 			}
+			//Moves the board
 			moveBoardView();
+			//Paints the changes
 			frame.repaint();
 		}
 	}
 	
-	/**
-	 * populates world with cells. doesn't clear before
-	 */
+	//Fills the world with cells
 	public void populate() {
 		Settings settings = Settings.getInstance();
 		
-		// to-do: replace variables by values from settings
 		Random random = RandomGenerator.getInstance().getRandom();
 		
 		int minType = 1;
-		int diffTypes = settings.cellTypesAmount;            //2 + (int)(random.nextDouble() * ((maxTypes - 2) + 1));	 // 2,3 or 4 
+		int diffTypes = settings.cellTypesAmount;            
 		float percentageWorldFilled = settings.fillRate; 	
-		
-		////System.out.println("different types: " + diffTypes);
-		
-		float probabilityCellGen = Math.abs(1.0f - percentageWorldFilled); // 30% prob that a cell gets placed on a tile
+		float probabilityCellGen = Math.abs(1.0f - percentageWorldFilled);
 		
 		boolean goOn = true;
-		// we iterate until min threshold is reached
+		
+		//Iterate until min threshold is reached
 		while (goOn && (currentCells.size() / (float)(TILE_COUNT * TILE_COUNT)) < percentageWorldFilled) {
 	
-			// walk world from left-top to bottom-down and randomly generate cells
+			//Follow world from left-top to bottom-right and randomly generate cells
 			for (Tile[] cols : tileArray) {
 				for (Tile tile : cols) {
 					if (goOn && 
 						getCellAtPositionCurrent(tile.x, tile.y) == null &&
 						Math.random() > probabilityCellGen) {
-						// generate tile on cell
-						// choose randomly a type
+						//Generate tile on cell with random type
 						int cellType = minType + (int)(random.nextDouble() * (((minType + diffTypes) - minType - 1) + 1));						
 						currentCells.add(new Cell(this, tile.x, tile.y, cellType));
 					}
-					//System.out.println((currentCells.size() / (float)(tileCount * tileCount)));
 					goOn = (currentCells.size() / (float)(TILE_COUNT * TILE_COUNT)) < percentageWorldFilled;
 				}
 			}
@@ -125,20 +130,18 @@ public class World {
 		System.out.println("n cells after populate: " + currentCells.size());
 	}
 
-	/*
-	 * do one world step
-	 */
+	//Iterate one step
 	public void iterate() {
 		
 		lastStepCellsDied = 0;
 		lastStepCellsBorn = 0;
 		
-		// update each cell
+		//Update each cell
 		for (Cell c : currentCells) {
 			c.update();	
 		}
 		
-		// calculate death rate
+		//Calculate death rate
 		for (Cell c : currentCells) {
 			if (c.isAlive() == false) {
 				lastStepCellsDied++;
@@ -147,7 +150,7 @@ public class World {
 		
 		StatisticManager.getInstance().takeSnapshot(this, 1);
 		
-
+		//Interesting data
 		System.out.println("cells died: " + lastStepCellsDied);
 		System.out.println("cells born: " + lastStepCellsBorn);
 		StatisticManager.getInstance().printCellStatistics();
@@ -160,16 +163,16 @@ public class World {
 			}
 		}		
 		
-		// sort cells according to speed.
-		// that will guarantee that fast cells move first
+		//Sort cells according to speed.
 		sortCellsBySpeed(currentCells);
-		//for (Cell c : currentCells) { //System.out.println(c.properties.getSpeed()); }
 		
+		//Interesting data
 		System.out.println("n cells alive: " + currentCells.size());
 		
 		nextCells = new ArrayList<Cell>(MEMORY_SIZE);
 	}
 	
+	//Sorts the cells so fast cell will move first
 	public void sortCellsBySpeed(ArrayList<Cell> cellArray) {
 		Collections.sort(cellArray, new Comparator<Cell>() {
 			@Override
@@ -178,34 +181,19 @@ public class World {
 			}
 		});
 	}
-	
-	/*
-	private void DEBUGprintCells(ArrayList<Cell> cells){
-		for (Cell cell : cells){
-			//System.out.println(""+ cell.x + " "+ cell.y);
-		}
-		//System.out.println("n cells =" + cells.size());
-	}
-	*/
 		
-	/**
-	 * getter iterations
-	 */
+	//Get number of iterations
 	public int getIterations() {
 		return iterations;
 	}
 	
-	/**
-	 * set iterations
-	 */
+	//Set number of iterations
 	public void setIterations(int n) {
 		if (n < 1) n = 1;
 		iterations = n;
 	}
 	
-	/**
-	 * creates all tiles
-	 */
+	//Create the tiles of the world
 	private void createTileset(){
 		for (int i = 0; i < TILE_COUNT; i++) {
 			for (int j = 0; j < TILE_COUNT; j++) {
@@ -215,138 +203,158 @@ public class World {
 		}
 	}
 	
+	//Returns the list of tiles
 	public Tile[][] getTiles(){
 		return tileArray;
 	}
 	
-	/*
-	 * returns euclidean distance between two points in world units
-	 */
+	//returns the euclidean distance between two points in world units
 	public int pointDistanceInWorldUnit(int x1, int y1, int x2, int y2) {
 		int DX = Math.abs((x1 + xOffSet) - x2);
 		int DY = Math.abs((y1 + yOffSet) - y2);
 		return (int)Math.ceil(Math.sqrt(DX * DX  + DY * DY) / TILE_SIZE);
 	}
 	
-	// returns a two dimensional array of all tiles, with coordinates that are movable in the JFrame
-	// 
-	// ERROR: when moving screen after having placed cells. perhaps cell x and y must be updated!
+	
+	//Returns the tile closest to a specific x and y
 	public Tile getTile(int x, int y) {
 		
 		int startx = tileArray[0][0].x;
 		int starty = tileArray[0][0].y;
-		int endx = tileArray[0][TILE_COUNT -1].x; // 
+		int endx = tileArray[0][TILE_COUNT -1].x; 
 		int endy = tileArray[TILE_COUNT -1][0].y;
-		//System.out.println("Startx: " + startx);
-		//System.out.println("Starty: " + starty);
-		//System.out.println("endx: " + endx);
-		//System.out.println("endy: " + endy);
 		
 		int xTiles = -1;
 		int yTiles = -1;
 		
+		//Too much to the right
 		if (x > endx){
-			//System.out.println("te grote x");
 			xTiles = TILE_COUNT - 1;
 		}
+		
+		//Too much to the left
 		if (x < startx){
-			//System.out.println("te kleine x");
 			xTiles = 0;
 		}
+		
+		//Too far down
 		if (y > endy){
-			//System.out.println("te grote y");
 			yTiles = TILE_COUNT - 1;
 		}
+		
+		//Too far up
 		if (y < starty){
-			//System.out.println("te kleine y");
 			yTiles = 0;
 		}
+		
+		//Inside the field on x-axis
 		if (xTiles == -1) {
-			//System.out.println((x - startx + xOffSet)/TILE_SIZE);
 			xTiles = (x - startx)/TILE_SIZE;
 		}
+		//Inside the field on y-axis
 		if (yTiles == -1) {
-			//System.out.println((y - starty + yOffSet)/TILE_SIZE);
 			yTiles = (y - starty)/TILE_SIZE;
 		}
 		
 		return tileArray[yTiles][xTiles];
 	}
 	
+	//Selects a tile
 	public void select(Tile tile){
 		selected = tile;
 	}
 	
+	//Adds a cell
 	public void addCell(Cell c){
-
 		currentCells.add(c);
 	}
 	
+	//Removes a cell
+	public void removeCell(Cell cell) {
+		currentCells.remove(cell);
+	}
+	
+	//Returns list of cells in the current position
 	public ArrayList<Cell> getCells() {
 		return currentCells;
 	}
 	
+	//Moves the board
 	private void moveBoardView() {
+		
+		//Up
 		if(movingUp){
 			moveUp();
 		}
+		
+		//Down
 		if(movingDown){
 			moveDown();
 		}
+		
+		//Left
 		if(movingLeft){
 			moveLeft();
 		}
+		
+		//Right
 		if(movingRight){
 			moveRight();
 		}
 	}
 	
+	//Moves board 5 pixels up
 	private void moveUp(){
 		yOffSet -= 5;
 	}
 	
+	//Moves board 5 pixels down
 	private void moveDown(){
 		yOffSet += 5;
 	}
 	
+	//Moves board 5 pixels left
 	private void moveLeft(){
 		xOffSet -= 5;
 	}
 	
+	//Moves board 5 pixels right
 	private void moveRight(){
 		xOffSet += 5;
 	}
 	
+	//Gets bottom right tile
 	public Tile getWorldEndPoint() {
 		return tileArray[TILE_COUNT - 1][TILE_COUNT - 1]; 
 	}
 	
+	//Gets top left tile
 	public Tile getWorldStartPoint() {
 		return tileArray[0][0];
 	}
 	
+	//Gets cell at x and y position from list of cells in the next turn
 	public Cell getCellAtPositionNext(int px, int py) {
 		for (Cell c : nextCells) {
-			if (c.x == px && c.y == py) return c;
-			
+			if (c.x == px && c.y == py){
+				return c;
+			}
 		}
 		return null;
 	}
 	
+	//Gets cell at x and y position from list of cells in this turn
 	public Cell getCellAtPositionCurrent(int px, int py) {
 		for (Cell c : currentCells) {
-			if (c.x == px && c.y == py) return c;
+			if (c.x == px && c.y == py) {
+				return c;
+			}
 		}
 		return null;
 	}
 
-	// clears the world
+	//Clears the world from all cells
 	public void clear() {
 		currentCells = new ArrayList<Cell>(MEMORY_SIZE);
 	}
-	
-	public void removeCell(Cell cell) {
-		currentCells.remove(cell);
-	}
-	
 }

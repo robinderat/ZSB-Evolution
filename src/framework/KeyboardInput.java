@@ -3,10 +3,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 
+//Handles the keyboard input
 public class KeyboardInput implements KeyListener {
-
-World world;
 	
+	//World reference to access information from the world
+	World world;
+	
+	//Constructor
 	public KeyboardInput(World core) {
 		world = core;
 	}
@@ -41,11 +44,7 @@ World world;
 		
 		int typed = (int)e.getKeyChar();
 		
-		//System.out.println(typed);
-		
-		// uncomment this line to find out the integer that corresponds to a key
-		//System.out.println((int)e.getKeyChar());
-		
+		//w
 		if (typed == 119){
 			world.movingUp = false;
 		}
@@ -111,13 +110,10 @@ World world;
 		if (typed == 120) {
 			StatisticManager.getInstance().printStatisticsToText();
 		}
-		
-		//System.out.println(typed);
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		
 		
 	}
 

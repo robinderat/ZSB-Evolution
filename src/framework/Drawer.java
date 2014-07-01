@@ -19,17 +19,20 @@ import javax.swing.event.ChangeListener;
 
 import objects.Cell;
 
-
-
-
+//Handles the graphics part of the system
 public class Drawer extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	
+	//World reference to access information from the world
 	World world;
 	
+	//Unchanging images
 	Image bg = new ImageIcon("src/art/Bg.png").getImage();
 	Image select = new ImageIcon("src/art/Selected.png").getImage();
 	Image infoBg = new ImageIcon("src/art/Data.png").getImage();
+	
+	//Buttons and sliders
 	
 	JButton cycleButton = new JButton("Start Cycle (space)");
 	JButton populateButton = new JButton("Populate (n)");
@@ -81,17 +84,17 @@ public class Drawer extends JPanel {
 	JTextField iterateRest = new JTextField("Min iterates");
 	String iterateRestValue = new String("");
 
-	
+	//Constructor
 	public Drawer(World c) {
-		
 		super.setLayout(null);
+		//Gets the settings
 		Settings settings = Settings.getInstance();
 		
+		//Button data
 		cycleButton.setBounds(620, 20, 150, 30);
 		cycleButton.setFocusable(false);
 		cycleButton.setActionCommand("cycle");
 		cycleButton.addActionListener(bl);
-		
 		
 		cellTypeAmountLabel.setBounds(800, -20, 80, 90);
 		
@@ -102,7 +105,6 @@ public class Drawer extends JPanel {
 		cellTypeAmountSlider.setBounds(800, 60, 80, 30);
 		cellTypeAmountSlider.addChangeListener(bl);
 		cellTypeAmountSlider.setFocusable(false);
-		
 		
 		fillRateLabel.setBounds(900, -20, 80, 90);
 		
@@ -123,8 +125,7 @@ public class Drawer extends JPanel {
 		clearButton.setFocusable(false);
 		clearButton.setActionCommand("clear");
 		clearButton.addActionListener(bl);
-		
-
+	
 		crossoverLabel.setBounds(620, 120, 160, 90);
 		
 		currentCrossoverRate.setBounds(620, 140, 160, 90);
@@ -134,7 +135,6 @@ public class Drawer extends JPanel {
 		crossoverRateSlider.setBounds(620, 200, 160, 30);
 		crossoverRateSlider.addChangeListener(bl);
 		crossoverRateSlider.setFocusable(false);
-		
 		
 		mutationLabel.setBounds(825, 120, 160, 90);
 		
@@ -152,7 +152,6 @@ public class Drawer extends JPanel {
 		//fillRateSlider.setLabelTable( labelTable );
 		//fillRateSlider.setPaintLabels(true);
 		
-		
 		matingEnergyRequirementLabel.setBounds(620, 220, 160, 90);
 		
 		currentMatingEnergyRequirement.setBounds(620, 240, 160, 90);
@@ -162,7 +161,6 @@ public class Drawer extends JPanel {
 		matingEnergyRequirementSlider.setBounds(620, 300, 160, 30);
 		matingEnergyRequirementSlider.addChangeListener(bl);
 		matingEnergyRequirementSlider.setFocusable(false);
-		
 		
 		eatingEnergyGainLabel.setBounds(825, 220, 160, 90);
 		
@@ -174,7 +172,6 @@ public class Drawer extends JPanel {
 		eatingEnergyGainSlider.addChangeListener(bl);
 		eatingEnergyGainSlider.setFocusable(false);
 		
-		
 		veryHungryThresholdLabel.setBounds(620, 320, 160, 90);
 		
 		currentVeryHungryThreshold.setBounds(620, 340, 160, 90);
@@ -185,7 +182,6 @@ public class Drawer extends JPanel {
 		veryHungryThresholdSlider.addChangeListener(bl);
 		veryHungryThresholdSlider.setFocusable(false);
 		
-		
 		startEnergyRateLabel.setBounds(825, 320, 160, 90);
 		
 		currentStartEnergyRate.setBounds(825, 340, 160, 90);
@@ -195,7 +191,6 @@ public class Drawer extends JPanel {
 		startEnergyRateSlider.setBounds(825, 400, 160, 30);
 		startEnergyRateSlider.addChangeListener(bl);
 		startEnergyRateSlider.setFocusable(false);
-		
 		
 		moveStrengthModifierLabel.setBounds(620, 420, 160, 90);
 		
@@ -242,9 +237,9 @@ public class Drawer extends JPanel {
 	    iterateRest.setEditable(true);
 	    */
 	    
+		//Adds all buttons and sliders
 	    super.add(cycleButton);
 		super.add(clearButton);
-		
 		super.add(cellTypeAmountLabel);
 		super.add(cellTypeAmountSlider);
 		super.add(currentCellTypeAmount);
@@ -252,37 +247,28 @@ public class Drawer extends JPanel {
 		super.add(fillRateSlider);
 		super.add(currentFillRate);
 		super.add(populateButton);
-		
 		super.add(currentMutationRate);
 		super.add(mutationRateSlider);
 		super.add(mutationLabel);
-		
 		super.add(crossoverRateSlider);
 		super.add(currentCrossoverRate);
-		super.add(crossoverLabel);
-		
+		super.add(crossoverLabel);	
 		super.add(matingEnergyRequirementLabel);
 		super.add(currentMatingEnergyRequirement);
 		super.add(matingEnergyRequirementSlider);
-		
 		super.add(eatingEnergyGainLabel);
 		super.add(currentEatingEnergyGain);
 		super.add(eatingEnergyGainSlider);
-		
 		super.add(veryHungryThresholdLabel);
 		super.add(currentVeryHungryThreshold);
 		super.add(veryHungryThresholdSlider);
-		
 		super.add(startEnergyRateLabel);
 		super.add(currentStartEnergyRate);
 		super.add(startEnergyRateSlider);
-		
 		super.add(moveStrengthModifierLabel);
 		super.add(currentMoveStrengthModifier);
 		super.add(moveStrengthModifierSlider);
-		
 		super.add(allowCannibalismButton);
-		
 		super.add(settingsButtonJ);
 		super.add(settingsButtonM);
 		super.add(settingsButtonR);
@@ -293,6 +279,7 @@ public class Drawer extends JPanel {
 		world = c;
 	}
 
+	//Paints all objects in the world
 	public void paintComponent(Graphics g) {
 		super.paintComponents(g);
 		g.drawImage(bg, 0, 0, 2500, 1000, null);
@@ -303,6 +290,7 @@ public class Drawer extends JPanel {
 		paintCells(g);
 	}
 	
+	//Paints the tiles
 	private void paintTiles(Graphics g) {
 		for (Tile[] tiles : world.getTiles()) {
 			for (Tile t : tiles) {
@@ -311,6 +299,7 @@ public class Drawer extends JPanel {
 		}
 	}
 	
+	//Paints the infoscreen
 	private void paintProperties(Graphics g) {
 		g.drawImage(infoBg, 1000, 25, 300, 600, null);
 		Tile tile = world.selected;
@@ -338,7 +327,7 @@ public class Drawer extends JPanel {
 		}
 	}
 	
-	// for stats
+	//Paints the cells statistics
 	private void paintStats(Graphics g){
 		//g.drawImage(infoBg, 1000, 25, 300, 600, null);
 		Tile tile = world.selected;
@@ -361,7 +350,7 @@ public class Drawer extends JPanel {
 		}
 	}
 
-
+	//Paints a new colour border for the selected tile 
 	private void paintSelected(Graphics g) {
 		Tile t = world.selected;
 		if (t != null) {
@@ -370,7 +359,8 @@ public class Drawer extends JPanel {
 			g.drawImage(select, t.x + world.xOffSet - world.TILE_SIZE / 2 , t.y + world.yOffSet - world.TILE_SIZE /2, world.TILE_SIZE , world.TILE_SIZE , null);
 		}
 	}
-		
+	
+	//Paints all the cells
 	private void paintCells(Graphics g) {
 		for(Cell cell : world.getCells()){
 			
@@ -381,12 +371,15 @@ public class Drawer extends JPanel {
 		
 	}
 	
+	//Changes the cycle button text
 	public void notifyIterationsEnd(){
 		cycleButton.setText("Start Cycle (space)");
 	}
 	
 	private ButtonListener bl = new ButtonListener();
 	
+	
+	//ButtonListener class
 	class ButtonListener implements ActionListener, ChangeListener, ItemListener {
 				
 	    public void actionPerformed(ActionEvent e) {

@@ -14,56 +14,52 @@ import framework.World;
 
 public class Cell {
 
-	//public static final int MaxTypes = 9;
-
-	// properties of cell. 
+	//Properties of cell. 
 	public Properties properties;
 	
+	//Image of cell
 	public Image img;
 	
-	// list of behaviours available to cell
+	//List of behaviours available to cell
 	public ArrayList<Behaviour> behaviours;
 	
-	// location
+	//Current location
 	public int x;			
 	public int y;
 	
-	public int type; // type of cell
+	//Type of cell
+	public int type; 
 	
 	public boolean isHunting;
 	
-	// reference back to the world
+	//World reference to access information from the world
 	public WeakReference<World> worldRef;
 	
-	/**
-	 * constructor which generates random DNA
-	 */
+	//Constructor for cell with random DNA
 	public Cell(World w, int lx, int ly, int t) {
 		this(w, lx, ly, t, "");
 	}
 	
-	/**
-	 * copy constructor
-	 */
+	//Constructor for cell with equal properties as given cell
 	public Cell(Cell other) {
 		this(other.worldRef.get(), other.x, other.y, other.type, other.properties.getDNA());
 	}
 	
-	/**
-	 * cell constructor
-	 */
+	//Constructor
 	public Cell(World w, int locX, int locY, int t, String DNA) {
-		//System.out.println(DNA);
+
+		//No DNA given
 		if (DNA.length() == 0) {
-			properties = new Properties(); // random DNA
+			//Random DNA
+			properties = new Properties(); 
 		} else {
 			properties = new Properties(DNA);
 		}
 		
 		x = locX;
 		y = locY;
-		
 		type = t;
+		
 		if (type > World.maxTypes || type < 1) {
 			type = 1;
 		}
@@ -73,43 +69,34 @@ public class Cell {
 		isHunting = false;
 		worldRef = new WeakReference<World>(w);
 		
-		// order may still need to be randomized based on type or DNA, although that will mean rapid extinction
 		behaviours = new ArrayList<Behaviour>();
 
-		//behaviours.add(new DEBUGCloneToSurroundingsBehaviour());
+		//Adds behaviours to behaviourlist
+		//The order in which they are added determines the priorities of the cell
 		behaviours.add(new MateBehaviour());
 		behaviours.add(new HuntBehaviour());
-
 		behaviours.add(new FleeBehaviour());
-		//behaviours.add(new ApproachCenterBehaviour());
-		//behaviours.add(new ApproachBorderBehaviour());
 		behaviours.add(new WanderBehaviour());
 		behaviours.add(new StayBehaviour());
 	}
 
+	//Checks if the cell is not dead
 	public boolean isAlive() {
-		// i think this can be removed. lets check it later
+		
 		if (properties.getCurrentEnergy() < 0) {
 			properties.setCurrentEnergy(0);
 		}
 		return properties.getIsAlive();
 	}
 	
-	/*
-	 * updates cell in iteration
-	 */
+	//Updates the cell in iteration
 	public void update() {
 		
 		if (!this.isAlive()) {
 			return;
 		}
 		
-		/*for(Behaviour behaviour : behaviours){
-			
-			System.out.println(behaviour.toString());
-		}*/
-		
-		// loops through each behaviour in a cell's own order, and breaks as soon as it finds one that it can do
+		//Loops through each behaviour and stops as soon as it finds one it can execute
 		for(Behaviour behaviour : behaviours){
 			if(behaviour.execute(this)){
 				this.properties.lastBehaviour = behaviour.toString();
@@ -117,15 +104,15 @@ public class Cell {
 			}
 		}
 		if (this.properties.lastBehaviour.equals("")) this.properties.lastBehaviour = "ERROR";
- 
 	}
 	
+	//Checks if a cell is hungry
 	public boolean isHungry(){
 		int hungerThreshold = properties.getMaxEnergy() / 10 * 8;
 		return properties.getCurrentEnergy() < hungerThreshold;
 	}
 
-	// cell eats another cell and fills current energy up to max if possible
+	//Cell attacks another cell
 	public void stab(Cell target) {
 		
 		int attackValue = properties.getStrength();
@@ -133,12 +120,11 @@ public class Cell {
 			attackValue = 1;
 		}
 		target.properties.setCurrentEnergy(target.properties.getCurrentEnergy() - attackValue);
-		if (target.isAlive() == false) {
-			//System.out.println("Cell eaten.");
-			
+		//If the target dies, the cell eats it and regains energy
+		if (target.isAlive() == false) {			
 			float eatModifier = Settings.getInstance().eatingEnergyGain;
 			
-			int energyValue = (int) Math.ceil(target.properties.getStrength() * eatModifier); // this is hardcoded, should really be taken from target cell or something
+			int energyValue = (int) Math.ceil(target.properties.getStrength() * eatModifier);
 			if (energyValue <= 0) {
 				energyValue = 1;
 			}
@@ -146,7 +132,7 @@ public class Cell {
 		}
 	}
 	
-	// creates a new cell using DNA of two mating cells
+	//Creates a new cell using DNA of two mating cells
 	public boolean mate(Cell part){
 		RandomGenerator random = RandomGenerator.getInstance();
 		
@@ -155,7 +141,7 @@ public class Cell {
 		String newDNA = worldRef.get().cBreeder.breed(ownDNA, otherDNA)[random.getRandom().nextInt(2)];
 		
 		ArrayList<Tile> tiles = getFreeNeighbours();
-		
+		//If there are tiles next to this one
 		if (!tiles.isEmpty()) {
 			
 			RandomGenerator gen = RandomGenerator.getInstance();
@@ -164,7 +150,8 @@ public class Cell {
 			
 			Tile babySpot = tiles.get(destIndex);
 			
-			if (babySpot.worldRef.get().getCellAtPositionNext(babySpot.x,babySpot.y)==null){
+			//If the tile is empty
+			if (babySpot.worldRef.get().getCellAtPositionNext(babySpot.x,babySpot.y) == null){
 				
 				double energyCost = Settings.getInstance().matingEnergyCost;
 	
@@ -178,59 +165,28 @@ public class Cell {
 					energyLostCell2 = 1;
 				}  
 				
-				//System.out.println("partner energy: " + part.properties.getCurrentEnergy());
-				//System.out.println("energyLostCell Partner: " + energyLostCellPart);
-				//System.out.println("own energy: " + properties.getCurrentEnergy());
-				//System.out.println("own energy lost: " + energyLostCell2);
-				
 				part.properties.setCurrentEnergy(part.properties.getCurrentEnergy() - energyLostCellPart);
 				properties.setCurrentEnergy(properties.getCurrentEnergy() - energyLostCell2);
 				
+				//Creates a new cell
 				Cell c = new Cell(worldRef.get(), babySpot.x, babySpot.y, type, newDNA);
 	
+				//Adds the cell to the new world
 				worldRef.get().nextCells.add(c);
-				//System.out.println("New cell born.");
 				
 				worldRef.get().lastStepCellsBorn++;
 			
 				return true;
 			}
 		}
-		//System.out.println("No space for newborn cell.");
 		return false;
 	}
 
-	/*
-	// changes target so that it is closer to where the cell can go
-	public void moveTowards(Tile target) {
-		ArrayList<Tile> tiles = getMoveSet();
-		
-		double distance = 500;
-		int Dx;
-		int Dy;
-		Tile bestTile = null;
-		for (Tile tile : tiles) {
-			Dx = tile.x - target.x; 
-			Dy = tile.y - target.y;
-			double newDistance = Math.sqrt(Dx * Dx + Dy * Dy);
-			
-			if (newDistance < distance) {
-				distance = newDistance;
-				bestTile = tile;
-			}
-		}
-		
-		if (bestTile != null) {
-			moveTo(bestTile);
-		}
-	}*/
-	
-	// cell moves to new destination
+	//Cell moves to new destination
 	public boolean moveTo(Tile destination) {
-		//System.out.println("destx " + destination.x + " desty " + destination.y);
 		boolean madeItInOneMove = true;
 		
-		// loop towards until a move can be made
+		//Loop towards until a move can be made
 		while (!this.getMoveSet().contains(destination)){
 			madeItInOneMove = false;
 			
@@ -252,31 +208,33 @@ public class Cell {
 			}
 			if (bestTile != null) destination = bestTile;
 			else {
-				// in this special case, the cell cannot move towards its destination
+				//In this case, the cell cannot move towards its destination
 				holdPosition();
 				return false;
 			}
 		}
-		// decrease energy
+		
 		int dist = worldRef.get().pointDistanceInWorldUnit(x, y, destination.x, destination.y);
 		
 		dist += (int)Math.ceil(dist * Settings.getInstance().moveStrengthModifier);
 		if (dist <= 0) {
 			dist = 1;
 		}
+		//Decrease energy based on movement
 		properties.setCurrentEnergy(properties.getCurrentEnergy() - dist);
 	
-		// update position
+		//Update position
 		x = destination.x;
 		y = destination.y;
 		
-		// we dont kill him here. even if energy reaches 0, we let him live one more iteration
+		//We dont kill him here. even if energy reaches 0, we let him live one more iteration
 		worldRef.get().nextCells.add(this);
 
 		return madeItInOneMove;
 	}
 	
-	// the cell stays in the same spot. it will lose energy though because it is getting hungry
+	//The cell stays in the same spot
+	//It will lose energy because it is getting hungry
 	public void holdPosition() {
 		int potDec = (int)Math.ceil(Settings.getInstance().moveStrengthModifier * this.properties.getStrength());
 		if (potDec <= 0) {
@@ -284,62 +242,55 @@ public class Cell {
 		}
 		this.properties.setCurrentEnergy(this.properties.getCurrentEnergy() - potDec);
 		
-		// if still alive add to next state of world
+		//If still alive, add to next state of world
 		this.worldRef.get().nextCells.add(this);
 	}
 	
-	
+	//Get a list of free tiles next to this one
 	private ArrayList<Tile> getFreeNeighbours() {
 		
 		ArrayList<Tile> neighbours = new ArrayList<Tile>();
 		World world = worldRef.get();
 		Tile t = null;
 		
-		//System.out.println(this.x + " " + this.y + " me");
-		
 		 t = world.getTile(x - 1 * world.TILE_SIZE , y); 
-		if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) {
+			neighbours.add(t);
+		}
 		
 		 t = world.getTile(x + 1 * world.TILE_SIZE , y); 
-		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) {
+			 neighbours.add(t);
+		 }
 		 
 		 t = world.getTile(x, y - 1 * world.TILE_SIZE);
-		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) {
+			 neighbours.add(t);
+		 }
 		 
 		 t = world.getTile(x, y + 1 * world.TILE_SIZE);
-		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) neighbours.add(t);
+		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null) {
+			 neighbours.add(t);
+		 }
 		 
-		// for (Tile n : neighbours) System.out.println(n.x + " " + n.y);
-		//System.out.println(neighbours);
-		
 		return neighbours;
 	}
 	
 	public Tile getClosestFreeNeighbour(int askx, int asky){
 		
-		ArrayList<Tile> neighbours = new ArrayList<Tile>();
-		World world = worldRef.get();
-		Tile t = null;
-		
-		 t = world.getTile(x - 1 * world.TILE_SIZE , y); 
-	     if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null && world.getCellAtPositionNext(t.x,t.y)==null) neighbours.add(t);
-		
-		 t = world.getTile(x + 1 * world.TILE_SIZE , y); 
-		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null && world.getCellAtPositionNext(t.x,t.y)==null) neighbours.add(t);
-		 
-		 t = world.getTile(x, y - 1 * world.TILE_SIZE);
-		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null && world.getCellAtPositionNext(t.x,t.y)==null) neighbours.add(t);
-		 
-		 t = world.getTile(x, y + 1 * world.TILE_SIZE);
-		 if(t != null && world.getCellAtPositionCurrent(t.x, t.y) == null && world.getCellAtPositionNext(t.x,t.y)==null) neighbours.add(t);
+		ArrayList<Tile> neighbours = getFreeNeighbours();
 		 
 		 Tile closest = null;
+		 
+		 //Just a number bigger than any neighbour will be
 		 double bestDistance = 500;
+		 //For every tile, get the distance to the cell asking for the closest tile
 		 for (Tile tile : neighbours) {
 			 int Dx = tile.x - askx;
 			 int Dy = tile.y - asky;
 			 double distance = Math.sqrt(Dx *Dx  + Dy * Dy);
 			 
+			 //If the distance is smaller, this tile is better
 			 if (distance < bestDistance) {
 				 bestDistance = distance;
 				 closest = tile;
@@ -348,29 +299,35 @@ public class Cell {
 		return closest;
 	}
 
-	// returns all viable tiles in a given radius around the cell
+	//Returns all viable tiles in a given radius around the cell
 	public ArrayList<Tile> getTilesInRadius(int rad, boolean isViewing) {
 
 		ArrayList<Tile> result = new ArrayList<Tile>();
 
+		//For every quadrant
 		for (int k = 0; k < 4; k++) {
+			//For the full distance of the radius
 			for (int i = 0; i < rad + 1; i++) {
 				int _x;
+				//The right side
 				if (k < 2) {
 					_x = x + i * worldRef.get().TILE_SIZE;	
+				//The left side
 				} else {
 					_x = x - i * worldRef.get().TILE_SIZE;	
 				} 
+				//The tiles up/down
 				int Dy = rad + 1 - i;
 				
 				for (int j = 0; j < Dy; j++) {
 					int _y;
+					//The tiles down
 					if (k % 2 == 0) {
 						_y = y +  j * worldRef.get().TILE_SIZE;
+					//The tiles up
 					} else {
 						_y = y  - j * worldRef.get().TILE_SIZE;
 					}
-					//System.out.println("X: " + _x + " Y: " + _y);
 					Tile tile = worldRef.get().getTile(_x, _y);
 					
 					if (isHunting && tile != null && tile.worldRef.get().getCellAtPositionNext(tile.x, tile.y)==null) result.add(tile);
@@ -381,16 +338,12 @@ public class Cell {
 						}
 					}
 				}
-			}
-				
-		}
-		
-		//System.out.println(result);
-		//System.out.println(result.size());
-		
+			}		
+		}		
 		return result;
 	}
 	
+	//Gets all tiles a cell can move towards
 	public ArrayList<Tile> getMoveSet() {
 		int moveRad = properties.getCurrentEnergy() < properties.getSpeed() ? properties.getCurrentEnergy() : properties.getSpeed();
 		
@@ -398,8 +351,8 @@ public class Cell {
 
 	}
 	
+	//Gets all tiles a cell can see
 	public ArrayList<Tile> getPerceptionSet() {
 		return getTilesInRadius(properties.getVision(), true);
 	}
-
 }
